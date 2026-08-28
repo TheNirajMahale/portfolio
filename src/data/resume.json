@@ -1,0 +1,72 @@
+{
+  "personal": {
+    "name": "Niraj Mahale",
+    "location": "Ahmedabad, India",
+    "relocation": "Open to relocation: Pune",
+    "email": "nirajmahale2002@gmail.com",
+    "phone": "+91 7558481455",
+    "linkedin": "https://linkedin.com/in/nirajmahale",
+    "github": "https://github.com/TheNirajMahale",
+    "summary": "Software engineer with hands-on experience in Flutter and Node.js, and backend experience in Spring Boot. Comfortable working on the full system, from mobile UI to APIs and databases."
+  },
+  "education": [
+    {
+      "institution": "Dr. D. Y. Patil Institute of Management and Research, Pune",
+      "degree": "Master of Computer Applications (MCA)",
+      "duration": "2023 - 2025",
+      "score": "CGPA: 7.61 / 10.0"
+    },
+    {
+      "institution": "Kavayitri Bahinabai Chaudhari North Maharashtra University, Jalgaon",
+      "degree": "Bachelor of Computer Applications (BCA)",
+      "duration": "2020 - 2023",
+      "score": "CGPA: 9.5 / 10.0"
+    }
+  ],
+  "experience": [
+    {
+      "title": "Software Engineer",
+      "company": "Velastra Pvt. Ltd., Ahmedabad",
+      "duration": "May 2026 - Present",
+      "highlights": [
+        "Took over a startup's early-stage mobile app and backend, both built with no dedicated engineer and little structure, and rebuilt both from the ground up.",
+        "Replaced a WebView wrapping a static web dashboard with a fully native Flutter app — provider-driven state management, live GPS map tracking, analytics charts, and a custom point-to-route deviation detection engine built from vector math.",
+        "Rebuilt the Node.js/Express backend, replacing hardcoded, unstructured logic with a clean REST API split across MongoDB and MySQL. Used MongoDB for sensor telemetry since sensors don't always send every field — a fixed SQL schema would create many empty (null) values, wasting space and slowing queries — and kept MySQL for structured business data.",
+        "Added a WebSocket layer (Socket.io) end-to-end — backend broadcasts live updates, Flutter dashboards consume them in real time, removing the need for manual refreshes.",
+        "Implemented JWT authentication, request validation, and rate limiting across the API.",
+        "Chose which parts of the old system needed fixing right away and which could wait, based on the founder's priorities for stability."
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "LoreKeeper API — Personal Reading Tracker Backend",
+      "link": "https://github.com/TheNirajMahale",
+      "highlights": [
+        "Built a Spring Boot REST API for a personal reading tracker covering books, manga, and comics, following a clean 4-layer architecture (Entity -> DTO -> Repository -> Controller).",
+        "Implemented stateless JWT authentication with Email/Password login as well as Google OAuth sign-in.",
+        "Integrated the Open Library API to auto-fetch book metadata, page counts, and cover art.",
+        "Used PostgreSQL for persistence, with Jakarta Validation and a centralized global exception handler for strict data integrity.",
+        "Added Runeglass, a rule-based adaptive reading-assistance highlighter module built into the API."
+      ]
+    },
+    {
+      "name": "Lorebound — Offline EPUB Reader (Flutter)",
+      "link": "https://github.com/TheNirajMahale",
+      "highlights": [
+        "Building an offline-first EPUB reader in Flutter with a custom, fully native render engine (no WebViews) for direct control over performance and typography.",
+        "Implemented dual reading modes — paginated and infinite vertical scroll — with an immersive, distraction-free overlay UI.",
+        "Designed local library management (importing EPUBs, tracking reading progress) as a standalone offline app, built to later serve as the mobile front-end for the LoreKeeper API."
+      ]
+    }
+  ],
+  "skills": {
+    "Programming Languages": ["Java", "Dart", "JavaScript", "SQL"],
+    "Frameworks & Libraries": ["Flutter", "Spring Boot", "Node.js", "Express"],
+    "Databases": ["MongoDB", "MySQL", "PostgreSQL"],
+    "Web Development": ["HTML", "CSS", "REST APIs", "JWT / OAuth"],
+    "Cloud & Tools": ["Git", "VS Code", "Linux", "Postman", "Eclipse", "Docker", "Google Cloud Platform (GCP)"],
+    "Concepts": ["Data Structures & Algorithms (DSA)", "Software Development Life Cycle (SDLC)"],
+    "Languages Spoken": ["English", "Hindi", "Marathi"]
+  }
+}
