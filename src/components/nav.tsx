@@ -47,7 +47,7 @@ export function Nav() {
             }}
             className="font-mono text-sm font-bold tracking-tight text-foreground transition-colors duration-150 hover:text-muted-foreground"
           >
-            N<span className="text-muted-foreground">.</span>
+            N
           </Link>
 
           {/* Desktop nav */}
