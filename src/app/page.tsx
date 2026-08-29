@@ -9,7 +9,7 @@ import { LinesAnimation } from "@/components/lines";
 export default function Home() {
   return (
     <main className="relative">
-      <div className="relative z-10 mx-auto w-[95%] md:w-[80%] max-w-7xl border-x-2 border-dashed border-foreground/40 bg-foreground/[0.02]">
+      <div className="relative z-10 mx-auto w-[95%] md:w-[80%] max-w-7xl border-x-2 border-b-2 border-dashed border-foreground/40 bg-foreground/[0.02]">
         <Hero />
         <AnimatedGrid />
         <LinesAnimation variant="grid" />

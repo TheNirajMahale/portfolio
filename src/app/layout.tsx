@@ -4,6 +4,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Nav } from "@/components/nav";
 import { Footer } from "@/components/footer";
 import { CustomCursor } from "@/components/ui/custom-cursor";
+import { ScrollToTop } from "@/components/ui/scroll-to-top";
 import "./globals.css";
 
 const inter = Inter({
@@ -45,6 +46,7 @@ export default function RootLayout({
           <Nav />
           <div className="flex-1">{children}</div>
           <Footer />
+          <ScrollToTop />
         </ThemeProvider>
       </body>
     </html>

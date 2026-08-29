@@ -11,6 +11,7 @@ const NAV_ITEMS = [
   { href: "/#experience", label: "Experience" },
   { href: "/#projects", label: "Projects" },
   { href: "/#skills", label: "Skills" },
+  { href: "/#education", label: "Education" },
 ];
 
 export function Nav() {
@@ -76,6 +77,12 @@ export function Nav() {
             {/* Resume link */}
             <Link
               href="/resume"
+              onClick={(e) => {
+                if (window.location.pathname === "/resume") {
+                  e.preventDefault();
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }
+              }}
               className="hidden sm:inline-flex items-center gap-2 rounded-md border border-border bg-muted px-3 py-1.5 font-mono text-xs font-medium text-foreground transition-all duration-200 hover:border-foreground/20 hover:bg-background ml-1"
             >
               <FileText size={13} strokeWidth={1.5} />
@@ -121,7 +128,13 @@ export function Nav() {
               ))}
               <Link
                 href="/resume"
-                onClick={() => setMobileOpen(false)}
+                onClick={(e) => {
+                  setMobileOpen(false);
+                  if (window.location.pathname === "/resume") {
+                    e.preventDefault();
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }
+                }}
                 className="inline-flex items-center gap-2 rounded-md border border-border bg-muted px-3 py-2.5 font-mono text-sm font-medium text-foreground transition-all duration-200 hover:border-foreground/20 mt-2"
               >
                 <FileText size={14} strokeWidth={1.5} />

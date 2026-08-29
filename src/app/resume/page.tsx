@@ -1,41 +1,24 @@
 "use client";
 
-import { useState } from "react";
-import { Download, Check } from "lucide-react";
+import { Download } from "lucide-react";
 import resumeData from "@/data/resume.json";
 import { LinesAnimation } from "@/components/lines";
 
 export default function ResumePage() {
-  const [downloaded, setDownloaded] = useState(false);
-
-  const handleDownload = () => {
-    setDownloaded(true);
-    window.print();
-    // Reset button after 2 seconds
-    setTimeout(() => setDownloaded(false), 2000);
-  };
 
   return (
     <main className="relative">
       <div className="relative z-10 mx-auto w-[95%] md:w-[80%] max-w-7xl border-x-2 border-b-2 border-dashed border-foreground/40 bg-foreground/[0.02] px-6 pt-28 pb-16 min-h-screen">
         {/* Download button — hidden during print */}
         <div className="print:hidden mb-12 flex justify-end">
-        <button
-          onClick={handleDownload}
+        <a
+          href="/resume.pdf"
+          download="Niraj_Mahale_Resume.pdf"
           className="inline-flex items-center gap-2 rounded-lg border border-border bg-foreground px-4 py-2 text-base font-medium text-background transition-[transform] duration-150 active:scale-[0.96]"
         >
-          {downloaded ? (
-            <>
-              <Check size={16} strokeWidth={1.5} />
-              <span>Downloaded!</span>
-            </>
-          ) : (
-            <>
-              <Download size={16} strokeWidth={1.5} />
-              <span>Download Resume</span>
-            </>
-          )}
-        </button>
+          <Download size={16} strokeWidth={1.5} />
+          <span>Download Resume</span>
+        </a>
       </div>
 
       {/* Resume content — styled as a clean document */}
