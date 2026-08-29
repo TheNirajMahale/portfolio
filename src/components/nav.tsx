@@ -45,7 +45,7 @@ export function Nav() {
                 window.scrollTo({ top: 0, behavior: "smooth" });
               }
             }}
-            className="font-mono text-sm font-bold tracking-tight text-foreground transition-colors duration-150 hover:text-muted-foreground"
+            className="font-mono text-lg font-bold tracking-tight text-foreground transition-colors duration-150 hover:text-muted-foreground"
           >
             N
           </Link>
