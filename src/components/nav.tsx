@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { motion } from "motion/react";
 import { FileText, Sun, Moon, Menu, X } from "lucide-react";
 import { useTheme } from "@/components/theme-provider";
 import { cn } from "@/lib/utils";
+import { MobileNav } from "@/components/mobile-nav";
 
 const NAV_ITEMS = [
   { href: "/#experience", label: "Experience" },
@@ -17,13 +18,37 @@ const NAV_ITEMS = [
 export function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("");
   const { theme, toggleTheme } = useTheme();
 
+  // Handle scroll bounce
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 40);
     handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Scroll Spy functionality
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        });
+      },
+      { rootMargin: "-40% 0px -40% 0px" } // Trigger when a section is near the middle of the screen
+    );
+
+    const sections = NAV_ITEMS.map((item) => item.href.replace("/#", ""));
+    sections.forEach((section) => {
+      const element = document.getElementById(section);
+      if (element) observer.observe(element);
+    });
+
+    return () => observer.disconnect();
   }, []);
 
   return (
@@ -52,15 +77,23 @@ export function Nav() {
 
           {/* Desktop nav */}
           <div className="flex items-center gap-1">
-            {NAV_ITEMS.map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                className="hidden sm:inline-flex font-mono text-xs text-muted-foreground px-3 py-2 rounded-md transition-colors duration-150 hover:text-foreground hover:bg-muted"
-              >
-                {item.label}
-              </a>
-            ))}
+            {NAV_ITEMS.map((item) => {
+              const isActive = activeSection === item.href.replace("/#", "");
+              return (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  className={cn(
+                    "hidden sm:inline-flex font-mono text-xs px-3 py-2 rounded-md transition-colors duration-150 hover:bg-muted",
+                    isActive
+                      ? "text-foreground bg-muted font-semibold"
+                      : "text-muted-foreground hover:text-foreground"
+                  )}
+                >
+                  {item.label}
+                </a>
+              );
+            })}
 
             {/* Theme toggle */}
             <button
@@ -107,44 +140,11 @@ export function Nav() {
         </header>
 
         {/* Mobile menu */}
-        <AnimatePresence>
-          {mobileOpen && (
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.2, ease: "easeOut" }}
-              className="absolute left-0 right-0 top-full z-40 border-b border-dashed border-foreground/40 bg-background/95 backdrop-blur-xl sm:hidden"
-            >
-              <div className="flex flex-col px-6 py-4 gap-1">
-                {NAV_ITEMS.map((item) => (
-                  <a
-                    key={item.label}
-                    href={item.href}
-                    onClick={() => setMobileOpen(false)}
-                    className="font-mono text-sm text-muted-foreground px-3 py-2.5 rounded-md transition-colors duration-150 hover:text-foreground hover:bg-muted"
-                  >
-                    {item.label}
-                  </a>
-                ))}
-                <Link
-                  href="/resume"
-                  onClick={(e) => {
-                    setMobileOpen(false);
-                    if (window.location.pathname === "/resume") {
-                      e.preventDefault();
-                      window.scrollTo({ top: 0, behavior: "smooth" });
-                    }
-                  }}
-                  className="inline-flex items-center gap-2 rounded-md border border-border bg-muted px-3 py-2.5 font-mono text-sm font-medium text-foreground transition-all duration-200 hover:border-foreground/20 mt-2"
-                >
-                  <FileText size={14} strokeWidth={1.5} />
-                  Resume
-                </Link>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        <MobileNav 
+          isOpen={mobileOpen} 
+          setIsOpen={setMobileOpen} 
+          navItems={NAV_ITEMS} 
+        />
       </motion.div>
     </>
   );
