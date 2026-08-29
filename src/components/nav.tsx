@@ -28,12 +28,13 @@ export function Nav() {
 
   return (
     <>
-      <motion.header
+      <motion.div
         initial={false}
         animate={{ y: scrolled ? 0 : 16 }}
         transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-        className="print:hidden fixed left-0 right-0 top-0 z-50 w-full border-y-2 border-dashed border-foreground/40"
+        className="print:hidden fixed left-0 right-0 top-0 z-50 w-full"
       >
+        <header className="w-full border-y-2 border-dashed border-foreground/40">
         <nav className="mx-auto flex w-[95%] items-center justify-between border-x-2 border-dashed border-foreground/40 bg-foreground/5 px-6 py-4 backdrop-blur-2xl md:w-[80%] max-w-7xl">
           {/* Logo */}
           <Link
@@ -46,7 +47,7 @@ export function Nav() {
             }}
             className="font-mono text-sm font-bold tracking-tight text-foreground transition-colors duration-150 hover:text-muted-foreground"
           >
-            NM<span className="text-muted-foreground">.</span>
+            N<span className="text-muted-foreground">.</span>
           </Link>
 
           {/* Desktop nav */}
@@ -103,47 +104,48 @@ export function Nav() {
             </button>
           </div>
         </nav>
-      </motion.header>
+        </header>
 
-      {/* Mobile menu */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.2, ease: "easeOut" }}
-            className="fixed inset-x-0 top-[57px] z-40 border-b border-border bg-background/95 backdrop-blur-xl sm:hidden"
-          >
-            <div className="flex flex-col px-6 py-4 gap-1">
-              {NAV_ITEMS.map((item) => (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  onClick={() => setMobileOpen(false)}
-                  className="font-mono text-sm text-muted-foreground px-3 py-2.5 rounded-md transition-colors duration-150 hover:text-foreground hover:bg-muted"
+        {/* Mobile menu */}
+        <AnimatePresence>
+          {mobileOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
+              className="absolute left-0 right-0 top-full z-40 border-b border-dashed border-foreground/40 bg-background/95 backdrop-blur-xl sm:hidden"
+            >
+              <div className="flex flex-col px-6 py-4 gap-1">
+                {NAV_ITEMS.map((item) => (
+                  <a
+                    key={item.label}
+                    href={item.href}
+                    onClick={() => setMobileOpen(false)}
+                    className="font-mono text-sm text-muted-foreground px-3 py-2.5 rounded-md transition-colors duration-150 hover:text-foreground hover:bg-muted"
+                  >
+                    {item.label}
+                  </a>
+                ))}
+                <Link
+                  href="/resume"
+                  onClick={(e) => {
+                    setMobileOpen(false);
+                    if (window.location.pathname === "/resume") {
+                      e.preventDefault();
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                    }
+                  }}
+                  className="inline-flex items-center gap-2 rounded-md border border-border bg-muted px-3 py-2.5 font-mono text-sm font-medium text-foreground transition-all duration-200 hover:border-foreground/20 mt-2"
                 >
-                  {item.label}
-                </a>
-              ))}
-              <Link
-                href="/resume"
-                onClick={(e) => {
-                  setMobileOpen(false);
-                  if (window.location.pathname === "/resume") {
-                    e.preventDefault();
-                    window.scrollTo({ top: 0, behavior: "smooth" });
-                  }
-                }}
-                className="inline-flex items-center gap-2 rounded-md border border-border bg-muted px-3 py-2.5 font-mono text-sm font-medium text-foreground transition-all duration-200 hover:border-foreground/20 mt-2"
-              >
-                <FileText size={14} strokeWidth={1.5} />
-                Resume
-              </Link>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+                  <FileText size={14} strokeWidth={1.5} />
+                  Resume
+                </Link>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
     </>
   );
 }
