@@ -2,39 +2,47 @@
 
 @theme {
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  
+  --font-mono: var(--font-roboto-mono), ui-monospace, monospace;
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
   --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
 }
 
+/* ─── Dark theme (default) ─── */
 :root {
-  --background: #ffffff;
-  --foreground: #111111;
-  --primary: #111111;
-  --primary-foreground: #ffffff;
-  --muted: #f4f4f5;
-  --muted-foreground: #71717a;
-  --border: #e4e4e7;
+  color-scheme: dark;
+
+  --background: #171717;
+  --foreground: #fafafa;
+  --muted: #141414;
+  --muted-foreground: #a1a1aa;
+  --border: #262626;
+  --accent: #e5e5e5;
+  --card: #111111;
+  --card-foreground: #fafafa;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-    --primary: #ededed;
-    --primary-foreground: #0a0a0a;
-    --muted: #27272a;
-    --muted-foreground: #a1a1aa;
-    --border: #27272a;
-  }
+/* ─── Light theme ─── */
+:root.light {
+  color-scheme: light;
+
+  --background: #fafafa;
+  --foreground: #0a0a0a;
+  --muted: #f0f0f0;
+  --muted-foreground: #52525b;
+  --border: #e5e5e5;
+  --accent: #171717;
+  --card: #ffffff;
+  --card-foreground: #0a0a0a;
 }
 
-/* Base WebInterfaceGuidelines requirements */
+/* ─── Base ─── */
 body {
   background-color: var(--background);
   color: var(--foreground);
@@ -43,22 +51,141 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   -webkit-text-size-adjust: 100%;
+  /* Smooth theme transitions */
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Focus styles following guidelines (box-shadow over outline) */
+html {
+  scroll-behavior: smooth;
+  font-size: 17px;
+}
+
+/* ─── Cursor ─── */
+body.cursor-none,
+body.cursor-none * {
+  cursor: none !important;
+}
+
+/* ─── Focus ─── */
 *:focus-visible {
   outline: none;
   box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--foreground);
-  border-radius: 2px;
+  border-radius: 4px;
 }
 
-/* ::selection styling as per WebInterfaceGuidelines */
+/* ─── Selection ─── */
 ::selection {
   background-color: var(--foreground);
   color: var(--background);
 }
 
-/* Smooth scrolling */
-html {
-  scroll-behavior: smooth;
+/* ─── Decorative: grid texture background ─── */
+.bg-grid-texture {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+:root.light .bg-grid-texture {
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* ─── Decorative: horizontal rule with plus markers ─── */
+.decorative-line {
+  position: relative;
+  height: 2px;
+  border-top: 2px dashed color-mix(in srgb, var(--foreground) 40%, transparent);
+}
+
+.decorative-line::before,
+.decorative-line::after {
+  content: "+";
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--muted-foreground);
+  line-height: 1;
+}
+
+.decorative-line::before {
+  left: 0;
+}
+
+.decorative-line::after {
+  right: 0;
+}
+
+/* ─── Plus corner illustration ─── */
+.plus-corner {
+  position: relative;
+}
+
+.plus-corner::before {
+  content: "+";
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1;
+  color: var(--muted-foreground);
+  transform: translate(-50%, -50%);
+}
+
+/* ─── Animated grid cell ─── */
+.grid-cell-active {
+  background-color: var(--foreground);
+  opacity: 0.06;
+}
+
+:root.light .grid-cell-active {
+  background-color: var(--foreground);
+  opacity: 0.08;
+}
+
+/* ─── Card hover glow ─── */
+.card-glow {
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-glow:hover {
+  border-color: color-mix(in srgb, var(--foreground) 20%, transparent);
+  box-shadow: 0 0 40px -12px color-mix(in srgb, var(--foreground) 8%, transparent);
+}
+
+/* ─── Print styles ─── */
+@media print {
+  :root {
+    --background: #ffffff;
+    --foreground: #111111;
+    --muted: #f4f4f5;
+    --muted-foreground: #555555;
+    --border: #d4d4d8;
+    --card: #ffffff;
+    --card-foreground: #111111;
+  }
+
+  body {
+    background: white;
+    color: black;
+  }
+
+  * {
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  a[href^="http"]::after {
+    content: none;
+  }
+
+  @page {
+    margin: 0.75in;
+  }
 }
