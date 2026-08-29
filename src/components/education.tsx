@@ -1,3 +1,5 @@
+"use client";
+
 import { motion } from "motion/react";
 import { GraduationCap } from "lucide-react";
 import { Section } from "@/components/ui/section";
