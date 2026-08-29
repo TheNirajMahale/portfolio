@@ -9,8 +9,8 @@ export function Experience() {
       <StaggerContainer className="space-y-6">
         {resumeData.experience.map((job) => (
           <StaggerItem key={job.company}>
-            <div className="group rounded-lg border-2 border-dashed border-foreground/40 bg-card p-6 md:p-8 card-glow hover:-translate-y-1.5 transition-transform duration-500 ease-out delay-75">
-              <div className="flex items-start gap-4">
+            <div className="group rounded-lg border-2 border-dashed border-foreground/40 bg-card p-5 md:p-8 card-glow hover:-translate-y-1.5 transition-transform duration-500 ease-out delay-75">
+              <div className="flex flex-col sm:flex-row sm:items-start gap-4 sm:gap-4">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-border bg-muted text-muted-foreground">
                   <Briefcase size={18} strokeWidth={1.5} />
                 </div>
