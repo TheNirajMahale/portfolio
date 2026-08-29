@@ -94,13 +94,25 @@ export function Nav() {
                   key={item.label}
                   href={item.href}
                   className={cn(
-                    "hidden sm:inline-flex font-mono text-xs px-3 py-2 rounded-md transition-colors duration-150 hover:bg-muted",
+                    "relative hidden sm:inline-flex font-mono text-xs px-3 py-2 rounded-md transition-colors duration-150",
                     isActive
-                      ? "text-foreground bg-muted font-semibold"
-                      : "text-muted-foreground hover:text-foreground"
+                      ? "text-foreground font-semibold"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
                   )}
                 >
-                  {item.label}
+                  {isActive && (
+                    <motion.div
+                      layoutId="nav-active-indicator"
+                      className="absolute inset-0 rounded-md bg-muted"
+                      initial={false}
+                      transition={{
+                        type: "spring",
+                        stiffness: 500,
+                        damping: 30,
+                      }}
+                    />
+                  )}
+                  <span className="relative z-10">{item.label}</span>
                 </a>
               );
             })}
