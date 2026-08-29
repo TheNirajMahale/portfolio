@@ -42,13 +42,18 @@ export function Nav() {
       { rootMargin: "-40% 0px -40% 0px" } // Trigger when a section is near the middle of the screen
     );
 
-    const sections = NAV_ITEMS.map((item) => item.href.replace("/#", ""));
-    sections.forEach((section) => {
-      const element = document.getElementById(section);
-      if (element) observer.observe(element);
-    });
+    const timeoutId = setTimeout(() => {
+      const sections = NAV_ITEMS.map((item) => item.href.replace("/#", ""));
+      sections.forEach((section) => {
+        const element = document.getElementById(section);
+        if (element) observer.observe(element);
+      });
+    }, 500);
 
-    return () => observer.disconnect();
+    return () => {
+      clearTimeout(timeoutId);
+      observer.disconnect();
+    };
   }, []);
 
   return (
