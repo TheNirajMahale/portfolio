@@ -16,17 +16,20 @@ const displayCategories = [
 export function Skills() {
   return (
     <Section id="skills" title="Skills" subtitle="Technologies I work with.">
-      <StaggerContainer className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {displayCategories.map((category) => {
+      <StaggerContainer className="grid gap-6 sm:grid-cols-2 lg:grid-cols-6">
+        {displayCategories.map((category, index) => {
           const items = resumeData.skills[category as keyof typeof resumeData.skills];
           if (!items || !Array.isArray(items)) return null;
 
           return (
-            <StaggerItem key={category}>
+            <StaggerItem 
+              key={category}
+              className={index < 3 ? "lg:col-span-2" : index === 4 ? "lg:col-span-3 sm:col-span-2 lg:col-[span_3]" : "lg:col-span-3"}
+            >
               <motion.div
                 whileHover={{ y: -6 }}
                 transition={{ duration: 0.25, ease: "easeOut" }}
-                className="rounded-lg border-2 border-dashed border-foreground/40 bg-card p-5 card-glow"
+                className="h-full flex flex-col rounded-lg border-2 border-dashed border-foreground/40 bg-card p-5 card-glow"
               >
                 <h3 className="mb-4 font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                   {category}
