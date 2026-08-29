@@ -1,3 +1,4 @@
+import { motion } from "motion/react";
 import { ExternalLink } from "lucide-react";
 import { Section } from "@/components/ui/section";
 import { StaggerContainer, StaggerItem } from "@/components/ui/in-view";
@@ -9,11 +10,13 @@ export function Projects() {
       <StaggerContainer className="grid gap-5 sm:grid-cols-2">
         {resumeData.projects.map((project) => (
           <StaggerItem key={project.name} className="h-full">
-            <a
+            <motion.a
+              whileHover={{ y: -6 }}
+              transition={{ type: "spring", stiffness: 400, damping: 25 }}
               href={project.link}
               target="_blank"
               rel="noopener noreferrer"
-              className="group flex h-full flex-col rounded-lg border-2 border-dashed border-foreground/40 bg-card p-6 card-glow hover:-translate-y-1.5 active:scale-[0.98] transition-transform duration-500 ease-out delay-75"
+              className="group flex h-full flex-col rounded-lg border-2 border-dashed border-foreground/40 bg-card p-6 card-glow active:scale-[0.98] transition-transform duration-500 ease-out delay-75"
             >
               <div className="flex items-start justify-between">
                 <h3 className="font-mono text-sm font-semibold text-foreground group-hover:text-accent transition-colors duration-200">
@@ -43,7 +46,7 @@ export function Projects() {
                   View on GitHub →
                 </span>
               </div>
-            </a>
+            </motion.a>
           </StaggerItem>
         ))}
       </StaggerContainer>

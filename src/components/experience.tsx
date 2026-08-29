@@ -1,3 +1,4 @@
+import { motion } from "motion/react";
 import { Briefcase } from "lucide-react";
 import { Section } from "@/components/ui/section";
 import { StaggerContainer, StaggerItem } from "@/components/ui/in-view";
@@ -9,7 +10,11 @@ export function Experience() {
       <StaggerContainer className="space-y-6">
         {resumeData.experience.map((job) => (
           <StaggerItem key={job.company}>
-            <div className="group rounded-lg border-2 border-dashed border-foreground/40 bg-card p-5 md:p-8 card-glow hover:-translate-y-1.5 transition-transform duration-500 ease-out delay-75">
+            <motion.div 
+              whileHover={{ y: -6 }}
+              transition={{ type: "spring", stiffness: 400, damping: 25 }}
+              className="group rounded-lg border-2 border-dashed border-foreground/40 bg-card p-5 md:p-8 card-glow"
+            >
               <div className="flex flex-col sm:flex-row sm:items-start gap-4 sm:gap-4">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-border bg-muted text-muted-foreground">
                   <Briefcase size={18} strokeWidth={1.5} />
@@ -37,7 +42,7 @@ export function Experience() {
                   </ul>
                 </div>
               </div>
-            </div>
+            </motion.div>
           </StaggerItem>
         ))}
       </StaggerContainer>
