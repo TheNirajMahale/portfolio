@@ -41,7 +41,7 @@
   "projects": [
     {
       "name": "LoreKeeper API — Personal Reading Tracker Backend",
-      "link": "https://github.com/TheNirajMahale",
+      "link": "https://github.com/TheNirajMahale/loreKeeper-api",
       "highlights": [
         "Built a Spring Boot REST API for a personal reading tracker covering books, manga, and comics, following a clean 4-layer architecture (Entity -> DTO -> Repository -> Controller).",
         "Implemented stateless JWT authentication with Email/Password login as well as Google OAuth sign-in.",
@@ -52,7 +52,7 @@
     },
     {
       "name": "Lorebound — Offline EPUB Reader (Flutter)",
-      "link": "https://github.com/TheNirajMahale",
+      "link": "https://github.com/TheNirajMahale/Lorebound",
       "highlights": [
         "Building an offline-first EPUB reader in Flutter with a custom, fully native render engine (no WebViews) for direct control over performance and typography.",
         "Implemented dual reading modes — paginated and infinite vertical scroll — with an immersive, distraction-free overlay UI.",
