@@ -31,30 +31,35 @@ export function Nav() {
 
   // Scroll Spy functionality
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
-          }
-        });
-      },
-      { rootMargin: "-40% 0px -40% 0px" } // Trigger when a section is near the middle of the screen
-    );
-
-    const timeoutId = setTimeout(() => {
+    const handleScrollSpy = () => {
       const sections = NAV_ITEMS.map((item) => item.href.replace("/#", ""));
-      sections.forEach((section) => {
+      let current = "";
+      
+      for (const section of sections) {
         const element = document.getElementById(section);
-        if (element) observer.observe(element);
-      });
-    }, 500);
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          // Trigger if section top is above middle of screen and bottom is below header
+          if (rect.top <= window.innerHeight / 2 && rect.bottom >= 100) {
+            current = section;
+          }
+        }
+      }
+      if (current !== activeSection) {
+        setActiveSection(current);
+      }
+    };
+
+    window.addEventListener("scroll", handleScrollSpy, { passive: true });
+    // Retry once after a short delay in case of slow hydration
+    const timeout = setTimeout(handleScrollSpy, 500);
+    handleScrollSpy();
 
     return () => {
-      clearTimeout(timeoutId);
-      observer.disconnect();
+      window.removeEventListener("scroll", handleScrollSpy);
+      clearTimeout(timeout);
     };
-  }, []);
+  }, [activeSection]);
 
   return (
     <>
@@ -149,6 +154,7 @@ export function Nav() {
           isOpen={mobileOpen} 
           setIsOpen={setMobileOpen} 
           navItems={NAV_ITEMS} 
+          activeSection={activeSection}
         />
       </motion.div>
     </>

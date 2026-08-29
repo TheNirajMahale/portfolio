@@ -8,9 +8,10 @@ interface MobileNavProps {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
   navItems: { href: string; label: string }[];
+  activeSection: string;
 }
 
-export function MobileNav({ isOpen, setIsOpen, navItems }: MobileNavProps) {
+export function MobileNav({ isOpen, setIsOpen, navItems, activeSection }: MobileNavProps) {
   return (
     <AnimatePresence>
       {isOpen && (
@@ -22,16 +23,23 @@ export function MobileNav({ isOpen, setIsOpen, navItems }: MobileNavProps) {
           className="absolute left-0 right-0 top-full z-40 border-b border-dashed border-foreground/40 bg-background/95 backdrop-blur-xl sm:hidden"
         >
           <div className="flex flex-col px-6 py-4 gap-1">
-            {navItems.map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                onClick={() => setIsOpen(false)}
-                className="font-mono text-sm text-muted-foreground px-3 py-2.5 rounded-md transition-colors duration-150 hover:text-foreground hover:bg-muted"
-              >
-                {item.label}
-              </a>
-            ))}
+            {navItems.map((item) => {
+              const isActive = activeSection === item.href.replace("/#", "");
+              return (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  onClick={() => setIsOpen(false)}
+                  className={`font-mono text-sm px-3 py-2.5 rounded-md transition-colors duration-150 ${
+                    isActive 
+                      ? "text-foreground bg-muted font-semibold" 
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                  }`}
+                >
+                  {item.label}
+                </a>
+              );
+            })}
             <Link
               href="/resume"
               onClick={(e) => {
