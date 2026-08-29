@@ -58,7 +58,7 @@ export function Hero() {
             variants={item}
             className="mb-6 inline-flex items-center gap-2 rounded-md border border-border bg-muted px-3 py-1.5 font-mono text-xs text-muted-foreground"
           >
-            <MapPin size={12} strokeWidth={1.5} />
+            <MapPin size={12} strokeWidth={1.5} className="-translate-y-[1px]" />
             <span>{resumeData.personal.location}</span>
             <span className="text-border">·</span>
             <span className="text-foreground">{resumeData.personal.relocation}</span>

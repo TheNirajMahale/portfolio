@@ -86,7 +86,7 @@ export function Nav() {
               }}
               className="hidden sm:inline-flex items-center gap-2 rounded-md border border-border bg-muted px-3 py-1.5 font-mono text-xs font-medium text-foreground transition-all duration-200 hover:border-foreground/20 hover:bg-background ml-1"
             >
-              <FileText size={13} strokeWidth={1.5} />
+              <FileText size={13} strokeWidth={1.5} className="-translate-y-[1px]" />
               Resume
             </Link>
 
