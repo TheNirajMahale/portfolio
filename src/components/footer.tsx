@@ -70,7 +70,6 @@ export function Footer() {
 
         <div className="mt-10 flex items-center justify-between text-xs text-muted-foreground/60 font-mono">
           <p>© {new Date().getFullYear()} Niraj Mahale</p>
-          <p>Built with Next.js</p>
         </div>
       </div>
     </footer>
