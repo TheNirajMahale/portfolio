@@ -97,7 +97,7 @@ export function Hero() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={link.label}
-                className="flex h-9 w-9 items-center justify-center rounded-md border border-border bg-muted text-muted-foreground transition-all duration-200 hover:border-foreground/30 hover:text-foreground hover:bg-background"
+                className="flex h-9 w-9 items-center justify-center rounded-md border border-border bg-muted text-muted-foreground transition-all duration-500 ease-out delay-75 hover:-translate-y-1 hover:border-foreground/30 hover:text-foreground hover:bg-background"
               >
                 <link.icon size={16} />
               </a>
