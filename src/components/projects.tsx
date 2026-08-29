@@ -14,7 +14,7 @@ export function Projects() {
           <StaggerItem key={project.name} className="h-full">
             <motion.a
               whileHover={{ y: -6 }}
-              transition={{ type: "spring", stiffness: 400, damping: 25 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
               href={project.link}
               target="_blank"
               rel="noopener noreferrer"

@@ -14,7 +14,7 @@ export function Education() {
           <StaggerItem key={edu.institution}>
             <motion.div
               whileHover={{ y: -6 }}
-              transition={{ type: "spring", stiffness: 400, damping: 25 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
               className="group rounded-lg border-2 border-dashed border-foreground/40 bg-card p-6 md:p-8 card-glow"
             >
               <div className="flex items-start gap-4">
