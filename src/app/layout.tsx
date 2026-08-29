@@ -7,6 +7,8 @@ import { CustomCursor } from "@/components/ui/custom-cursor";
 import { ScrollToTop } from "@/components/ui/scroll-to-top";
 import "./globals.css";
 
+import resumeData from "@/data/resume.json";
+
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
@@ -18,14 +20,20 @@ const robotoMono = Roboto_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Niraj Mahale — Software Engineer",
-  description:
-    "Portfolio of Niraj Mahale, a Software Engineer specializing in Flutter, Node.js, and Spring Boot.",
+  metadataBase: new URL("https://nirajmahale.vercel.app"),
+  title: `${resumeData.personal.name} — Software Engineer`,
+  description: resumeData.personal.summary,
   openGraph: {
-    title: "Niraj Mahale — Software Engineer",
-    description:
-      "Portfolio of Niraj Mahale, a Software Engineer specializing in Flutter, Node.js, and Spring Boot.",
+    title: `${resumeData.personal.name} — Software Engineer`,
+    description: resumeData.personal.summary,
     type: "website",
+    url: "https://nirajmahale.vercel.app",
+    siteName: `${resumeData.personal.name} Portfolio`,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${resumeData.personal.name} — Software Engineer`,
+    description: resumeData.personal.summary,
   },
 };
 

@@ -61,7 +61,7 @@ export function Hero() {
             <MapPin size={12} strokeWidth={1.5} />
             <span>{resumeData.personal.location}</span>
             <span className="text-border">·</span>
-            <span className="text-foreground">Open to work</span>
+            <span className="text-foreground">{resumeData.personal.relocation}</span>
           </motion.div>
 
           {/* Name */}
@@ -77,7 +77,7 @@ export function Hero() {
             variants={item}
             className="mt-2 font-mono text-xl text-muted-foreground sm:text-2xl"
           >
-            Software Engineer
+            {resumeData.experience[0].title}
           </motion.p>
 
           {/* Description */}

@@ -69,7 +69,7 @@ export function Footer() {
         </div>
 
         <div className="mt-10 flex items-center justify-between text-xs text-muted-foreground/60 font-mono">
-          <p>© {new Date().getFullYear()} Niraj Mahale</p>
+          <p>© {new Date().getFullYear()} {resumeData.personal.name}</p>
         </div>
       </div>
     </footer>
