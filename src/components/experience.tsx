@@ -14,7 +14,7 @@ export function Experience() {
           <StaggerItem key={job.company}>
             <motion.div 
               whileHover={{ y: -6 }}
-              transition={{ duration: 0.4, ease: "easeOut" }}
+              transition={{ duration: 0.25, ease: "easeOut" }}
               className="group rounded-lg border-2 border-dashed border-foreground/40 bg-card p-5 md:p-8 card-glow"
             >
               <div className="flex flex-col sm:flex-row sm:items-start gap-4 sm:gap-4">

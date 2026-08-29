@@ -1,3 +1,6 @@
+"use client";
+
+import { motion } from "motion/react";
 import { Section } from "@/components/ui/section";
 import { StaggerContainer, StaggerItem } from "@/components/ui/in-view";
 import resumeData from "@/data/resume.json";
@@ -19,10 +22,12 @@ export function Skills() {
           if (!items || !Array.isArray(items)) return null;
 
           return (
-            <StaggerItem
-              key={category}
-              className="rounded-lg border-2 border-dashed border-foreground/40 bg-card p-5 card-glow hover:-translate-y-1 transition-transform duration-500 ease-out delay-75"
-            >
+            <StaggerItem key={category}>
+              <motion.div
+                whileHover={{ y: -6 }}
+                transition={{ duration: 0.25, ease: "easeOut" }}
+                className="rounded-lg border-2 border-dashed border-foreground/40 bg-card p-5 card-glow"
+              >
                 <h3 className="mb-4 font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                   {category}
                 </h3>
@@ -36,6 +41,7 @@ export function Skills() {
                     </span>
                   ))}
                 </div>
+              </motion.div>
             </StaggerItem>
           );
         })}
