@@ -12,7 +12,7 @@ export function Section({ id, title, subtitle, children, className }: SectionPro
   return (
     <section
       id={id}
-      className={cn("mx-auto w-full max-w-5xl px-6 py-20 md:px-8 md:py-28", className)}
+      className={cn("mx-auto w-full max-w-5xl px-6 py-10 md:px-8 md:py-16", className)}
     >
       {title && (
         <div className="mb-12">

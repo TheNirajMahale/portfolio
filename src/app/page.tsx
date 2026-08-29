@@ -12,7 +12,7 @@ export default function Home() {
       <div className="relative z-10 mx-auto w-[95%] md:w-[80%] max-w-7xl border-x-2 border-dashed border-foreground/40 bg-foreground/[0.02]">
         <Hero />
         <AnimatedGrid />
-        
+        <LinesAnimation variant="grid" />
         <Experience />
         <LinesAnimation variant="particles" />
         <Projects />

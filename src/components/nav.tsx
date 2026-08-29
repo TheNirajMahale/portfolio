@@ -37,6 +37,12 @@ export function Nav() {
           {/* Logo */}
           <Link
             href="/"
+            onClick={(e) => {
+              if (window.location.pathname === "/") {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }
+            }}
             className="font-mono text-sm font-bold tracking-tight text-foreground transition-colors duration-150 hover:text-muted-foreground"
           >
             NM<span className="text-muted-foreground">.</span>

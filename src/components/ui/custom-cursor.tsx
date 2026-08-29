@@ -27,24 +27,22 @@ export function CustomCursor() {
     }
 
     const moveCursor = (e: MouseEvent) => {
-      // Set target to mouse position (centered for outer 32px ring)
-      cursorX.set(e.clientX - 16);
-      cursorY.set(e.clientY - 16);
+      // Offset target to trail below and to the right of the native cursor
+      cursorX.set(e.clientX + 12);
+      cursorY.set(e.clientY + 12);
       if (!isVisible) setIsVisible(true);
     };
 
     const handleMouseLeave = () => setIsVisible(false);
     const handleMouseEnter = () => setIsVisible(true);
 
-    // Hide default cursor
-    document.body.classList.add("cursor-none");
+    // Native cursor is kept visible
 
     window.addEventListener("mousemove", moveCursor);
     document.addEventListener("mouseleave", handleMouseLeave);
     document.addEventListener("mouseenter", handleMouseEnter);
 
     return () => {
-      document.body.classList.remove("cursor-none");
       window.removeEventListener("mousemove", moveCursor);
       document.removeEventListener("mouseleave", handleMouseLeave);
       document.removeEventListener("mouseenter", handleMouseEnter);

@@ -60,11 +60,6 @@ html {
   font-size: 17px;
 }
 
-/* ─── Cursor ─── */
-body.cursor-none,
-body.cursor-none * {
-  cursor: none !important;
-}
 
 /* ─── Focus ─── */
 *:focus-visible {

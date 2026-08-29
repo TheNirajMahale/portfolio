@@ -223,7 +223,7 @@ export type DividerVariant = "lines" | "grid" | "particles";
 
 export const LinesAnimation = ({ variant = "lines" }: { variant?: DividerVariant }) => {
   return (
-    <div className="border-y-2 relative border-foreground/40 border-dashed p-4 overflow-hidden my-12 md:my-16 flex items-center justify-center">
+    <div className="border-y-2 relative border-foreground/40 border-dashed p-4 overflow-hidden my-6 md:my-10 flex items-center justify-center">
       {variant === "lines" && <LinesArt />}
       {variant === "grid" && <GridArt />}
       {variant === "particles" && <ParticlesArt />}
