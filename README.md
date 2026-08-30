@@ -23,7 +23,7 @@ This file controls the global layout and configuration of the site.
 
 ```json
 {
-  "siteUrl": "https://nirajmahale.vercel.app",
+  "siteUrl": "https://your-portfolio.com",
   "nav": {
     "logo": "https://avatars.githubusercontent.com/u/your-github-id"
   },
