@@ -1,0 +1,17 @@
+{
+  "nav": {
+    "logo": "/logo.png"
+  },
+  "terminal": {
+    "prompt": "niraj@portfolio",
+    "quotes": [
+      "Building digital products.",
+      "Writing clean code.",
+      "Designing robust systems.",
+      "Solving hard problems."
+    ]
+  },
+  "footer": {
+    "tagline": "Building digital experiences."
+  }
+}

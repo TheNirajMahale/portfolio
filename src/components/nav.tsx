@@ -7,6 +7,7 @@ import { FileText, Sun, Moon, Menu, X } from "lucide-react";
 import { useTheme } from "@/components/theme-provider";
 import { cn } from "@/lib/utils";
 import { MobileNav } from "@/components/mobile-nav";
+import siteData from "@/data/site.json";
 
 const NAV_ITEMS = [
   { href: "/#experience", label: "Experience" },
@@ -80,9 +81,13 @@ export function Nav() {
                 window.scrollTo({ top: 0, behavior: "smooth" });
               }
             }}
-            className="font-mono text-lg font-bold tracking-tight text-foreground transition-colors duration-150 hover:text-muted-foreground"
+            className="flex items-center justify-center transition-opacity hover:opacity-80 -ml-2"
           >
-            N
+            <img 
+              src={siteData.nav.logo}
+              alt="Logo" 
+              className="h-11 w-auto rounded-sm" 
+            />
           </Link>
 
           {/* Desktop nav */}

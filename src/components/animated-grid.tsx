@@ -2,13 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
+import siteData from "@/data/site.json";
 
-const textOptions = [
-  "Building digital products.",
-  "Writing clean code.",
-  "Designing robust systems.",
-  "Solving hard problems.",
-];
+const textOptions = siteData.terminal.quotes;
 
 export function AnimatedGrid() {
   const [index, setIndex] = useState(0);
@@ -42,7 +38,12 @@ export function AnimatedGrid() {
   return (
     <div className="w-full pt-4 pb-12 flex items-center justify-center border-b border-border/30 -mt-4 relative z-20">
       <div className="font-mono text-lg sm:text-xl md:text-2xl text-foreground flex items-center min-h-[40px]">
-        <span className="text-muted-foreground mr-3">{">"}</span>
+        <div className="mr-3 flex items-center shrink-0">
+          <span className="text-green-500 dark:text-green-400">{siteData.terminal.prompt}</span>
+          <span className="text-foreground">:</span>
+          <span className="text-blue-500 dark:text-blue-400">~</span>
+          <span className="text-foreground ml-0.5">$</span>
+        </div>
         <span>{displayedText}</span>
         <motion.span
           animate={{ opacity: [1, 1, 0, 0] }}

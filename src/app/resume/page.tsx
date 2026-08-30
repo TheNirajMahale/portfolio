@@ -13,7 +13,7 @@ export default function ResumePage() {
         <div className="print:hidden mb-12 flex justify-end">
         <a
           href="/resume.pdf"
-          download="Niraj_Mahale_Resume.pdf"
+          download={`${resumeData.personal.name.replace(/\s+/g, "_")}_Resume.pdf`}
           className="inline-flex items-center gap-2 rounded-lg border border-border bg-foreground px-4 py-2 text-base font-medium text-background transition-[transform] duration-150 active:scale-[0.96]"
         >
           <Download size={16} strokeWidth={1.5} />

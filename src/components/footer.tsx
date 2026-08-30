@@ -1,5 +1,6 @@
 import { Mail } from "lucide-react";
 import resumeData from "@/data/resume.json";
+import siteData from "@/data/site.json";
 
 function GitHubIcon({ size = 16 }: { size?: number }) {
   return (
@@ -48,7 +49,7 @@ export function Footer() {
               {resumeData.personal.name}
             </span>
             <p className="text-sm text-muted-foreground">
-              Building digital experiences.
+              {siteData.footer.tagline}
             </p>
           </div>
 
