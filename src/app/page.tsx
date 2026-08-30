@@ -4,7 +4,6 @@ import { Projects } from "@/components/projects";
 import { Skills } from "@/components/skills";
 import { Education } from "@/components/education";
 import { AnimatedGrid } from "@/components/animated-grid";
-import { LinesAnimation } from "@/components/lines";
 
 export default function Home() {
   return (

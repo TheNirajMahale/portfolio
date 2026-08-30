@@ -9,6 +9,7 @@ import { SmoothScroll } from "@/components/smooth-scroll";
 import "./globals.css";
 
 import resumeData from "@/data/resume.json";
+import siteData from "@/data/site.json";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -21,14 +22,14 @@ const robotoMono = Roboto_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://nirajmahale.vercel.app"),
+  metadataBase: new URL(siteData.siteUrl),
   title: `${resumeData.personal.name} — Software Engineer`,
   description: resumeData.personal.summary,
   openGraph: {
     title: `${resumeData.personal.name} — Software Engineer`,
     description: resumeData.personal.summary,
     type: "website",
-    url: "https://nirajmahale.vercel.app",
+    url: siteData.siteUrl,
     siteName: `${resumeData.personal.name} Portfolio`,
   },
   twitter: {

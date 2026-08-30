@@ -2,7 +2,6 @@
 
 import { Download } from "lucide-react";
 import resumeData from "@/data/resume.json";
-import { LinesAnimation } from "@/components/lines";
 
 export default function ResumePage() {
 

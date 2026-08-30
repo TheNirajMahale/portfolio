@@ -93,7 +93,7 @@ html {
 .decorative-line {
   position: relative;
   height: 2px;
-  border-top: 2px dashed color-mix(in srgb, var(--foreground) 40%, transparent);
+  border-top: 2px dotted color-mix(in srgb, var(--foreground) 40%, transparent);
 }
 
 .decorative-line::before,
@@ -114,34 +114,6 @@ html {
 
 .decorative-line::after {
   right: 0;
-}
-
-/* ─── Plus corner illustration ─── */
-.plus-corner {
-  position: relative;
-}
-
-.plus-corner::before {
-  content: "+";
-  position: absolute;
-  top: -1px;
-  left: -1px;
-  font-family: var(--font-mono);
-  font-size: 14px;
-  line-height: 1;
-  color: var(--muted-foreground);
-  transform: translate(-50%, -50%);
-}
-
-/* ─── Animated grid cell ─── */
-.grid-cell-active {
-  background-color: var(--foreground);
-  opacity: 0.06;
-}
-
-:root.light .grid-cell-active {
-  background-color: var(--foreground);
-  opacity: 0.08;
 }
 
 /* ─── Card hover glow ─── */
