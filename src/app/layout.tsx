@@ -50,7 +50,7 @@ export default function RootLayout({
       className={`${inter.variable} ${robotoMono.variable} antialiased`}
       suppressHydrationWarning
     >
-      <body className="min-h-screen bg-background text-foreground flex flex-col bg-grid-texture bg-fixed">
+      <body className="min-h-screen bg-background text-foreground flex flex-col bg-grid-texture">
         <SmoothScroll>
           <CustomCursor />
           <ThemeProvider>
