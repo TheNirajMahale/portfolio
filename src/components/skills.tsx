@@ -4,6 +4,52 @@ import { motion } from "motion/react";
 import { Section } from "@/components/ui/section";
 import { StaggerContainer, StaggerItem } from "@/components/ui/in-view";
 import resumeData from "@/data/resume.json";
+import { 
+  SiDart, SiJavascript, SiMysql, SiPostgresql, SiMongodb,
+  SiFlutter, SiSpringboot, SiNodedotjs, SiExpress,
+  SiHtml5, SiCss,
+  SiGit, SiLinux, SiPostman, SiEclipseide, SiDocker, SiGooglecloud,
+} from "react-icons/si";
+import { FaDatabase, FaGears, FaLock, FaNetworkWired, FaCode, FaJava } from "react-icons/fa6";
+import { VscVscode } from "react-icons/vsc";
+
+const skillIcons: Record<string, React.ElementType> = {
+  // Programming Languages
+  "Java": FaJava,
+  "Dart": SiDart,
+  "JavaScript": SiJavascript,
+  "SQL": FaDatabase,
+
+  // Frameworks & Libraries
+  "Flutter": SiFlutter,
+  "Spring Boot": SiSpringboot,
+  "Node.js": SiNodedotjs,
+  "Express": SiExpress,
+
+  // Databases
+  "MongoDB": SiMongodb,
+  "MySQL": SiMysql,
+  "PostgreSQL": SiPostgresql,
+
+  // Web Development
+  "HTML": SiHtml5,
+  "CSS": SiCss,
+  "REST APIs": FaNetworkWired,
+  "JWT / OAuth": FaLock,
+
+  // Cloud & Tools
+  "Git": SiGit,
+  "VS Code": VscVscode,
+  "Linux": SiLinux,
+  "Postman": SiPostman,
+  "Eclipse": SiEclipseide,
+  "Docker": SiDocker,
+  "Google Cloud Platform (GCP)": SiGooglecloud,
+
+  // Concepts
+  "Data Structures & Algorithms (DSA)": FaCode,
+  "Software Development Life Cycle (SDLC)": FaGears,
+};
 
 const displayCategories = [
   "Programming Languages",
@@ -35,14 +81,18 @@ export function Skills() {
                   {category}
                 </h3>
                 <div className="flex flex-wrap gap-2">
-                  {items.map((skill) => (
-                    <span
-                      key={skill}
-                      className="rounded-md border border-border bg-muted px-2.5 py-1 font-mono text-xs text-foreground transition-colors duration-200 hover:border-foreground/30 hover:bg-background"
-                    >
-                      {skill}
-                    </span>
-                  ))}
+                  {items.map((skill) => {
+                    const Icon = skillIcons[skill];
+                    return (
+                      <span
+                        key={skill}
+                        className="flex items-center gap-1.5 rounded-md border border-border bg-muted px-2.5 py-1 font-mono text-xs text-foreground transition-colors duration-200 hover:border-foreground/30 hover:bg-background"
+                      >
+                        {Icon && <Icon className="text-muted-foreground transition-colors duration-200 group-hover:text-foreground" size={14} />}
+                        {skill}
+                      </span>
+                    );
+                  })}
                 </div>
               </motion.div>
             </StaggerItem>

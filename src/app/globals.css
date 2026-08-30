@@ -51,8 +51,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   -webkit-text-size-adjust: 100%;
-  /* Smooth theme transitions */
-  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 html {
@@ -87,6 +85,34 @@ html.lenis, html.lenis body {
 .lenis.lenis-smooth iframe {
   pointer-events: none;
 }
+
+/* ─── View Transitions ─── */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+  display: block;
+}
+
+::view-transition-old(root) {
+  z-index: 1;
+}
+
+::view-transition-new(root) {
+  z-index: 9999;
+  will-change: clip-path;
+  animation: theme-reveal 1.7s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+@keyframes theme-reveal {
+  0% {
+    clip-path: circle(0px at var(--theme-x) var(--theme-y));
+  }
+  100% {
+    clip-path: circle(var(--theme-radius) at var(--theme-x) var(--theme-y));
+  }
+}
+
 /* ─── Selection ─── */
 ::selection {
   background-color: var(--foreground);
