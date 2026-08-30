@@ -61,12 +61,41 @@
     }
   ],
   "skills": {
-    "Programming Languages": ["Java", "Dart", "JavaScript", "SQL"],
-    "Frameworks & Libraries": ["Flutter", "Spring Boot", "Node.js", "Express"],
-    "Databases": ["MongoDB", "MySQL", "PostgreSQL"],
-    "Web Development": ["HTML", "CSS", "REST APIs", "JWT / OAuth"],
-    "Cloud & Tools": ["Git", "VS Code", "Linux", "Postman", "Eclipse", "Docker", "Google Cloud Platform (GCP)"],
-    "Concepts": ["Data Structures & Algorithms (DSA)", "Software Development Life Cycle (SDLC)"],
-    "Languages Spoken": ["English", "Hindi", "Marathi"]
+    "Programming Languages": [
+      "Java",
+      "Dart",
+      "JavaScript",
+      "SQL"
+    ],
+    "Frameworks & Libraries": [
+      "Flutter",
+      "Spring Boot",
+      "Node.js",
+      "Express"
+    ],
+    "Databases": [
+      "MongoDB",
+      "MySQL",
+      "PostgreSQL"
+    ],
+    "Web Development": [
+      "HTML",
+      "CSS",
+      "REST APIs",
+      "JWT / OAuth"
+    ],
+    "Cloud & Tools": [
+      "Git",
+      "VS Code",
+      "Linux",
+      "Postman",
+      "Eclipse",
+      "Docker",
+      "Google Cloud Platform (GCP)"
+    ],
+    "Concepts": [
+      "Data Structures & Algorithms (DSA)",
+      "Software Development Life Cycle (SDLC)"
+    ]
   }
 }

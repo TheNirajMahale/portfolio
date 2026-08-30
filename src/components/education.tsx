@@ -17,7 +17,7 @@ export function Education() {
               transition={{ duration: 0.25, ease: "easeOut" }}
               className="group rounded-lg border-2 border-dotted border-foreground/40 bg-card p-6 md:p-8 card-glow"
             >
-              <div className="flex items-start gap-4">
+              <div className="flex flex-col sm:flex-row sm:items-start gap-4">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-border bg-muted text-muted-foreground">
                   <GraduationCap size={18} strokeWidth={1.5} />
                 </div>
