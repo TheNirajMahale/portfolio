@@ -23,6 +23,7 @@ This file controls the global layout and configuration of the site.
 
 ```json
 {
+  "siteUrl": "https://nirajmahale.vercel.app",
   "nav": {
     "logo": "https://avatars.githubusercontent.com/u/your-github-id"
   },
@@ -38,6 +39,7 @@ This file controls the global layout and configuration of the site.
   }
 }
 ```
+- **`siteUrl`**: The base URL where your portfolio is deployed. Used for SEO and metadata.
 - **`logo`**: You can use a URL (like your GitHub Avatar) or drop an image into the `/public` folder and use `"/your-logo.png"`.
 - **`prompt`**: Customize the Linux bash prompt that appears in the Hero section.
 - **`quotes`**: A list of strings that will rotate through the typewriter animation.
