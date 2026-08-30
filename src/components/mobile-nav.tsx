@@ -20,7 +20,7 @@ export function MobileNav({ isOpen, setIsOpen, navItems, activeSection }: Mobile
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
           transition={{ duration: 0.2, ease: "easeOut" }}
-          className="absolute left-0 right-0 top-full z-40 border-b border-dashed border-foreground/40 bg-background/95 backdrop-blur-xl sm:hidden"
+          className="absolute left-0 right-0 top-full z-40 border-b border-dotted border-foreground/40 bg-background/95 backdrop-blur-xl sm:hidden"
         >
           <div className="flex flex-col px-6 py-4 gap-1">
             {navItems.map((item) => {

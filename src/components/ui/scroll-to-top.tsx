@@ -37,7 +37,7 @@ export function ScrollToTop() {
           exit={{ opacity: 0, scale: 0.8, y: 20 }}
           transition={{ duration: 0.2 }}
           onClick={scrollToTop}
-          className="print:hidden fixed bottom-22 right-6 md:right-[calc(max(5vw,(100vw_-_80rem)/4)_-_1.25rem)] z-50 flex h-10 w-10 items-center justify-center rounded-full border-2 border-dashed border-foreground/40 bg-background shadow-md transition-all hover:bg-muted focus:outline-none focus:ring-2 focus:ring-foreground focus:ring-offset-2 focus:ring-offset-background"
+          className="print:hidden fixed bottom-22 right-6 md:right-[calc(max(5vw,(100vw_-_80rem)/4)_-_1.25rem)] z-50 flex h-10 w-10 items-center justify-center rounded-full border-2 border-dotted border-foreground/40 bg-background shadow-md transition-all hover:bg-muted focus:outline-none focus:ring-2 focus:ring-foreground focus:ring-offset-2 focus:ring-offset-background"
           aria-label="Scroll to top"
         >
           <ChevronUp size={20} strokeWidth={1.5} className="text-foreground" />

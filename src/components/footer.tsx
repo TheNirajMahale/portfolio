@@ -60,7 +60,7 @@ export function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={link.label}
-                className="flex h-9 w-9 items-center justify-center rounded-md border-2 border-dashed border-foreground/40 bg-muted text-muted-foreground transition-all duration-500 ease-out delay-75 hover:border-foreground/30 hover:text-foreground hover:bg-background hover:-translate-y-1"
+                className="flex h-9 w-9 items-center justify-center rounded-md border-2 border-dotted border-foreground/40 bg-muted text-muted-foreground transition-all duration-500 ease-out delay-75 hover:border-foreground/30 hover:text-foreground hover:bg-background hover:-translate-y-1"
               >
                 <link.icon size={16} />
               </a>

@@ -5,6 +5,7 @@ import { Nav } from "@/components/nav";
 import { Footer } from "@/components/footer";
 import { CustomCursor } from "@/components/ui/custom-cursor";
 import { ScrollToTop } from "@/components/ui/scroll-to-top";
+import { SmoothScroll } from "@/components/smooth-scroll";
 import "./globals.css";
 
 import resumeData from "@/data/resume.json";
@@ -45,17 +46,19 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${robotoMono.variable} antialiased scroll-smooth`}
+      className={`${inter.variable} ${robotoMono.variable} antialiased`}
       suppressHydrationWarning
     >
-      <body className="min-h-screen bg-background text-foreground flex flex-col">
-        <CustomCursor />
-        <ThemeProvider>
-          <Nav />
-          <div className="flex-1">{children}</div>
-          <Footer />
-          <ScrollToTop />
-        </ThemeProvider>
+      <body className="min-h-screen bg-background text-foreground flex flex-col bg-grid-texture bg-fixed">
+        <SmoothScroll>
+          <CustomCursor />
+          <ThemeProvider>
+            <Nav />
+            <div className="flex-1">{children}</div>
+            <Footer />
+            <ScrollToTop />
+          </ThemeProvider>
+        </SmoothScroll>
       </body>
     </html>
   );

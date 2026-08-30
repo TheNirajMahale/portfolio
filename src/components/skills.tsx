@@ -29,7 +29,7 @@ export function Skills() {
               <motion.div
                 whileHover={{ y: -6 }}
                 transition={{ duration: 0.25, ease: "easeOut" }}
-                className="h-full flex flex-col rounded-lg border-2 border-dashed border-foreground/40 bg-card p-5 card-glow"
+                className="h-full flex flex-col rounded-lg border-2 border-dotted border-foreground/40 bg-card p-5 card-glow"
               >
                 <h3 className="mb-4 font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                   {category}

@@ -15,7 +15,7 @@ export function Education() {
             <motion.div
               whileHover={{ y: -6 }}
               transition={{ duration: 0.25, ease: "easeOut" }}
-              className="group rounded-lg border-2 border-dashed border-foreground/40 bg-card p-6 md:p-8 card-glow"
+              className="group rounded-lg border-2 border-dotted border-foreground/40 bg-card p-6 md:p-8 card-glow"
             >
               <div className="flex items-start gap-4">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-border bg-muted text-muted-foreground">
@@ -32,7 +32,7 @@ export function Education() {
                   </div>
                   <p className="mt-0.5 text-sm text-muted-foreground">{edu.institution}</p>
 
-                  <div className="mt-4 pt-4 border-t-2 border-dashed border-foreground/40">
+                  <div className="mt-4 pt-4 border-t-2 border-dotted border-foreground/40">
                     <p className="font-mono text-xs text-muted-foreground">
                       Grade: <span className="text-foreground">{edu.score}</span>
                     </p>

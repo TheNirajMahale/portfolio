@@ -47,11 +47,22 @@ const item = {
 
 export function Hero() {
   return (
-    <section className="relative min-h-[85vh] flex items-center overflow-hidden">
-      {/* Background grid texture */}
-      <div className="absolute inset-0 bg-grid-texture" />
+    <section className="relative min-h-[70vh] flex items-center overflow-hidden">
+      {/* Dynamic SVG Texture for Hero */}
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden opacity-[0.15] dark:opacity-[0.07]">
+        <svg className="absolute inset-0 h-full w-full" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="hero-fabric" width="16" height="16" patternUnits="userSpaceOnUse">
+              <path d="M0 16V0h16v16H0zm8-16v16M0 8h16" fill="none" stroke="currentColor" strokeWidth="0.5" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#hero-fabric)" className="text-foreground" />
+        </svg>
+        {/* Fade the texture out at the bottom */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background" />
+      </div>
 
-      <div className="relative z-10 mx-auto w-full max-w-5xl px-6 py-24 md:px-8">
+      <div className="relative z-10 mx-auto w-full max-w-5xl px-6 pt-36 pb-12 md:px-8">
         <motion.div variants={container} initial="hidden" animate="visible">
           {/* Status badge */}
           <motion.div
@@ -115,8 +126,6 @@ export function Hero() {
         </motion.div>
       </div>
 
-      {/* Decorative line at bottom */}
-      <div className="absolute bottom-0 left-0 right-0 decorative-line" />
     </section>
   );
 }

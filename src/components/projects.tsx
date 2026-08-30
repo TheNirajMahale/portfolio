@@ -18,7 +18,7 @@ export function Projects() {
               href={project.link}
               target="_blank"
               rel="noopener noreferrer"
-              className="group flex h-full flex-col rounded-lg border-2 border-dashed border-foreground/40 bg-card p-6 card-glow active:scale-[0.98] transition-transform duration-500 ease-out delay-75"
+              className="group flex h-full flex-col rounded-lg border-2 border-dotted border-foreground/40 bg-card p-6 card-glow active:scale-[0.98] transition-transform duration-500 ease-out delay-75"
             >
               <div className="flex items-start justify-between">
                 <h3 className="font-mono text-sm font-semibold text-foreground group-hover:text-accent transition-colors duration-200">
@@ -43,7 +43,7 @@ export function Projects() {
                 ))}
               </ul>
 
-              <div className="mt-5 pt-4 border-t-2 border-dashed border-foreground/40">
+              <div className="mt-5 pt-4 border-t-2 border-dotted border-foreground/40">
                 <span className="font-mono text-xs text-muted-foreground group-hover:text-foreground transition-colors duration-200">
                   View on GitHub →
                 </span>

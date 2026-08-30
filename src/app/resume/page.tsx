@@ -8,7 +8,7 @@ export default function ResumePage() {
 
   return (
     <main className="relative">
-      <div className="relative z-10 mx-auto w-[95%] md:w-[80%] max-w-7xl border-x-2 border-b-2 border-dashed border-foreground/40 bg-foreground/[0.02] px-6 pt-28 pb-16 min-h-screen">
+      <div className="relative z-10 mx-auto w-[95%] md:w-[80%] max-w-7xl border-x-2 border-b-2 border-dotted border-foreground/40 bg-background px-6 pt-28 pb-16 min-h-screen">
         {/* Download button — hidden during print */}
         <div className="print:hidden mb-12 flex justify-end">
         <a
@@ -54,7 +54,7 @@ export default function ResumePage() {
           {resumeData.personal.summary}
         </p>
 
-        <hr className="border-border" />
+        <hr className="border-t-2 border-dotted border-foreground/50" />
 
         {/* Experience */}
         <section>
@@ -86,7 +86,7 @@ export default function ResumePage() {
           ))}
         </section>
 
-        <hr className="border-border" />
+        <hr className="border-t-2 border-dotted border-foreground/50" />
 
         {/* Projects */}
         <section>
@@ -114,7 +114,7 @@ export default function ResumePage() {
           </div>
         </section>
 
-        <hr className="border-border" />
+        <hr className="border-t-2 border-dotted border-foreground/50" />
 
         {/* Education */}
         <section>
@@ -140,7 +140,7 @@ export default function ResumePage() {
           </div>
         </section>
 
-        <hr className="border-border" />
+        <hr className="border-t-2 border-dotted border-foreground/50" />
 
         {/* Skills */}
         <section>
@@ -164,7 +164,6 @@ export default function ResumePage() {
         </section>
         </article>
 
-        <LinesAnimation variant="grid" />
       </div>
     </main>
   );
