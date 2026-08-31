@@ -34,7 +34,7 @@ const item = {
 
 export function Hero() {
   return (
-    <section className="relative min-h-[70vh] flex items-center overflow-hidden">
+    <section className="relative min-h-0 sm:min-h-[70vh] flex items-center overflow-hidden">
       {/* Dynamic SVG Texture for Hero */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden opacity-[0.15] dark:opacity-[0.07]">
         <svg className="absolute inset-0 h-full w-full" xmlns="http://www.w3.org/2000/svg">
@@ -49,7 +49,7 @@ export function Hero() {
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background" />
       </div>
 
-      <div className="relative z-10 mx-auto w-full max-w-5xl px-6 pt-36 pb-16 md:px-8">
+      <div className="relative z-10 mx-auto w-full max-w-5xl px-6 pt-28 pb-4 sm:pt-36 sm:pb-16 md:px-8">
         <motion.div variants={container} initial="hidden" animate="visible">
           {/* Status badge */}
           <motion.div

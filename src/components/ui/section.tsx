@@ -12,12 +12,12 @@ export function Section({ id, title, subtitle, children, className }: SectionPro
   return (
     <section
       id={id}
-      className={cn("mx-auto w-full max-w-5xl px-6 py-10 md:px-8 md:py-16", className)}
+      className={cn("mx-auto w-full max-w-5xl px-6 pt-6 pb-10 sm:py-10 md:px-8 md:py-16", className)}
     >
       {title && (
-        <div className="mb-12">
+        <div className="mb-8 sm:mb-12">
           {/* Decorative line above title */}
-          <div className="decorative-line mb-8" />
+          <div className="decorative-line mb-5 sm:mb-8" />
           <h2 className="font-mono text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
             {title}
           </h2>

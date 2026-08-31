@@ -36,8 +36,8 @@ export function AnimatedGrid() {
   }, [displayedText, isDeleting, index]);
 
   return (
-    <div className="w-full px-4 pt-5 pb-8 sm:pt-8 sm:pb-14 flex items-center justify-center border-b border-border/30 relative z-20">
-      <div className="font-mono text-xs sm:text-base md:text-xl text-foreground flex items-center min-h-[32px] sm:min-h-[40px] text-center justify-center flex-wrap">
+    <div className="w-full px-4 py-3 sm:pt-8 sm:pb-14 flex items-center justify-center border-b border-border/30 relative z-20">
+      <div className="font-mono text-xs sm:text-base md:text-xl text-foreground flex items-center min-h-[28px] sm:min-h-[40px] text-center justify-center flex-wrap">
         <div className="mr-2 sm:mr-3 flex items-center shrink-0">
           <span className="text-green-500 dark:text-green-400">{siteData.terminal.prompt}</span>
           <span className="text-foreground">:</span>
