@@ -3,15 +3,17 @@
 import { motion } from "motion/react";
 import { MapPin, ArrowDown } from "lucide-react";
 import { GitHubIcon, LinkedInIcon, MailIcon } from "@/components/ui/icons";
+import { SocialHoverCard, type SocialType } from "@/components/ui/social-hover-card";
 import resumeData from "@/data/resume.json";
 
-const socialLinks = [
-  { href: resumeData.personal.github, icon: GitHubIcon, label: "GitHub" },
-  { href: resumeData.personal.linkedin, icon: LinkedInIcon, label: "LinkedIn" },
+const socialLinks: { href: string; icon: typeof GitHubIcon; label: string; type: SocialType }[] = [
+  { href: resumeData.personal.github, icon: GitHubIcon, label: "GitHub", type: "github" },
+  { href: resumeData.personal.linkedin, icon: LinkedInIcon, label: "LinkedIn", type: "linkedin" },
   {
     href: `mailto:${resumeData.personal.email}`,
     icon: MailIcon,
     label: "Email",
+    type: "email",
   },
 ];
 
@@ -87,16 +89,17 @@ export function Hero() {
           {/* Social links */}
           <motion.div variants={item} className="mt-8 flex items-center gap-2">
             {socialLinks.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={link.label}
-                className="flex h-9 w-9 items-center justify-center rounded-md border border-border bg-muted text-muted-foreground transition-all duration-500 ease-out delay-75 hover:-translate-y-1 hover:border-foreground/30 hover:text-foreground hover:bg-background"
-              >
-                <link.icon size={16} />
-              </a>
+              <SocialHoverCard key={link.label} type={link.type} side="bottom">
+                <a
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={link.label}
+                  className="flex h-9 w-9 items-center justify-center rounded-md border border-border bg-muted text-muted-foreground transition-all duration-300 ease-out hover:-translate-y-1 hover:border-foreground/30 hover:text-foreground hover:bg-background"
+                >
+                  <link.icon size={16} />
+                </a>
+              </SocialHoverCard>
             ))}
 
             {/* CTA */}

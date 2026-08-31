@@ -1,22 +1,26 @@
 import { GitHubIcon, LinkedInIcon, MailIcon } from "@/components/ui/icons";
+import { SocialHoverCard, type SocialType } from "@/components/ui/social-hover-card";
 import resumeData from "@/data/resume.json";
 import siteData from "@/data/site.json";
 
-const links = [
+const links: { href: string; icon: typeof GitHubIcon; label: string; type: SocialType }[] = [
   {
     href: `mailto:${resumeData.personal.email}`,
     icon: MailIcon,
     label: "Email",
+    type: "email",
   },
   {
     href: resumeData.personal.linkedin,
     icon: LinkedInIcon,
     label: "LinkedIn",
+    type: "linkedin",
   },
   {
     href: resumeData.personal.github,
     icon: GitHubIcon,
     label: "GitHub",
+    type: "github",
   },
 ];
 
@@ -39,16 +43,17 @@ export function Footer() {
 
           <div className="flex items-center gap-2">
             {links.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={link.label}
-                className="flex h-9 w-9 items-center justify-center rounded-md border-2 border-dotted border-foreground/40 bg-muted text-muted-foreground transition-all duration-500 ease-out delay-75 hover:border-foreground/30 hover:text-foreground hover:bg-background hover:-translate-y-1"
-              >
-                <link.icon size={16} />
-              </a>
+              <SocialHoverCard key={link.label} type={link.type} side="top">
+                <a
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={link.label}
+                  className="flex h-9 w-9 items-center justify-center rounded-md border-2 border-dotted border-foreground/40 bg-muted text-muted-foreground transition-all duration-300 ease-out hover:border-foreground/30 hover:text-foreground hover:bg-background hover:-translate-y-1"
+                >
+                  <link.icon size={16} />
+                </a>
+              </SocialHoverCard>
             ))}
           </div>
         </div>

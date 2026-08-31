@@ -1,0 +1,54 @@
+{
+  "github": {
+    "platform": "GitHub",
+    "name": "Niraj Mahale",
+    "username": "TheNirajMahale",
+    "handle": "@TheNirajMahale",
+    "bio": "Flutter, Node.js & Spring Boot engineer.",
+    "status": "Active builder",
+    "url": "https://github.com/TheNirajMahale",
+    "featuredRepositoriesTitle": "Featured Projects",
+    "badge": "Public",
+    "featuredRepositories": [
+      {
+        "name": "loreKeeper-api",
+        "tech": "Spring Boot",
+        "url": "https://github.com/TheNirajMahale/loreKeeper-api"
+      },
+      {
+        "name": "Lorebound",
+        "tech": "Flutter",
+        "url": "https://github.com/TheNirajMahale/Lorebound"
+      }
+    ],
+    "ctaText": "View GitHub Profile"
+  },
+  "linkedin": {
+    "platform": "LinkedIn",
+    "name": "Niraj Mahale",
+    "headline": "Software Engineer",
+    "company": "Velastra",
+    "role": "Software Engineer",
+    "education": "MCA · Dr. D.Y. Patil, Pune",
+    "location": "Ahmedabad, India",
+    "skills": [
+      "Flutter",
+      "Node.js",
+      "Spring Boot",
+      "MySQL",
+      "MongoDB"
+    ],
+    "url": "https://linkedin.com/in/nirajmahale",
+    "ctaText": "Connect on LinkedIn"
+  },
+  "email": {
+    "platform": "Email",
+    "name": "Niraj Mahale",
+    "address": "nirajmahale2002@gmail.com",
+    "label": "Direct Contact",
+    "statusBadge": "Available",
+    "copyButtonText": "Copy",
+    "copiedButtonText": "Copied!",
+    "sendMailButtonText": "Send Mail"
+  }
+}
