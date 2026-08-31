@@ -36,7 +36,7 @@ export function AnimatedGrid() {
   }, [displayedText, isDeleting, index]);
 
   return (
-    <div className="w-full pt-4 pb-12 flex items-center justify-center border-b border-border/30 -mt-4 relative z-20">
+    <div className="w-full pt-8 pb-14 flex items-center justify-center border-b border-border/30 relative z-20">
       <div className="font-mono text-lg sm:text-xl md:text-2xl text-foreground flex items-center min-h-[40px]">
         <div className="mr-3 flex items-center shrink-0">
           <span className="text-green-500 dark:text-green-400">{siteData.terminal.prompt}</span>

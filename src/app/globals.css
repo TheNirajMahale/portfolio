@@ -87,10 +87,6 @@ html.lenis, html.lenis body {
 }
 
 /* ─── View Transitions ─── */
-::view-transition {
-  pointer-events: none;
-}
-
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation: none;
@@ -105,16 +101,8 @@ html.lenis, html.lenis body {
 ::view-transition-new(root) {
   z-index: 9999;
   will-change: clip-path;
-  animation: theme-reveal 1.7s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-}
-
-@keyframes theme-reveal {
-  0% {
-    clip-path: circle(0px at var(--theme-x) var(--theme-y));
-  }
-  100% {
-    clip-path: circle(var(--theme-radius) at var(--theme-x) var(--theme-y));
-  }
+  /* Lock the first frame to a 0px circle at center to prevent 1-frame flicker in JS animation */
+  clip-path: circle(0px at 50% 50%);
 }
 
 /* ─── Selection ─── */

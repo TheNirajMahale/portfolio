@@ -47,7 +47,7 @@ export function Hero() {
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background" />
       </div>
 
-      <div className="relative z-10 mx-auto w-full max-w-5xl px-6 pt-36 pb-12 md:px-8">
+      <div className="relative z-10 mx-auto w-full max-w-5xl px-6 pt-36 pb-16 md:px-8">
         <motion.div variants={container} initial="hidden" animate="visible">
           {/* Status badge */}
           <motion.div
