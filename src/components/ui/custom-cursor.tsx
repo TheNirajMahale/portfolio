@@ -2,9 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { motion, useMotionValue, useSpring } from "motion/react";
+import { useCursor } from "@/components/cursor-provider";
 
 export function CustomCursor() {
+  const { cursorEnabled } = useCursor();
   const [isVisible, setIsVisible] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   // Mouse position values
   const cursorX = useMotionValue(-100);
@@ -21,8 +24,9 @@ export function CustomCursor() {
   const fastY = useSpring(cursorY, fastSpringConfig);
 
   useEffect(() => {
-    // Only show custom cursor on non-touch devices
-    if (window.matchMedia("(pointer: coarse)").matches) {
+    // Only run if custom cursor is enabled and on non-touch devices
+    if (!cursorEnabled || window.matchMedia("(pointer: coarse)").matches) {
+      setIsVisible(false);
       return;
     }
 
@@ -31,12 +35,24 @@ export function CustomCursor() {
       cursorX.set(e.clientX + 12);
       cursorY.set(e.clientY + 12);
       if (!isVisible) setIsVisible(true);
+
+      const target = e.target as HTMLElement | null;
+      if (
+        target &&
+        (target.closest("a") ||
+          target.closest("button") ||
+          target.closest("[role='button']") ||
+          target.tagName === "INPUT" ||
+          target.tagName === "TEXTAREA")
+      ) {
+        setIsHovered(true);
+      } else {
+        setIsHovered(false);
+      }
     };
 
     const handleMouseLeave = () => setIsVisible(false);
     const handleMouseEnter = () => setIsVisible(true);
-
-    // Native cursor is kept visible
 
     window.addEventListener("mousemove", moveCursor);
     document.addEventListener("mouseleave", handleMouseLeave);
@@ -47,24 +63,32 @@ export function CustomCursor() {
       document.removeEventListener("mouseleave", handleMouseLeave);
       document.removeEventListener("mouseenter", handleMouseEnter);
     };
-  }, [cursorX, cursorY, isVisible]);
+  }, [cursorEnabled, cursorX, cursorY, isVisible]);
 
-  if (!isVisible) return null;
+  if (!cursorEnabled || !isVisible) return null;
 
   return (
     <>
       {/* Outer hollow trailing ring */}
       <motion.div
         className="pointer-events-none fixed left-0 top-0 z-[9999] h-8 w-8 rounded-full border border-white"
+        animate={{
+          scale: isHovered ? 1.25 : 1,
+        }}
+        transition={{ type: "spring", stiffness: 400, damping: 25 }}
         style={{
           x: smoothX,
           y: smoothY,
           mixBlendMode: "difference",
         }}
       />
-      {/* Inner solid dot (faster, offset by 6px to center in 32px ring) */}
+      {/* Inner solid dot */}
       <motion.div
         className="pointer-events-none fixed left-0 top-0 z-[10000] h-5 w-5 rounded-full bg-white"
+        animate={{
+          scale: isHovered ? 0.6 : 1,
+        }}
+        transition={{ type: "spring", stiffness: 400, damping: 25 }}
         style={{
           x: fastX,
           y: fastY,
@@ -76,3 +100,4 @@ export function CustomCursor() {
     </>
   );
 }
+

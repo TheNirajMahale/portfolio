@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Roboto_Mono } from "next/font/google";
+import { CursorProvider } from "@/components/cursor-provider";
+import { SoundProvider } from "@/components/sound-provider";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Nav } from "@/components/nav";
 import { Footer } from "@/components/footer";
@@ -52,13 +54,17 @@ export default function RootLayout({
     >
       <body className="min-h-screen bg-background text-foreground flex flex-col bg-grid-texture">
         <SmoothScroll>
-          <CustomCursor />
-          <ThemeProvider>
-            <Nav />
-            <div className="flex-1">{children}</div>
-            <Footer />
-            <ScrollToTop />
-          </ThemeProvider>
+          <CursorProvider>
+            <SoundProvider>
+              <CustomCursor />
+              <ThemeProvider>
+                <Nav />
+                <div className="flex-1">{children}</div>
+                <Footer />
+                <ScrollToTop />
+              </ThemeProvider>
+            </SoundProvider>
+          </CursorProvider>
         </SmoothScroll>
       </body>
     </html>
