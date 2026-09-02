@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Roboto_Mono } from "next/font/google";
 import { CursorProvider } from "@/components/cursor-provider";
 import { SoundProvider } from "@/components/sound-provider";
+import { MusicProvider } from "@/components/music-provider";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Nav } from "@/components/nav";
 import { Footer } from "@/components/footer";
@@ -56,13 +57,15 @@ export default function RootLayout({
         <SmoothScroll>
           <CursorProvider>
             <SoundProvider>
-              <CustomCursor />
-              <ThemeProvider>
-                <Nav />
-                <div className="flex-1">{children}</div>
-                <Footer />
-                <ScrollToTop />
-              </ThemeProvider>
+              <MusicProvider>
+                <CustomCursor />
+                <ThemeProvider>
+                  <Nav />
+                  <div className="flex-1">{children}</div>
+                  <Footer />
+                  <ScrollToTop />
+                </ThemeProvider>
+              </MusicProvider>
             </SoundProvider>
           </CursorProvider>
         </SmoothScroll>

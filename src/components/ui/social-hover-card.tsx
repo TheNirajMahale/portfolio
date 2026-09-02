@@ -72,7 +72,7 @@ export function SocialHoverCard({
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.96, y: side === "top" ? 3 : -3 }}
                 transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
-                className="w-68 sm:w-72 rounded-lg border border-border bg-card/95 p-3 text-card-foreground shadow-lg shadow-black/5 dark:shadow-xl dark:shadow-black/70 backdrop-blur-md ring-1 ring-border/50 select-text"
+                className="w-68 sm:w-72 rounded-lg border border-border bg-card/95 p-3 text-card-foreground shadow-sm shadow-black/5 dark:shadow-md dark:shadow-black/25 backdrop-blur-md select-text"
               >
                 {type === "github" && (
                   <div className="flex flex-col gap-2">
