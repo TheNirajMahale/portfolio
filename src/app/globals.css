@@ -57,6 +57,12 @@ html {
   font-size: 17px;
 }
 
+/* Hide native OS cursor when custom cursor is active on desktop */
+html.custom-cursor-active,
+html.custom-cursor-active * {
+  cursor: none !important;
+}
+
 
 /* ─── Focus ─── */
 *:focus-visible {
