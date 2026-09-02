@@ -3,6 +3,16 @@
   "nav": {
     "logo": "/logo.png"
   },
+  "hero": {
+    "avatar": "/developer-avatar.png",
+    "avatarAlt": "Niraj Mahale - Coding illustration"
+  },
+  "audio": {
+    "bgMusicSrc": "/sounds/ambient-piano.mp3",
+    "bgMusicVolume": 0.18,
+    "clickSoundSrc": "/sounds/click.mp3",
+    "clickVolume": 0.3
+  },
   "terminal": {
     "prompt": "niraj@portfolio",
     "quotes": [

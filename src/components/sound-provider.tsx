@@ -10,9 +10,11 @@ import {
   useState,
 } from "react";
 
+import siteData from "@/data/site.json";
+
 const STORAGE_KEY = "ui-sound";
-export const CLICK_SOUND = "/sounds/click.mp3";
-export const CLICK_VOLUME = 0.3;
+export const CLICK_SOUND = siteData.audio?.clickSoundSrc ?? "/sounds/click.mp3";
+export const CLICK_VOLUME = siteData.audio?.clickVolume ?? 0.3;
 
 type SoundContextType = {
   soundEnabled: boolean;

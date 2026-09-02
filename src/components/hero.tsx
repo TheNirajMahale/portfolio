@@ -4,23 +4,14 @@ import Image from "next/image";
 import { motion } from "motion/react";
 import { MapPin, ArrowDown, Sparkles, Volume2, VolumeX, Music } from "lucide-react";
 import { GitHubIcon, LinkedInIcon, MailIcon } from "@/components/ui/icons";
-import { SocialHoverCard, type SocialType } from "@/components/ui/social-hover-card";
+import { SocialHoverCard } from "@/components/ui/social-hover-card";
 import { useCursor } from "@/components/cursor-provider";
 import { useSound } from "@/components/sound-provider";
 import { useMusic } from "@/components/music-provider";
 import { AudioWaveformLine } from "@/components/ui/audio-waveform-line";
+import { socialLinks } from "@/lib/socials";
 import resumeData from "@/data/resume.json";
-
-const socialLinks: { href: string; icon: typeof GitHubIcon; label: string; type: SocialType }[] = [
-  { href: resumeData.personal.github, icon: GitHubIcon, label: "GitHub", type: "github" },
-  { href: resumeData.personal.linkedin, icon: LinkedInIcon, label: "LinkedIn", type: "linkedin" },
-  {
-    href: `mailto:${resumeData.personal.email}`,
-    icon: MailIcon,
-    label: "Email",
-    type: "email",
-  },
-];
+import siteData from "@/data/site.json";
 
 const container = {
   hidden: {},
@@ -174,7 +165,7 @@ export function Hero() {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={link.label}
-                      className="flex h-9 w-9 items-center justify-center rounded-md border border-border bg-muted text-muted-foreground transition-all duration-300 ease-out hover:-translate-y-1 hover:border-foreground/30 hover:text-foreground hover:bg-background"
+                      className="flex h-9 w-9 items-center justify-center rounded-md border-2 border-dotted border-foreground/40 bg-muted text-muted-foreground transition-all duration-300 ease-out hover:-translate-y-1 hover:border-foreground/30 hover:text-foreground hover:bg-background"
                     >
                       <link.icon size={16} />
                     </a>
@@ -203,8 +194,8 @@ export function Hero() {
 
               <div className="relative group transition-transform duration-500 hover:scale-[1.02] overflow-visible">
                 <Image
-                  src="/developer-avatar.png"
-                  alt="Niraj Mahale - Coding illustration"
+                  src={siteData.hero?.avatar ?? "/developer-avatar.png"}
+                  alt={siteData.hero?.avatarAlt ?? `${resumeData.personal.name} - Coding illustration`}
                   width={420}
                   height={420}
                   priority

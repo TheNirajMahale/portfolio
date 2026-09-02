@@ -71,13 +71,23 @@ portfolio/
 To make this portfolio your own, simply update the three JSON files in `src/data/`:
 
 ### 1. `src/data/site.json` (Site Configuration)
-Controls the global layout, metadata, and terminal animation.
+Controls the global layout, metadata, hero illustration, audio assets, and terminal animation.
 
 ```json
 {
   "siteUrl": "https://your-portfolio.com",
   "nav": {
     "logo": "/logo.png"
+  },
+  "hero": {
+    "avatar": "/developer-avatar.png",
+    "avatarAlt": "Your Name - Coding illustration"
+  },
+  "audio": {
+    "bgMusicSrc": "/sounds/ambient-piano.mp3",
+    "bgMusicVolume": 0.18,
+    "clickSoundSrc": "/sounds/click.mp3",
+    "clickVolume": 0.3
   },
   "terminal": {
     "prompt": "you@portfolio",
@@ -94,9 +104,10 @@ Controls the global layout, metadata, and terminal animation.
 ```
 
 - **`siteUrl`**: Base URL for metadata and Open Graph links.
-- **`logo`**: Path to an image in `/public` or an external avatar URL.
-- **`prompt`**: Terminal username and host prompt.
-- **`quotes`**: Array of text lines that rotate through the typewriter animation.
+- **`nav.logo`**: Path to your logo in `/public` or an external URL.
+- **`hero.avatar`**: Path to your avatar/illustration in `/public`.
+- **`audio`**: Custom audio file paths and default volume levels for background ambient music and UI click sounds.
+- **`terminal.prompt` & `quotes`**: Terminal username and rotating typewriter quotes.
 
 ---
 
@@ -107,12 +118,12 @@ Acts as your personal database for the portfolio and `/resume` page:
 - **`experience`**: Array of roles with title, company, duration, and bulleted highlights.
 - **`education`**: Institution names, degrees, durations, and grades/scores.
 - **`projects`**: Featured projects with GitHub links and highlight summaries.
-- **`skills`**: Categorized technical skills (Languages, Frameworks, Databases, Tools).
+- **`skills`**: Key-value object of technical skill categories (e.g. Languages, Frameworks, Databases, Tools, Concepts). **All categories added here are dynamically rendered into cards on the site.**
 
 ---
 
-### 3. `src/data/socials.json` (Social Profile Hover Cards)
-Controls the rich preview popovers when hovering over your social links:
+### 3. `src/data/socials.json` (Social Profile Hover Cards & Links)
+Controls the social triggers and rich preview popovers in the hero and footer:
 
 ```json
 {

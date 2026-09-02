@@ -51,27 +51,18 @@ const skillIcons: Record<string, React.ElementType> = {
   "Software Development Life Cycle (SDLC)": FaGears,
 };
 
-const displayCategories = [
-  "Programming Languages",
-  "Frameworks & Libraries",
-  "Databases",
-  "Web Development",
-  "Cloud & Tools",
-] as const;
-
 export function Skills() {
+  const categories = Object.keys(resumeData.skills);
+
   return (
     <Section id="skills" title="Skills" subtitle="Technologies I work with.">
-      <StaggerContainer className="grid gap-6 sm:grid-cols-2 lg:grid-cols-6">
-        {displayCategories.map((category, index) => {
+      <StaggerContainer className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {categories.map((category) => {
           const items = resumeData.skills[category as keyof typeof resumeData.skills];
           if (!items || !Array.isArray(items)) return null;
 
           return (
-            <StaggerItem 
-              key={category}
-              className={index < 3 ? "lg:col-span-2" : index === 4 ? "lg:col-span-3 sm:col-span-2 lg:col-[span_3]" : "lg:col-span-3"}
-            >
+            <StaggerItem key={category} className="h-full">
               <motion.div
                 whileHover={{ y: -6 }}
                 transition={{ duration: 0.25, ease: "easeOut" }}

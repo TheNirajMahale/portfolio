@@ -1,28 +1,7 @@
-import { GitHubIcon, LinkedInIcon, MailIcon } from "@/components/ui/icons";
-import { SocialHoverCard, type SocialType } from "@/components/ui/social-hover-card";
+import { SocialHoverCard } from "@/components/ui/social-hover-card";
+import { socialLinks } from "@/lib/socials";
 import resumeData from "@/data/resume.json";
 import siteData from "@/data/site.json";
-
-const links: { href: string; icon: typeof GitHubIcon; label: string; type: SocialType }[] = [
-  {
-    href: `mailto:${resumeData.personal.email}`,
-    icon: MailIcon,
-    label: "Email",
-    type: "email",
-  },
-  {
-    href: resumeData.personal.linkedin,
-    icon: LinkedInIcon,
-    label: "LinkedIn",
-    type: "linkedin",
-  },
-  {
-    href: resumeData.personal.github,
-    icon: GitHubIcon,
-    label: "GitHub",
-    type: "github",
-  },
-];
 
 export function Footer() {
   return (
@@ -42,7 +21,7 @@ export function Footer() {
           </div>
 
           <div className="flex items-center gap-2">
-            {links.map((link) => (
+            {socialLinks.map((link) => (
               <SocialHoverCard key={link.label} type={link.type} side="top">
                 <a
                   href={link.href}

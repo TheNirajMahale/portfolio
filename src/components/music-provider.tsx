@@ -10,9 +10,11 @@ import {
   useState,
 } from "react";
 
+import siteData from "@/data/site.json";
+
 const STORAGE_KEY = "portfolio-music";
-export const BACKGROUND_MUSIC_SRC = "/sounds/ambient-piano.mp3";
-export const TARGET_VOLUME = 0.18; // Soft ambient volume (18%)
+export const BACKGROUND_MUSIC_SRC = siteData.audio?.bgMusicSrc ?? "/sounds/ambient-piano.mp3";
+export const TARGET_VOLUME = siteData.audio?.bgMusicVolume ?? 0.18; // Soft ambient volume (18%)
 
 type MusicContextType = {
   musicEnabled: boolean;
