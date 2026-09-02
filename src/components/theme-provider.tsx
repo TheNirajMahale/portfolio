@@ -30,7 +30,6 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setTheme] = useState<Theme>("dark");
   const [mounted, setMounted] = useState(false);
   const isTransitioningRef = useRef(false);
-  const activeAnimRef = useRef<Animation | null>(null);
 
   // Read saved preference or system preference on mount
   useEffect(() => {
@@ -62,37 +61,40 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     const isDark = theme === "dark";
     const nextTheme = isDark ? "light" : "dark";
 
-    // Fallback if browser doesn't support View Transitions or reduced motion is preferred
+    // Fallback if reduced motion is preferred or View Transitions not supported
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (!document.startViewTransition || prefersReducedMotion) {
-      setTheme(nextTheme);
-      return;
-    }
-
-    // Expand from the center of the screen
-    const x = window.innerWidth / 2;
-    const y = window.innerHeight / 2;
-    
-    // Calculate distance to the furthest corner (center to corner)
-    const endRadius = Math.hypot(x, y);
-
-    isTransitioningRef.current = true;
-
-    // Cancel any ongoing animation if still active
-    if (activeAnimRef.current) {
-      activeAnimRef.current.cancel();
-      activeAnimRef.current = null;
-    }
-
-    const transition = document.startViewTransition(() => {
-      // Sync the DOM immediately for the snapshot transition
       const root = document.documentElement;
       if (nextTheme === "light") {
         root.classList.add("light");
       } else {
         root.classList.remove("light");
       }
-      // Force React to finish re-rendering before the animation starts
+      setTheme(nextTheme);
+      return;
+    }
+
+    isTransitioningRef.current = true;
+
+    // Origin coordinates from center of screen
+    const x = window.innerWidth / 2;
+    const y = window.innerHeight / 2;
+
+    // Calculate maximum radius from center to furthest corner
+    const maxRadius = Math.hypot(x, y);
+
+    const root = document.documentElement;
+    root.style.setProperty("--ripple-x", `${x}px`);
+    root.style.setProperty("--ripple-y", `${y}px`);
+    root.style.setProperty("--ripple-r", `${Math.ceil(maxRadius)}px`);
+
+    const transition = document.startViewTransition(() => {
+      if (nextTheme === "light") {
+        root.classList.add("light");
+      } else {
+        root.classList.remove("light");
+      }
+
       flushSync(() => {
         setTheme(nextTheme);
       });
@@ -100,36 +102,13 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
     const cleanup = () => {
       isTransitioningRef.current = false;
-      activeAnimRef.current = null;
     };
 
     if (transition.finished && typeof transition.finished.finally === "function") {
-      transition.finished.finally(cleanup).catch(() => {});
+      transition.finished.finally(cleanup).catch(cleanup);
+    } else {
+      setTimeout(cleanup, 550);
     }
-
-    transition.ready
-      .then(() => {
-        const clipPath = [
-          `circle(0px at ${x}px ${y}px)`,
-          `circle(${endRadius}px at ${x}px ${y}px)`,
-        ];
-
-        const anim = document.documentElement.animate(
-          {
-            clipPath: clipPath,
-          },
-          {
-            duration: 850,
-            easing: "cubic-bezier(0.25, 1, 0.5, 1)",
-            pseudoElement: "::view-transition-new(root)",
-            fill: "both",
-          }
-        );
-        activeAnimRef.current = anim;
-      })
-      .catch(() => {
-        cleanup();
-      });
   }, [theme]);
 
   // Prevent flash of wrong theme by hiding content until mounted
