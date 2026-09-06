@@ -72,7 +72,8 @@ html.custom-cursor-active * {
 }
 
 /* ─── Lenis Smooth Scroll ─── */
-html.lenis, html.lenis body {
+html.lenis,
+html.lenis body {
   height: auto;
 }
 
@@ -113,6 +114,7 @@ html.lenis, html.lenis body {
   from {
     clip-path: circle(0px at var(--ripple-x, 50%) var(--ripple-y, 50%));
   }
+
   to {
     clip-path: circle(var(--ripple-r, 1500px) at var(--ripple-x, 50%) var(--ripple-y, 50%));
   }
@@ -174,6 +176,25 @@ html.lenis, html.lenis body {
 .card-glow:hover {
   border-color: color-mix(in srgb, var(--foreground) 50%, transparent);
   box-shadow: 0 0 40px -12px color-mix(in srgb, var(--foreground) 15%, transparent);
+}
+
+/* ─── Cursor glow ─── */
+.cursor-glow {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  background: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+      hsl(var(--glow-hue, 280) 70% 55% / 0.12),
+      transparent 80%);
+}
+
+:root.light .cursor-glow {
+  background: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+      hsl(var(--glow-hue, 280) 70% 55% / 0.12),
+      transparent 80%);
 }
 
 /* ─── Print styles ─── */

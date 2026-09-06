@@ -7,6 +7,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Nav } from "@/components/nav";
 import { Footer } from "@/components/footer";
 import { CustomCursor } from "@/components/ui/custom-cursor";
+import { CursorGlow } from "@/components/ui/cursor-glow";
 import { ScrollToTop } from "@/components/ui/scroll-to-top";
 import { SmoothScroll } from "@/components/smooth-scroll";
 import "./globals.css";
@@ -59,6 +60,7 @@ export default function RootLayout({
             <SoundProvider>
               <MusicProvider>
                 <CustomCursor />
+                <CursorGlow />
                 <ThemeProvider>
                   <Nav />
                   <div className="flex-1">{children}</div>
