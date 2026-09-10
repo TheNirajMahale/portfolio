@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { motion, useMotionValue, useSpring } from "motion/react";
-import { useCursor } from "@/components/cursor-provider";
+import { useCursor } from "@/components/providers";
 
 const DEFAULT_SIZE = 20; // 20px default circle
 const DEFAULT_RADIUS = 999; // Circular border-radius

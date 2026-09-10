@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { FileText, Sun, Moon, Menu, X } from "lucide-react";
-import { useTheme } from "@/components/theme-provider";
+import { useTheme } from "@/components/providers";
 import { cn } from "@/lib/utils";
 import { MobileNav } from "@/components/mobile-nav";
 import siteData from "@/data/site.json";
