@@ -156,6 +156,50 @@ export function Skills() {
     }
   }, []);
 
+  const handleViewModeChange = React.useCallback(
+    (newMode: "ticker" | "grid") => {
+      if (newMode !== viewMode) {
+        setViewMode(newMode);
+        setSelectedCategory("All");
+        activeTooltipRef.current = null;
+        setActiveTooltip(null);
+      }
+    },
+    [viewMode]
+  );
+
+  const handleBadgeEnter = React.useCallback(
+    (id: string, skill: SkillMeta, e: React.MouseEvent<HTMLDivElement>) => {
+      clearCloseTimeout();
+      mousePosRef.current = { x: e.clientX, y: e.clientY };
+      const badgeEl = e.currentTarget;
+      const centerX = badgeEl.offsetLeft + badgeEl.offsetWidth / 2;
+      const newTooltip = { id, skill, centerX };
+      activeTooltipRef.current = newTooltip;
+      setActiveTooltip(newTooltip);
+    },
+    [clearCloseTimeout]
+  );
+
+  const handleBadgeLeave = React.useCallback(() => {
+    clearCloseTimeout();
+    // 110ms grace period so moving across badges keeps the tooltip alive
+    closeTimeoutRef.current = setTimeout(() => {
+      activeTooltipRef.current = null;
+      setActiveTooltip(null);
+    }, 110);
+  }, [clearCloseTimeout]);
+
+  const handleMarqueeMouseLeave = React.useCallback(() => {
+    isMarqueeHoveredRef.current = false;
+    mousePosRef.current = null;
+    clearCloseTimeout();
+    closeTimeoutRef.current = setTimeout(() => {
+      activeTooltipRef.current = null;
+      setActiveTooltip(null);
+    }, 110);
+  }, [clearCloseTimeout]);
+
   // 4x repetition for seamless wide-screen infinite translation
   const marqueeBadges = React.useMemo(() => {
     const list: Array<{ id: string; skill: SkillMeta }> = [];
@@ -346,38 +390,6 @@ export function Skills() {
     };
   }, [viewMode, marqueeBadges, clearCloseTimeout]);
 
-  const handleBadgeEnter = React.useCallback(
-    (id: string, skill: SkillMeta, e: React.MouseEvent<HTMLDivElement>) => {
-      clearCloseTimeout();
-      mousePosRef.current = { x: e.clientX, y: e.clientY };
-      const badgeEl = e.currentTarget;
-      const centerX = badgeEl.offsetLeft + badgeEl.offsetWidth / 2;
-      const newTooltip = { id, skill, centerX };
-      activeTooltipRef.current = newTooltip;
-      setActiveTooltip(newTooltip);
-    },
-    [clearCloseTimeout]
-  );
-
-  const handleBadgeLeave = React.useCallback(() => {
-    clearCloseTimeout();
-    // 110ms grace period so moving across badges keeps the tooltip alive
-    closeTimeoutRef.current = setTimeout(() => {
-      activeTooltipRef.current = null;
-      setActiveTooltip(null);
-    }, 110);
-  }, [clearCloseTimeout]);
-
-  const handleMarqueeMouseLeave = () => {
-    isMarqueeHoveredRef.current = false;
-    mousePosRef.current = null;
-    clearCloseTimeout();
-    closeTimeoutRef.current = setTimeout(() => {
-      activeTooltipRef.current = null;
-      setActiveTooltip(null);
-    }, 110);
-  };
-
   React.useEffect(() => {
     return () => {
       clearCloseTimeout();
@@ -427,7 +439,7 @@ export function Skills() {
           <div className="flex items-center gap-1 self-start sm:self-auto rounded-md border border-border bg-muted/60 p-0.5">
             <button
               type="button"
-              onClick={() => setViewMode("ticker")}
+              onClick={() => handleViewModeChange("ticker")}
               className={cn(
                 "flex items-center gap-1.5 px-2.5 py-1 font-mono text-xs rounded transition-all cursor-pointer",
                 viewMode === "ticker"
@@ -441,7 +453,7 @@ export function Skills() {
             </button>
             <button
               type="button"
-              onClick={() => setViewMode("grid")}
+              onClick={() => handleViewModeChange("grid")}
               className={cn(
                 "flex items-center gap-1.5 px-2.5 py-1 font-mono text-xs rounded transition-all cursor-pointer",
                 viewMode === "grid"
