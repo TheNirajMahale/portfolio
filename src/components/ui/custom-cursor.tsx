@@ -51,10 +51,37 @@ export function CustomCursor() {
       return;
     }
 
-    const parseRadius = (str: string): number => {
-      const match = str.match(/^([\d.]+)px/);
-      if (match) return parseFloat(match[1]);
-      if (str.includes("%") || str === "9999px" || str.includes("full")) return 999;
+    const parseRadius = (el: HTMLElement, computed: CSSStyleDeclaration, rect: DOMRect): number => {
+      // 1. Direct class check for Tailwind rounded-full / rounded-none
+      if (el.classList.contains("rounded-full") || el.closest(".rounded-full")) {
+        return 999;
+      }
+      if (el.classList.contains("rounded-none")) {
+        return 0;
+      }
+
+      // 2. Read specific longhand property to avoid shorthand CSSOM serialization quirks
+      const rawRadius = computed.borderTopLeftRadius || computed.borderRadius || "";
+
+      if (
+        rawRadius.includes("infinity") ||
+        rawRadius.includes("9999") ||
+        rawRadius.includes("%") ||
+        rawRadius.includes("full")
+      ) {
+        return 999;
+      }
+
+      const num = parseFloat(rawRadius);
+      if (!isNaN(num)) {
+        // If radius is at least half the element's height or width, it's effectively a pill or circle
+        const halfMinDim = Math.min(rect.width, rect.height) / 2;
+        if (num >= halfMinDim && halfMinDim > 0) {
+          return 999;
+        }
+        return num;
+      }
+
       return 8;
     };
 
@@ -69,7 +96,7 @@ export function CustomCursor() {
       if (interactive) {
         const rect = interactive.getBoundingClientRect();
         const computed = window.getComputedStyle(interactive);
-        const radiusVal = parseRadius(computed.borderRadius);
+        const radiusVal = parseRadius(interactive, computed, rect);
 
         activeTargetRef.current = interactive;
 

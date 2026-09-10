@@ -142,7 +142,11 @@ export function Skills() {
   const [viewMode, setViewMode] = React.useState<"ticker" | "grid">("ticker");
 
   const tickerRef = React.useRef<HTMLDivElement>(null);
+  const marqueeContainerRef = React.useRef<HTMLDivElement>(null);
   const isMarqueeHoveredRef = React.useRef(false);
+  const wheelVelocityRef = React.useRef(0);
+  const mousePosRef = React.useRef<{ x: number; y: number } | null>(null);
+  const activeTooltipRef = React.useRef<ActiveTooltip | null>(null);
   const closeTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
 
   const clearCloseTimeout = React.useCallback(() => {
@@ -151,88 +155,6 @@ export function Skills() {
       closeTimeoutRef.current = null;
     }
   }, []);
-
-  const isSkillHighlighted = React.useCallback(
-    (category: string) => {
-      if (selectedCategory === "All") return true;
-      return selectedCategory === category;
-    },
-    [selectedCategory]
-  );
-
-  // Single-line smooth inertial rAF Marquee:
-  // Cruising speed ~38px/s; when hovered, gently coasts down to a slow ~8px/s drift (never stops abruptly)
-  React.useEffect(() => {
-    if (viewMode !== "ticker") return;
-
-    let animId: number;
-    let lastTime = performance.now();
-    let x = 0;
-    let currentSpeed = 0.62;
-
-    const tick = (now: number) => {
-      const dt = Math.min((now - lastTime) / 1000, 0.1);
-      lastTime = now;
-
-      // On hover, coast down to a gentle 0.12 px/frame (~7-8px/s). Cruising speed is 0.62 px/frame (~38px/s)
-      const targetSpeed = isMarqueeHoveredRef.current ? 0.12 : 0.62;
-      // Exponential inertia smoothing: natural deceleration with physical momentum
-      currentSpeed += (targetSpeed - currentSpeed) * Math.min(dt * 5, 1);
-
-      const step = currentSpeed * 60 * dt;
-
-      x -= step;
-      if (tickerRef.current) {
-        const half = tickerRef.current.scrollWidth / 2;
-        if (half > 0 && Math.abs(x) >= half) {
-          x += half;
-        }
-        tickerRef.current.style.transform = `translate3d(${x}px, 0, 0)`;
-      }
-
-      animId = requestAnimationFrame(tick);
-    };
-
-    animId = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(animId);
-  }, [viewMode]);
-
-  const handleBadgeEnter = React.useCallback(
-    (id: string, skill: SkillMeta, e: React.MouseEvent<HTMLDivElement>) => {
-      clearCloseTimeout();
-      const badgeEl = e.currentTarget;
-      const centerX = badgeEl.offsetLeft + badgeEl.offsetWidth / 2;
-      setActiveTooltip({ id, skill, centerX });
-    },
-    [clearCloseTimeout]
-  );
-
-  const handleBadgeLeave = React.useCallback(() => {
-    clearCloseTimeout();
-    // 110ms grace period so moving across the gap between badges keeps the tooltip alive to slide smoothly
-    closeTimeoutRef.current = setTimeout(() => {
-      setActiveTooltip(null);
-    }, 110);
-  }, [clearCloseTimeout]);
-
-  const handleMarqueeMouseEnter = () => {
-    isMarqueeHoveredRef.current = true;
-    clearCloseTimeout();
-  };
-
-  const handleMarqueeMouseLeave = () => {
-    isMarqueeHoveredRef.current = false;
-    clearCloseTimeout();
-    closeTimeoutRef.current = setTimeout(() => {
-      setActiveTooltip(null);
-    }, 110);
-  };
-
-  React.useEffect(() => {
-    return () => {
-      clearCloseTimeout();
-    };
-  }, [clearCloseTimeout]);
 
   // 4x repetition for seamless wide-screen infinite translation
   const marqueeBadges = React.useMemo(() => {
@@ -247,6 +169,220 @@ export function Skills() {
     }
     return list;
   }, []);
+
+  const isSkillHighlighted = React.useCallback(
+    (category: string) => {
+      if (selectedCategory === "All") return true;
+      return selectedCategory === category;
+    },
+    [selectedCategory]
+  );
+
+  // Single-line smooth inertial rAF Marquee with physics-based horizontal mouse wheel scrolling
+  React.useEffect(() => {
+    if (viewMode !== "ticker") return;
+
+    let animId: number;
+    let lastTime = performance.now();
+    let x = 0;
+    let currentSpeed = 0.62;
+
+    const container = marqueeContainerRef.current;
+    const handleWheel = (e: WheelEvent) => {
+      const ticker = tickerRef.current;
+      if (!ticker) return;
+
+      const tickerRect = ticker.getBoundingClientRect();
+      const badgeCenterY = (tickerRect.top + tickerRect.bottom) / 2;
+      const halfBadgeHeight = 32; // 64px badge / 2
+      const buffer = 28; // Exact symmetrical buffer matching 28px area under icons (pb-4 + py-3)
+
+      const blockZoneTop = badgeCenterY - halfBadgeHeight - buffer;
+      const blockZoneBottom = badgeCenterY + halfBadgeHeight + buffer;
+
+      // Only block vertical scrolling if cursor is within the symmetrical icon zone
+      const isInBlockZone = e.clientY >= blockZoneTop && e.clientY <= blockZoneBottom;
+      if (!isInBlockZone) {
+        // Outside the icon zone (e.g. near tabs or section divider): allow native vertical scrolling
+        return;
+      }
+
+      // Completely block vertical page scrolling while directly over the icon zone
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+
+      // Record cursor coordinates for instant hit-detection during wheel rotation
+      mousePosRef.current = { x: e.clientX, y: e.clientY };
+
+      let delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+      if (e.deltaMode === 1) {
+        // DOM_DELTA_LINE
+        delta *= 20;
+      } else if (e.deltaMode === 2) {
+        // DOM_DELTA_PAGE
+        delta *= 60;
+      }
+
+      // Smooth impulse accumulator
+      wheelVelocityRef.current += delta * 0.18;
+
+      // Clamp max velocity for comfortable gliding
+      const maxVel = 26;
+      if (wheelVelocityRef.current > maxVel) wheelVelocityRef.current = maxVel;
+      if (wheelVelocityRef.current < -maxVel) wheelVelocityRef.current = -maxVel;
+    };
+
+    if (container) {
+      container.addEventListener("wheel", handleWheel, { passive: false, capture: true });
+    }
+
+    const tick = (now: number) => {
+      const dt = Math.min((now - lastTime) / 1000, 0.1);
+      lastTime = now;
+
+      // On hover, coast down to a gentle 0.12 px/frame (~7-8px/s). Cruising speed is 0.62 px/frame (~38px/s)
+      const targetSpeed = isMarqueeHoveredRef.current ? 0.12 : 0.62;
+      // Exponential inertia smoothing: natural deceleration with physical momentum
+      currentSpeed += (targetSpeed - currentSpeed) * Math.min(dt * 5, 1);
+
+      // Smooth wheel momentum with frame-rate independent friction damping
+      const wheelStep = wheelVelocityRef.current;
+      wheelVelocityRef.current *= Math.pow(0.88, dt * 60);
+      if (Math.abs(wheelVelocityRef.current) < 0.01) {
+        wheelVelocityRef.current = 0;
+      }
+
+      const autoStep = currentSpeed * 60 * dt;
+
+      // Total displacement: wheeling down (positive delta) advances ticker forward (decreases x)
+      x -= (autoStep + wheelStep);
+
+      if (tickerRef.current) {
+        const half = tickerRef.current.scrollWidth / 2;
+        if (half > 0) {
+          // Bi-directional seamless wrapping
+          while (x <= -half) {
+            x += half;
+          }
+          while (x > 0) {
+            x -= half;
+          }
+        }
+        tickerRef.current.style.transform = `translate3d(${x}px, 0, 0)`;
+
+        // Dynamically detect which badge is currently under the cursor as badges slide
+        if (mousePosRef.current) {
+          const tickerRect = tickerRef.current.getBoundingClientRect();
+          const badgeCenterY = (tickerRect.top + tickerRect.bottom) / 2;
+          const halfBadgeHeight = 32;
+          const buffer = 28;
+          const blockZoneTop = badgeCenterY - halfBadgeHeight - buffer;
+          const blockZoneBottom = badgeCenterY + halfBadgeHeight + buffer;
+
+          const isInsideIconZone =
+            mousePosRef.current.y >= blockZoneTop &&
+            mousePosRef.current.y <= blockZoneBottom &&
+            mousePosRef.current.x >= tickerRect.left &&
+            mousePosRef.current.x <= tickerRect.right;
+
+          if (isInsideIconZone) {
+            isMarqueeHoveredRef.current = true;
+            const badgeNodes = tickerRef.current.querySelectorAll<HTMLDivElement>("[data-skill-id]");
+            let matchedBadge: HTMLDivElement | null = null;
+            let minDistance = Infinity;
+
+            for (let i = 0; i < badgeNodes.length; i++) {
+              const node = badgeNodes[i];
+              const rect = node.getBoundingClientRect();
+              if (rect.right < 0 || rect.left > window.innerWidth) continue;
+
+              // Expand horizontal hit boundary by half the 16px gap (8px)
+              if (mousePosRef.current.x >= rect.left - 8 && mousePosRef.current.x <= rect.right + 8) {
+                matchedBadge = node;
+                break;
+              }
+
+              const centerX = (rect.left + rect.right) / 2;
+              const dist = Math.abs(mousePosRef.current.x - centerX);
+              if (dist < minDistance) {
+                minDistance = dist;
+                matchedBadge = node;
+              }
+            }
+
+            if (matchedBadge) {
+              const id = matchedBadge.getAttribute("data-skill-id");
+              if (id && id !== activeTooltipRef.current?.id) {
+                const found = marqueeBadges.find((b) => b.id === id);
+                if (found) {
+                  const centerX = matchedBadge.offsetLeft + matchedBadge.offsetWidth / 2;
+                  const newTooltip = { id, skill: found.skill, centerX };
+                  activeTooltipRef.current = newTooltip;
+                  setActiveTooltip(newTooltip);
+                  clearCloseTimeout();
+                }
+              }
+            }
+          } else {
+            isMarqueeHoveredRef.current = false;
+            if (activeTooltipRef.current) {
+              activeTooltipRef.current = null;
+              setActiveTooltip(null);
+            }
+          }
+        }
+      }
+
+      animId = requestAnimationFrame(tick);
+    };
+
+    animId = requestAnimationFrame(tick);
+    return () => {
+      cancelAnimationFrame(animId);
+      if (container) {
+        container.removeEventListener("wheel", handleWheel, { capture: true });
+      }
+    };
+  }, [viewMode, marqueeBadges, clearCloseTimeout]);
+
+  const handleBadgeEnter = React.useCallback(
+    (id: string, skill: SkillMeta, e: React.MouseEvent<HTMLDivElement>) => {
+      clearCloseTimeout();
+      mousePosRef.current = { x: e.clientX, y: e.clientY };
+      const badgeEl = e.currentTarget;
+      const centerX = badgeEl.offsetLeft + badgeEl.offsetWidth / 2;
+      const newTooltip = { id, skill, centerX };
+      activeTooltipRef.current = newTooltip;
+      setActiveTooltip(newTooltip);
+    },
+    [clearCloseTimeout]
+  );
+
+  const handleBadgeLeave = React.useCallback(() => {
+    clearCloseTimeout();
+    // 110ms grace period so moving across badges keeps the tooltip alive
+    closeTimeoutRef.current = setTimeout(() => {
+      activeTooltipRef.current = null;
+      setActiveTooltip(null);
+    }, 110);
+  }, [clearCloseTimeout]);
+
+  const handleMarqueeMouseLeave = () => {
+    isMarqueeHoveredRef.current = false;
+    mousePosRef.current = null;
+    clearCloseTimeout();
+    closeTimeoutRef.current = setTimeout(() => {
+      activeTooltipRef.current = null;
+      setActiveTooltip(null);
+    }, 110);
+  };
+
+  React.useEffect(() => {
+    return () => {
+      clearCloseTimeout();
+    };
+  }, [clearCloseTimeout]);
 
   return (
     <Section
@@ -322,12 +458,17 @@ export function Skills() {
 
         {/* View 1: Prominent Single-Line Infinite Marquee with Sliding Inspector Pill */}
         {viewMode === "ticker" && (
-          <div className="relative w-full overflow-hidden pt-[100px] pb-4 [mask-image:linear-gradient(to_right,transparent,black_6%,black_94%,transparent)]">
+          <div
+            ref={marqueeContainerRef}
+            onMouseMove={(e) => {
+              mousePosRef.current = { x: e.clientX, y: e.clientY };
+            }}
+            onMouseLeave={handleMarqueeMouseLeave}
+            className="relative w-full overflow-hidden pt-[100px] pb-4 [mask-image:linear-gradient(to_right,transparent,black_6%,black_94%,transparent)]"
+          >
             <div
-              onMouseEnter={handleMarqueeMouseEnter}
-              onMouseLeave={handleMarqueeMouseLeave}
               ref={tickerRef}
-              className="relative flex gap-4 py-3 w-max will-change-transform items-center"
+              className="relative flex gap-4 py-3 w-max will-change-transform items-center select-none"
             >
               {/* Single Gliding Floating Inspector Pill (SocialHoverGroup style spring slide across badges) */}
               <AnimatePresence>
@@ -396,6 +537,7 @@ export function Skills() {
               {marqueeBadges.map(({ id, skill }) => (
                 <TickerSkillBadge
                   key={id}
+                  id={id}
                   skill={skill}
                   isHighlighted={isSkillHighlighted(skill.category)}
                   isHovered={activeTooltip?.id === id}
@@ -464,12 +606,14 @@ export function Skills() {
 
 // Single-line Ticker Badge with 64x64px footprint and prominent 32px icon
 function TickerSkillBadge({
+  id,
   skill,
   isHighlighted,
   isHovered,
   onMouseEnter,
   onMouseLeave,
 }: {
+  id: string;
   skill: SkillMeta;
   isHighlighted: boolean;
   isHovered: boolean;
@@ -480,6 +624,7 @@ function TickerSkillBadge({
 
   return (
     <div
+      data-skill-id={id}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       className="relative shrink-0 flex items-center justify-center cursor-pointer select-none"

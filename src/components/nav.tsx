@@ -125,7 +125,7 @@ export function Nav() {
             <button
               onClick={toggleTheme}
               aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
-              className="relative flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground transition-colors duration-150 hover:text-foreground hover:bg-muted overflow-hidden"
+              className="relative flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground transition-colors duration-150 hover:text-foreground hover:bg-muted overflow-hidden"
             >
               <AnimatePresence mode="wait" initial={false}>
                 {theme === "dark" ? (
