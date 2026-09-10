@@ -7,6 +7,7 @@ import {
   useState,
   useCallback,
   useRef,
+  useSyncExternalStore,
 } from "react";
 import { flushSync } from "react-dom";
 
@@ -14,10 +15,19 @@ type Theme = "dark" | "light";
 
 interface ThemeContextValue {
   theme: Theme;
-  toggleTheme: (event?: React.MouseEvent) => void;
+  toggleTheme: () => void;
 }
 
 const ThemeContext = createContext<ThemeContextValue | null>(null);
+
+const emptySubscribe = () => () => {};
+function useMounted() {
+  return useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false
+  );
+}
 
 export function useTheme() {
   const ctx = useContext(ThemeContext);
@@ -27,21 +37,19 @@ export function useTheme() {
 }
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<Theme>("dark");
-  const [mounted, setMounted] = useState(false);
-  const isTransitioningRef = useRef(false);
-
-  // Read saved preference or system preference on mount
-  useEffect(() => {
-    const saved = localStorage.getItem("theme") as Theme | null;
-    if (saved === "light" || saved === "dark") {
-      setTheme(saved);
-    } else {
-      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-      setTheme(prefersDark ? "dark" : "light");
+  const [theme, setTheme] = useState<Theme>(() => {
+    if (typeof window === "undefined") return "dark";
+    try {
+      const saved = localStorage.getItem("theme") as Theme | null;
+      if (saved === "light" || saved === "dark") return saved;
+      return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    } catch {
+      return "dark";
     }
-    setMounted(true);
-  }, []);
+  });
+
+  const mounted = useMounted();
+  const isTransitioningRef = useRef(false);
 
   // Sync class on <html> whenever theme changes
   useEffect(() => {
@@ -52,10 +60,14 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     } else {
       root.classList.remove("light");
     }
-    localStorage.setItem("theme", theme);
+    try {
+      localStorage.setItem("theme", theme);
+    } catch {
+      // Storage unavailable fallback
+    }
   }, [theme, mounted]);
 
-  const toggleTheme = useCallback((event?: React.MouseEvent) => {
+  const toggleTheme = useCallback(() => {
     if (isTransitioningRef.current) return;
 
     const isDark = theme === "dark";
@@ -75,39 +87,44 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     }
 
     isTransitioningRef.current = true;
-
-    // Origin coordinates from center of screen
-    const x = window.innerWidth / 2;
-    const y = window.innerHeight / 2;
-
-    // Calculate maximum radius from center to furthest corner
-    const maxRadius = Math.hypot(x, y);
-
     const root = document.documentElement;
-    root.style.setProperty("--ripple-x", `${x}px`);
-    root.style.setProperty("--ripple-y", `${y}px`);
-    root.style.setProperty("--ripple-r", `${Math.ceil(maxRadius)}px`);
-
-    const transition = document.startViewTransition(() => {
-      if (nextTheme === "light") {
-        root.classList.add("light");
-      } else {
-        root.classList.remove("light");
-      }
-
-      flushSync(() => {
-        setTheme(nextTheme);
-      });
-    });
 
     const cleanup = () => {
       isTransitioningRef.current = false;
     };
 
-    if (transition.finished && typeof transition.finished.finally === "function") {
-      transition.finished.finally(cleanup).catch(cleanup);
-    } else {
-      setTimeout(cleanup, 550);
+    try {
+      const transition = document.startViewTransition(() => {
+        flushSync(() => {
+          setTheme(nextTheme);
+          if (nextTheme === "light") {
+            root.classList.add("light");
+          } else {
+            root.classList.remove("light");
+          }
+        });
+      });
+
+      transition.ready
+        .then(() => {
+          const animation = root.animate(
+            {
+              clipPath: [
+                "inset(0 100% 0 0)",
+                "inset(0 0 0 0)",
+              ],
+            },
+            {
+              duration: 900,
+              easing: "cubic-bezier(0.25, 1, 0.4, 1)",
+              pseudoElement: "::view-transition-new(root)",
+            }
+          );
+          animation.finished.finally(cleanup).catch(cleanup);
+        })
+        .catch(cleanup);
+    } catch {
+      cleanup();
     }
   }, [theme]);
 

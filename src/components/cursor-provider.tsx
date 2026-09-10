@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState, useCallback } from "react";
+import { createContext, useContext, useState, useCallback, useSyncExternalStore } from "react";
 
 interface CursorContextValue {
   cursorEnabled: boolean;
@@ -16,23 +16,35 @@ export function useCursor() {
   return useContext(CursorContext);
 }
 
+const emptySubscribe = () => () => {};
+function useMounted() {
+  return useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false
+  );
+}
+
 export function CursorProvider({ children }: { children: React.ReactNode }) {
   // Default is OFF (false)
-  const [cursorEnabled, setCursorEnabled] = useState<boolean>(false);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    const saved = localStorage.getItem("custom-cursor-enabled");
-    if (saved === "true") {
-      setCursorEnabled(true);
+  const [cursorEnabled, setCursorEnabled] = useState<boolean>(() => {
+    if (typeof window === "undefined") return false;
+    try {
+      return localStorage.getItem("custom-cursor-enabled") === "true";
+    } catch {
+      return false;
     }
-    setMounted(true);
-  }, []);
+  });
+  const mounted = useMounted();
 
   const toggleCursor = useCallback(() => {
     setCursorEnabled((prev) => {
       const next = !prev;
-      localStorage.setItem("custom-cursor-enabled", String(next));
+      try {
+        localStorage.setItem("custom-cursor-enabled", String(next));
+      } catch {
+        // Storage unavailable fallback
+      }
       return next;
     });
   }, []);

@@ -180,37 +180,46 @@ const GridArt = () => {
 };
 
 // --- Particles / Wave Animation ---
+const PARTICLE_DATA = Array.from({ length: 40 }, (_, i) => {
+  const seed1 = (i * 9301 + 49297) % 233280;
+  const rnd1 = seed1 / 233280;
+  const seed2 = (seed1 * 9301 + 49297) % 233280;
+  const rnd2 = seed2 / 233280;
+  const seed3 = (seed2 * 9301 + 49297) % 233280;
+  const rnd3 = seed3 / 233280;
+  return {
+    x: rnd1 * 800 - 400,
+    y: rnd2 * 60 - 30,
+    targetY: rnd3 * 100 - 50,
+    scale: rnd1 * 1.5 + 0.5,
+    duration: rnd2 * 3 + 2,
+    delay: rnd3 * 2,
+  };
+});
+
 const ParticlesArt = () => {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) return <div className="h-24 w-full" />;
-
   return (
     <div className="flex justify-center items-center h-24 overflow-hidden w-full relative">
-      {Array.from({ length: 40 }).map((_, i) => (
+      {PARTICLE_DATA.map((p, i) => (
         <motion.div
           key={i}
           className="absolute w-1.5 h-1.5 rounded-full bg-foreground/40"
           initial={{
-            x: Math.random() * 800 - 400,
-            y: Math.random() * 60 - 30,
+            x: p.x,
+            y: p.y,
             opacity: 0,
             scale: 0,
           }}
           animate={{
-            y: [null, Math.random() * 100 - 50],
+            y: [null, p.targetY],
             opacity: [0, 0.8, 0],
-            scale: [0, Math.random() * 1.5 + 0.5, 0],
+            scale: [0, p.scale, 0],
           }}
           transition={{
-            duration: Math.random() * 3 + 2,
+            duration: p.duration,
             repeat: Infinity,
             ease: "easeInOut",
-            delay: Math.random() * 2,
+            delay: p.delay,
           }}
         />
       ))}

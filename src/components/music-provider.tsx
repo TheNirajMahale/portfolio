@@ -25,7 +25,14 @@ type MusicContextType = {
 const MusicContext = createContext<MusicContextType | null>(null);
 
 export function MusicProvider({ children }: { children: React.ReactNode }) {
-  const [musicEnabled, setMusicEnabledState] = useState(false);
+  const [musicEnabled, setMusicEnabledState] = useState<boolean>(() => {
+    if (typeof window === "undefined") return false;
+    try {
+      return window.localStorage.getItem(STORAGE_KEY) === "on";
+    } catch {
+      return false;
+    }
+  });
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const fadeIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -35,15 +42,6 @@ export function MusicProvider({ children }: { children: React.ReactNode }) {
     audio.loop = true;
     audio.volume = 0;
     audioRef.current = audio;
-
-    try {
-      const stored = window.localStorage.getItem(STORAGE_KEY);
-      if (stored === "on") {
-        setMusicEnabledState(true);
-      }
-    } catch {
-      // localStorage unavailable fallback
-    }
 
     return () => {
       if (fadeIntervalRef.current) clearInterval(fadeIntervalRef.current);

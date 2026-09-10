@@ -93,7 +93,7 @@ html.lenis body {
   pointer-events: none;
 }
 
-/* ─── View Transitions (CSS-driven Ripple) ─── */
+/* ─── View Transitions (Hardware-Accelerated Linear Wipe) ─── */
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation: none;
@@ -107,17 +107,10 @@ html.lenis body {
 
 ::view-transition-new(root) {
   z-index: 9999;
-  animation: theme-ripple 500ms cubic-bezier(0.2, 0, 0, 1) forwards;
 }
 
-@keyframes theme-ripple {
-  from {
-    clip-path: circle(0px at var(--ripple-x, 50%) var(--ripple-y, 50%));
-  }
-
-  to {
-    clip-path: circle(var(--ripple-r, 1500px) at var(--ripple-x, 50%) var(--ripple-y, 50%));
-  }
+::view-transition-image-pair(root) {
+  isolation: isolate;
 }
 
 /* ─── Selection ─── */

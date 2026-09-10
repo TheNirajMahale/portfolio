@@ -13,19 +13,29 @@ export function Experience() {
         {resumeData.experience.map((job) => (
           <StaggerItem key={job.company}>
             <motion.div 
-              whileHover={{ y: -6 }}
-              transition={{ duration: 0.25, ease: "easeOut" }}
-              className="group rounded-lg border-2 border-dotted border-foreground/40 bg-card p-5 md:p-8 card-glow"
+              whileHover={{ scale: 1.012 }}
+              transition={{ duration: 0.35, ease: [0.25, 1, 0.5, 1] }}
+              className="group relative rounded-lg border-2 border-dotted border-foreground/40 bg-card p-5 md:p-8 card-glow transition-colors duration-300 hover:border-foreground/80 hover:z-10"
             >
               <div className="flex flex-col sm:flex-row sm:items-start gap-4 sm:gap-4">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-border bg-muted text-muted-foreground">
-                  <Briefcase size={18} strokeWidth={1.5} />
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-border bg-muted/70 text-muted-foreground transition-all duration-300 group-hover:border-foreground/40 group-hover:text-foreground group-hover:bg-muted">
+                  <span className="inline-block transition-transform duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:-translate-y-0.5 group-hover:scale-110 group-hover:rotate-6">
+                    <Briefcase size={18} strokeWidth={1.5} />
+                  </span>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
-                    <h3 className="font-mono text-sm font-semibold text-foreground">
-                      {job.title}
-                    </h3>
+                  <div className="flex flex-col gap-1.5 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <h3 className="font-mono text-sm font-semibold text-foreground">
+                        {job.title}
+                      </h3>
+                      {job.duration.toLowerCase().includes("present") && (
+                        <span className="inline-flex items-center gap-1.5 rounded border border-emerald-500/40 bg-emerald-500/10 px-2 py-0.5 font-mono text-[10px] font-medium text-emerald-600 dark:text-emerald-400">
+                          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                          CURRENT ROLE
+                        </span>
+                      )}
+                    </div>
                     <span className="font-mono text-xs tabular-nums text-muted-foreground whitespace-nowrap">
                       {job.duration}
                     </span>

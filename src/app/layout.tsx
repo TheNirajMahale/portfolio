@@ -9,6 +9,7 @@ import { Footer } from "@/components/footer";
 import { CustomCursor } from "@/components/ui/custom-cursor";
 import { CursorGlow } from "@/components/ui/cursor-glow";
 import { ScrollToTop } from "@/components/ui/scroll-to-top";
+import { ScrollProgressBar } from "@/components/ui/scroll-progress-bar";
 import { SmoothScroll } from "@/components/smooth-scroll";
 import "./globals.css";
 
@@ -62,6 +63,7 @@ export default function RootLayout({
                 <CustomCursor />
                 <CursorGlow />
                 <ThemeProvider>
+                  <ScrollProgressBar />
                   <Nav />
                   <div className="flex-1">{children}</div>
                   <Footer />

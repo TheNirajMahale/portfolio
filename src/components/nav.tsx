@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState, useEffect } from "react";
-import { motion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 import { FileText, Sun, Moon, Menu, X } from "lucide-react";
 import { useTheme } from "@/components/theme-provider";
 import { cn } from "@/lib/utils";
@@ -83,10 +84,13 @@ export function Nav() {
             }}
             className="flex items-center justify-center transition-opacity hover:opacity-80 -ml-2"
           >
-            <img 
+            <Image 
               src={siteData.nav.logo}
               alt="Logo" 
-              className="h-11 w-auto rounded-sm" 
+              width={44}
+              height={44}
+              className="h-11 w-auto rounded-sm"
+              priority 
             />
           </Link>
 
@@ -126,13 +130,33 @@ export function Nav() {
             <button
               onClick={toggleTheme}
               aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
-              className="flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground transition-colors duration-150 hover:text-foreground hover:bg-muted"
+              className="relative flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground transition-colors duration-150 hover:text-foreground hover:bg-muted overflow-hidden"
             >
-              {theme === "dark" ? (
-                <Sun size={15} strokeWidth={1.5} />
-              ) : (
-                <Moon size={15} strokeWidth={1.5} />
-              )}
+              <AnimatePresence mode="wait" initial={false}>
+                {theme === "dark" ? (
+                  <motion.span
+                    key="sun"
+                    initial={{ rotate: -90, scale: 0.5, opacity: 0 }}
+                    animate={{ rotate: 0, scale: 1, opacity: 1 }}
+                    exit={{ rotate: 90, scale: 0.5, opacity: 0 }}
+                    transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                    className="flex items-center justify-center"
+                  >
+                    <Sun size={15} strokeWidth={1.5} />
+                  </motion.span>
+                ) : (
+                  <motion.span
+                    key="moon"
+                    initial={{ rotate: 90, scale: 0.5, opacity: 0 }}
+                    animate={{ rotate: 0, scale: 1, opacity: 1 }}
+                    exit={{ rotate: -90, scale: 0.5, opacity: 0 }}
+                    transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                    className="flex items-center justify-center"
+                  >
+                    <Moon size={15} strokeWidth={1.5} />
+                  </motion.span>
+                )}
+              </AnimatePresence>
             </button>
 
             {/* Resume link */}
@@ -144,9 +168,9 @@ export function Nav() {
                   window.scrollTo({ top: 0, behavior: "smooth" });
                 }
               }}
-              className="hidden sm:inline-flex items-center gap-2 rounded-md border border-border bg-muted px-3 py-1.5 font-mono text-xs font-medium text-foreground transition-all duration-200 hover:border-foreground/20 hover:bg-background ml-1"
+              className="group hidden sm:inline-flex items-center gap-2 rounded-md border border-border bg-muted px-3 py-1.5 font-mono text-xs font-medium text-foreground transition-all duration-200 hover:border-foreground/20 hover:bg-background ml-1"
             >
-              <FileText size={13} strokeWidth={1.5} className="-translate-y-[1px]" />
+              <FileText size={13} strokeWidth={1.5} className="-translate-y-[1px] transition-transform duration-200 group-hover:-rotate-6 group-hover:scale-110" />
               Resume
             </Link>
 

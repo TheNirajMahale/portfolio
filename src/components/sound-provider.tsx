@@ -25,21 +25,22 @@ type SoundContextType = {
 
 const SoundContext = createContext<SoundContextType | null>(null);
 
-export function SoundProvider({ children }: { children: React.ReactNode }) {
-  const [soundEnabled, setSoundEnabledState] = useState(false);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+function getClickAudio() {
+  const audio = new Audio(CLICK_SOUND);
+  audio.volume = CLICK_VOLUME;
+  return audio;
+}
 
-  useEffect(() => {
+export function SoundProvider({ children }: { children: React.ReactNode }) {
+  const [soundEnabled, setSoundEnabledState] = useState<boolean>(() => {
+    if (typeof window === "undefined") return false;
     try {
-      // Default to false (OFF) unless explicitly enabled
-      const stored = window.localStorage.getItem(STORAGE_KEY);
-      if (stored === "on") {
-        setSoundEnabledState(true);
-      }
+      return window.localStorage.getItem(STORAGE_KEY) === "on";
     } catch {
-      // Storage unavailable fallback
+      return false;
     }
-  }, []);
+  });
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const setSoundEnabled = useCallback((value: boolean) => {
     setSoundEnabledState(value);
@@ -53,14 +54,16 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
   const playClick = useCallback(() => {
     if (!soundEnabled) return;
 
-    let audio = audioRef.current;
-    if (!audio) {
-      audio = new Audio(CLICK_SOUND);
-      audio.volume = CLICK_VOLUME;
-      audioRef.current = audio;
+    try {
+      if (!audioRef.current) {
+        audioRef.current = getClickAudio();
+      }
+      const audio = audioRef.current;
+      audio.currentTime = 0;
+      void audio.play().catch(() => {});
+    } catch {
+      // Audio playback blocked
     }
-    audio.currentTime = 0;
-    void audio.play().catch(() => {});
 
     if (typeof navigator !== "undefined" && "vibrate" in navigator) {
       navigator.vibrate?.(8);
@@ -95,12 +98,16 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
     const next = !soundEnabled;
     setSoundEnabled(next);
     if (next) {
-      // Play brief confirmation click upon enabling
-      const audio = audioRef.current ?? new Audio(CLICK_SOUND);
-      audio.volume = CLICK_VOLUME;
-      audioRef.current = audio;
-      audio.currentTime = 0;
-      void audio.play().catch(() => {});
+      try {
+        if (!audioRef.current) {
+          audioRef.current = getClickAudio();
+        }
+        const audio = audioRef.current;
+        audio.currentTime = 0;
+        void audio.play().catch(() => {});
+      } catch {
+        // Audio playback blocked
+      }
     }
   }, [soundEnabled, setSoundEnabled]);
 

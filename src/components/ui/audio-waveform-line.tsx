@@ -27,15 +27,15 @@ export function AudioWaveformLine({ isPlaying, className = "" }: AudioWaveformLi
   return (
     <div
       className={`flex items-center gap-[3px] px-1 select-none pointer-events-none transition-opacity duration-300 ${
-        isPlaying ? "opacity-90" : "opacity-30"
+        isPlaying ? "opacity-100" : "opacity-35"
       } ${className}`}
       aria-hidden="true"
     >
       {BARS.map((bar, i) => (
         <motion.span
           key={i}
-          className={`w-[2px] rounded-full transition-colors duration-300 ${
-            isPlaying ? "bg-foreground" : "bg-muted-foreground/60"
+          className={`w-[2px] rounded-full transition-all duration-300 ${
+            isPlaying ? "bg-foreground shadow-[0_0_6px_rgba(16,185,129,0.35)]" : "bg-muted-foreground/40"
           }`}
           animate={
             isPlaying
