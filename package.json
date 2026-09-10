@@ -5,6 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:resume": "node scripts/build-resume.mjs",
+    "watch:resume": "node scripts/build-resume.mjs --watch",
     "start": "next start",
     "lint": "eslint"
   },

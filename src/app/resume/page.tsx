@@ -83,8 +83,6 @@ export default function ResumePage() {
               <a href={`mailto:${resumeData.personal.email}`} className="hover:text-foreground transition-colors duration-150">
                 {resumeData.personal.email}
               </a>
-              {" · "}
-              <span>{resumeData.personal.phone}</span>
             </p>
             <p className="mt-1 text-base text-muted-foreground">
               <a href={resumeData.personal.linkedin} target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors duration-150">
