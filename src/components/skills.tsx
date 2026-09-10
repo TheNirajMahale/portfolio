@@ -138,6 +138,7 @@ interface ActiveTooltip {
 
 export function Skills() {
   const [selectedCategory, setSelectedCategory] = React.useState<string>("All");
+  const [hoveredGridCategory, setHoveredGridCategory] = React.useState<string | null>(null);
   const [activeTooltip, setActiveTooltip] = React.useState<ActiveTooltip | null>(null);
   const [viewMode, setViewMode] = React.useState<"ticker" | "grid">("ticker");
 
@@ -161,6 +162,7 @@ export function Skills() {
       if (newMode !== viewMode) {
         setViewMode(newMode);
         setSelectedCategory("All");
+        setHoveredGridCategory(null);
         activeTooltipRef.current = null;
         setActiveTooltip(null);
       }
@@ -409,12 +411,18 @@ export function Skills() {
           {/* Category Filter Pills */}
           <div className="flex flex-wrap items-center gap-1.5">
             {categoryList.map((cat) => {
-              const isActive = selectedCategory === cat;
+              const isActive =
+                viewMode === "grid" && hoveredGridCategory
+                  ? hoveredGridCategory === cat
+                  : selectedCategory === cat;
               return (
                 <button
                   key={cat}
                   type="button"
-                  onClick={() => setSelectedCategory(cat)}
+                  onClick={() => {
+                    setSelectedCategory(cat);
+                    setHoveredGridCategory(null);
+                  }}
                   className={cn(
                     "relative px-3 py-1 font-mono text-xs rounded-md transition-colors duration-150 cursor-pointer select-none",
                     isActive
@@ -563,11 +571,20 @@ export function Skills() {
 
         {/* View 2: Categorized Grid (Fixed-size, Zero Layout Glitches) */}
         {viewMode === "grid" && (
-          <div className="pt-6">
+          <div
+            className="pt-6"
+            onMouseLeave={() => {
+              setHoveredGridCategory(null);
+              setSelectedCategory("All");
+            }}
+          >
             <StaggerContainer className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {Object.keys(resumeData.skills).map((category) => {
+                const activeCat = hoveredGridCategory || selectedCategory;
                 const isCatActive =
-                  selectedCategory === "All" || selectedCategory === category;
+                  activeCat === "All"
+                    ? (hoveredGridCategory ? hoveredGridCategory === category : true)
+                    : activeCat === category;
                 const items =
                   resumeData.skills[category as keyof typeof resumeData.skills];
                 if (!items || !Array.isArray(items)) return null;
@@ -577,11 +594,16 @@ export function Skills() {
                     <motion.div
                       whileHover={{ scale: 1.015 }}
                       transition={{ duration: 0.35, ease: [0.25, 1, 0.5, 1] }}
+                      onMouseEnter={() => setHoveredGridCategory(category)}
+                      onMouseLeave={() => {
+                        setHoveredGridCategory(null);
+                        setSelectedCategory("All");
+                      }}
                       className={cn(
-                        "group h-full flex flex-col rounded-lg border-2 border-dotted p-4.5 bg-card transition-colors duration-300 hover:z-10",
+                        "group h-full flex flex-col rounded-lg border-2 border-dotted p-4.5 bg-card transition-all duration-300 hover:z-10",
                         isCatActive
                           ? "border-foreground/40 hover:border-foreground/80 card-glow opacity-100"
-                          : "border-border/40 opacity-40 grayscale"
+                          : "border-border/40 opacity-30 grayscale"
                       )}
                     >
                       <div className="mb-3.5 border-b border-border/60 pb-2">
