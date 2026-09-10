@@ -2,6 +2,7 @@
 
 import { motion } from "motion/react";
 import resumeData from "@/data/resume.json";
+import siteData from "@/data/site.json";
 
 const container = {
   hidden: {},
@@ -222,7 +223,7 @@ export default function ResumePage() {
         className="fixed bottom-6 right-6 z-40 print:hidden"
       >
         <a
-          href="/resume.pdf"
+          href={siteData.resumePdfUrl || "/resume.pdf"}
           download={`${resumeData.personal.name.replace(/\s+/g, "_")}_Resume.pdf`}
           className="group flex items-center gap-2.5 rounded-full border border-border/80 bg-background/90 px-4 py-2.5 font-mono text-xs font-semibold text-foreground shadow-xl shadow-black/10 dark:shadow-black/40 backdrop-blur-md transition-all duration-300 hover:border-foreground hover:bg-background hover:scale-105 active:scale-95"
         >

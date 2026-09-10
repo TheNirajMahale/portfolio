@@ -32,12 +32,15 @@ export function Hero() {
   const { soundEnabled, toggleSound } = useSound();
   const { musicEnabled, toggleMusic } = useMusic();
 
+  const ctaTarget = siteData.hero.cta?.target || "#experience";
+  const ctaLabel = siteData.hero.cta?.label || "View my work";
+
   const scrollToExperience = (e: React.MouseEvent) => {
     e.preventDefault();
     if (lenis) {
-      lenis.scrollTo("#experience", { offset: -90, duration: 1.4 });
+      lenis.scrollTo(ctaTarget, { offset: -90, duration: 1.4 });
     } else {
-      const target = document.getElementById("experience");
+      const target = document.getElementById(ctaTarget.replace("#", ""));
       if (target) {
         const top = target.getBoundingClientRect().top + window.scrollY - 90;
         window.scrollTo({ top, behavior: "smooth" });
@@ -244,7 +247,7 @@ export function Hero() {
 
                 {/* Primary CTA: MicroKit Read More Swap with Lenis smooth scroll */}
                 <a
-                  href="#experience"
+                  href={ctaTarget}
                   onClick={scrollToExperience}
                   className="group relative inline-flex items-center justify-center overflow-hidden rounded-md border border-border bg-foreground px-4 py-2 font-mono text-xs font-medium text-background transition-all duration-300 ease-out hover:bg-foreground/90 hover:shadow-md active:scale-95"
                 >
@@ -255,7 +258,7 @@ export function Hero() {
 
                   {/* Label */}
                   <span className="transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]">
-                    View my work
+                    {ctaLabel}
                   </span>
 
                   {/* Default trailing arrow */}

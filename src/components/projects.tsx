@@ -11,22 +11,6 @@ import resumeData from "@/data/resume.json";
 
 type ProjectItem = (typeof resumeData.projects)[number];
 
-// Associated specialized tech stack tags for prominent neo-brutalist cards
-const PROJECT_TAGS: Record<string, string[]> = {
-  "LoreKeeper API — Personal Reading Tracker Backend": [
-    "Spring Boot",
-    "PostgreSQL",
-    "JWT / OAuth",
-    "REST API",
-  ],
-  "Lorebound — Offline EPUB Reader (Flutter)": [
-    "Flutter",
-    "Dart",
-    "Offline-First",
-    "Custom Engine",
-  ],
-};
-
 export function Projects() {
   return (
     <Section id="projects" title="Projects" subtitle="Things I've built.">
@@ -56,7 +40,7 @@ function ProjectCard({ project }: { project: ProjectItem }) {
     mouseY.set(-1000);
   }
 
-  const tags = PROJECT_TAGS[project.name] || [];
+  const tags = ("tags" in project && Array.isArray(project.tags) ? project.tags : []) as string[];
 
   return (
     <motion.div

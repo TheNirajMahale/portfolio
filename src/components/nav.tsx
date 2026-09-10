@@ -10,12 +10,7 @@ import { cn } from "@/lib/utils";
 import { MobileNav } from "@/components/mobile-nav";
 import siteData from "@/data/site.json";
 
-const NAV_ITEMS = [
-  { href: "/#experience", label: "Experience" },
-  { href: "/#projects", label: "Projects" },
-  { href: "/#skills", label: "Skills" },
-  { href: "/#education", label: "Education" },
-];
+const NAV_ITEMS = siteData.nav.items;
 
 export function Nav() {
   const [scrolled, setScrolled] = useState(false);

@@ -1,11 +1,22 @@
 {
   "siteUrl": "https://nirajmahale.vercel.app",
+  "resumePdfUrl": "/resume.pdf",
   "nav": {
-    "logo": "/logo.png"
+    "logo": "/logo.png",
+    "items": [
+      { "href": "/#experience", "label": "Experience" },
+      { "href": "/#projects", "label": "Projects" },
+      { "href": "/#skills", "label": "Skills" },
+      { "href": "/#education", "label": "Education" }
+    ]
   },
   "hero": {
     "avatar": "/developer-avatar.png",
-    "avatarAlt": "Niraj Mahale - Coding illustration"
+    "avatarAlt": "Niraj Mahale - Coding illustration",
+    "cta": {
+      "label": "View my work",
+      "target": "#experience"
+    }
   },
   "audio": {
     "bgMusicSrc": "/sounds/ambient-piano.mp3",
