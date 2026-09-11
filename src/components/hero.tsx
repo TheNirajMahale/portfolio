@@ -97,11 +97,10 @@ export function Hero() {
                   whileTap={{ scale: 0.94 }}
                   title={musicEnabled ? "Pause ambient piano music" : "Play ambient piano music"}
                   aria-label="Toggle ambient piano music"
-                  className={`group relative flex h-8 w-8 items-center justify-center rounded-md border transition-all duration-200 select-none ${
-                    musicEnabled
+                  className={`group relative flex h-8 w-8 items-center justify-center rounded-md border transition-all duration-200 select-none ${musicEnabled
                       ? "border-foreground/75 bg-card text-foreground shadow-xs"
                       : "border-border/80 bg-muted/60 text-muted-foreground/60 hover:border-foreground/60 hover:text-foreground hover:bg-muted/80"
-                  }`}
+                    }`}
                 >
                   {musicEnabled && (
                     <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-emerald-500 animate-pulse border-2 border-background" />
@@ -127,11 +126,10 @@ export function Hero() {
                   whileTap={{ scale: 0.94 }}
                   title={soundEnabled ? "Mute UI click sound" : "Enable UI click sound"}
                   aria-label="Toggle UI click sound"
-                  className={`group relative flex h-8 w-8 items-center justify-center rounded-md border transition-all duration-200 select-none ${
-                    soundEnabled
+                  className={`group relative flex h-8 w-8 items-center justify-center rounded-md border transition-all duration-200 select-none ${soundEnabled
                       ? "border-foreground/75 bg-card text-foreground shadow-xs"
                       : "border-border/80 bg-muted/60 text-muted-foreground/60 hover:border-foreground/60 hover:text-foreground hover:bg-muted/80"
-                  }`}
+                    }`}
                 >
                   {soundEnabled && (
                     <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-emerald-500 animate-pulse border-2 border-background" />
@@ -167,11 +165,10 @@ export function Hero() {
                   whileTap={{ scale: 0.94 }}
                   title={cursorEnabled ? "Disable cursor follower" : "Enable cursor follower"}
                   aria-label="Toggle custom cursor follower"
-                  className={`group relative flex h-8 w-8 items-center justify-center rounded-md border transition-all duration-200 select-none ${
-                    cursorEnabled
+                  className={`group relative flex h-8 w-8 items-center justify-center rounded-md border transition-all duration-200 select-none ${cursorEnabled
                       ? "border-foreground/75 bg-card text-foreground shadow-xs"
                       : "border-border/80 bg-muted/60 text-muted-foreground/60 hover:border-foreground/60 hover:text-foreground hover:bg-muted/80"
-                  }`}
+                    }`}
                 >
                   {cursorEnabled && (
                     <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-emerald-500 animate-pulse border-2 border-background" />

@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { motion, AnimatePresence } from "motion/react";
 import { FileText } from "lucide-react";
+import { useLenis } from "lenis/react";
+import { useSound } from "@/components/providers";
 
 interface MobileNavProps {
   isOpen: boolean;
@@ -12,6 +14,30 @@ interface MobileNavProps {
 }
 
 export function MobileNav({ isOpen, setIsOpen, navItems, activeSection }: MobileNavProps) {
+  const lenis = useLenis();
+  const { playClick } = useSound();
+
+  const handleItemClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    setIsOpen(false);
+    if (href.startsWith("/#") || href.startsWith("#")) {
+      const targetId = href.replace("/#", "").replace("#", "");
+      if (window.location.pathname === "/") {
+        e.preventDefault();
+        playClick();
+        if (lenis) {
+          lenis.scrollTo(`#${targetId}`, { offset: -90, duration: 1.4 });
+        } else {
+          const element = document.getElementById(targetId);
+          if (element) {
+            const top = element.getBoundingClientRect().top + window.scrollY - 90;
+            window.scrollTo({ top, behavior: "smooth" });
+          }
+        }
+        window.history.pushState(null, "", `#${targetId}`);
+      }
+    }
+  };
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -29,7 +55,7 @@ export function MobileNav({ isOpen, setIsOpen, navItems, activeSection }: Mobile
                 <a
                   key={item.label}
                   href={item.href}
-                  onClick={() => setIsOpen(false)}
+                  onClick={(e) => handleItemClick(e, item.href)}
                   className={`font-mono text-sm px-3 py-2.5 rounded-md transition-colors duration-150 ${
                     isActive 
                       ? "text-foreground bg-muted font-semibold" 

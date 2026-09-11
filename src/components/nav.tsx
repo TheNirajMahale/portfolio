@@ -4,8 +4,9 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
+import { useLenis } from "lenis/react";
 import { FileText, Sun, Moon, Menu, X } from "lucide-react";
-import { useTheme } from "@/components/providers";
+import { useTheme, useSound } from "@/components/providers";
 import { cn } from "@/lib/utils";
 import { MobileNav } from "@/components/mobile-nav";
 import siteData from "@/data/site.json";
@@ -17,6 +18,28 @@ export function Nav() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("");
   const { theme, toggleTheme } = useTheme();
+  const { playClick } = useSound();
+  const lenis = useLenis();
+
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (href.startsWith("/#") || href.startsWith("#")) {
+      const targetId = href.replace("/#", "").replace("#", "");
+      if (window.location.pathname === "/") {
+        e.preventDefault();
+        playClick();
+        if (lenis) {
+          lenis.scrollTo(`#${targetId}`, { offset: -90, duration: 1.4 });
+        } else {
+          const element = document.getElementById(targetId);
+          if (element) {
+            const top = element.getBoundingClientRect().top + window.scrollY - 90;
+            window.scrollTo({ top, behavior: "smooth" });
+          }
+        }
+        window.history.pushState(null, "", `#${targetId}`);
+      }
+    }
+  };
 
   // Handle scroll bounce
   useEffect(() => {
@@ -74,7 +97,12 @@ export function Nav() {
             onClick={(e) => {
               if (window.location.pathname === "/") {
                 e.preventDefault();
-                window.scrollTo({ top: 0, behavior: "smooth" });
+                playClick();
+                if (lenis) {
+                  lenis.scrollTo(0, { duration: 1.4 });
+                } else {
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }
               }
             }}
             className="flex items-center justify-center transition-opacity hover:opacity-80 -ml-2"
@@ -97,6 +125,7 @@ export function Nav() {
                 <a
                   key={item.label}
                   href={item.href}
+                  onClick={(e) => handleNavClick(e, item.href)}
                   className={cn(
                     "relative hidden sm:inline-flex font-mono text-xs px-3 py-2 rounded-md transition-colors duration-150",
                     isActive

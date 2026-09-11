@@ -108,29 +108,40 @@ export default function ResumePage() {
               Experience
             </h2>
             <div className="space-y-6">
-              {resumeData.experience.map((job) => (
-                <div key={job.company}>
-                  <div className="flex flex-col gap-0.5 sm:flex-row sm:items-baseline sm:justify-between">
-                    <h3 className="text-base font-semibold text-foreground">
-                      {job.title}
-                    </h3>
-                    <span className="text-sm tabular-nums text-muted-foreground">
-                      {job.duration}
-                    </span>
+              {resumeData.experience.map((job: any) => {
+                const details = job.details ?? job.highlights ?? [];
+
+                return (
+                  <div key={job.company}>
+                    <div className="flex flex-col gap-0.5 sm:flex-row sm:items-baseline sm:justify-between">
+                      <h3 className="text-base font-semibold text-foreground">
+                        {job.title}
+                      </h3>
+                      <span className="text-sm tabular-nums text-muted-foreground">
+                        {job.duration}
+                      </span>
+                    </div>
+                    <p className="text-sm text-muted-foreground">{job.company}</p>
+                    {job.summary && (
+                      <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground/90 font-sans">
+                        {job.summary}
+                      </p>
+                    )}
+                    {details.length > 0 && (
+                      <ul className="mt-2 space-y-1.5">
+                        {details.map((h: string, i: number) => (
+                          <li
+                            key={i}
+                            className="relative pl-3.5 text-sm leading-relaxed text-muted-foreground before:absolute before:left-0 before:top-[7px] before:h-1 before:w-1 before:rounded-full before:bg-muted-foreground/40"
+                          >
+                            {h}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                   </div>
-                  <p className="text-sm text-muted-foreground">{job.company}</p>
-                  <ul className="mt-2 space-y-1.5">
-                    {job.highlights.map((h, i) => (
-                      <li
-                        key={i}
-                        className="relative pl-3.5 text-sm leading-relaxed text-muted-foreground before:absolute before:left-0 before:top-[7px] before:h-1 before:w-1 before:rounded-full before:bg-muted-foreground/40"
-                      >
-                        {h}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </motion.section>
 

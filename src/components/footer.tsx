@@ -6,11 +6,11 @@ import siteData from "@/data/site.json";
 
 export function Footer() {
   return (
-    <footer className="print:hidden mx-auto w-full max-w-5xl px-6 md:px-8 mt-20">
+    <footer className="print:hidden mx-auto w-full max-w-5xl px-6 md:px-8 min-h-[380px] md:min-h-[460px] flex flex-col justify-center">
       {/* Decorative line */}
       <div className="decorative-line" />
 
-      <div className="py-12">
+      <div className="py-8 sm:py-10">
         <div className="flex flex-col items-center justify-between gap-6 sm:flex-row">
           <div className="flex flex-col items-center gap-1 sm:items-start">
             <span className="font-mono text-sm font-semibold tracking-tight text-foreground">
