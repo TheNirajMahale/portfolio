@@ -37,14 +37,6 @@
         "Implemented JWT authentication, request validation, and rate limiting across the API.",
         "Chose which parts of the old system needed fixing right away and which could wait, based on the founder's priorities for stability."
       ]
-    },
-    {
-      "title": "Full-Stack Developer",
-      "company": "Independent & Academic Projects",
-      "duration": "2023 - 2026",
-      "location": "Pune / Remote",
-      "summary": "Designed and deployed custom full-stack web applications, secure REST APIs, and database schemas with a focus on clean architecture and responsive typography.",
-      "tags": ["Spring Boot", "React", "TypeScript", "PostgreSQL"]
     }
   ],
   "projects": [
