@@ -67,7 +67,7 @@ export default function RootLayout({
                 <ThemeProvider>
                   <ScrollProgressBar />
                   <Nav />
-                  <div className="flex-1">{children}</div>
+                  <div className="flex-1 relative z-10 bg-background">{children}</div>
                   <Footer />
                   <ScrollToTop />
                 </ThemeProvider>
