@@ -46,6 +46,14 @@ const ORDER: Record<SocialType, number> = {
   email: 2,
 };
 
+function isCursorDevice(): boolean {
+  if (typeof window === "undefined") return false;
+  if (window.innerWidth < 768) return false;
+  const hasHover = window.matchMedia("(hover: hover)").matches;
+  const hasFinePointer = window.matchMedia("(pointer: fine)").matches;
+  return hasHover && hasFinePointer;
+}
+
 export interface SocialHoverGroupProps {
   children: React.ReactNode;
   side?: "top" | "bottom";
@@ -81,6 +89,7 @@ export function SocialHoverGroup({
 
   const computeCoords = React.useCallback(
     (targetType: SocialType): CardCoords | null => {
+      if (!isCursorDevice()) return null;
       const triggerEl = triggerRefs.current.get(targetType);
       if (!triggerEl || !groupRef.current) return null;
 
@@ -129,13 +138,8 @@ export function SocialHoverGroup({
 
   const onTriggerEnter = React.useCallback(
     (type: SocialType) => {
-      // Respect touch devices: on pure touch screen, tapping opens the link directly without hover cards
-      if (
-        typeof window !== "undefined" &&
-        window.matchMedia("(hover: none)").matches
-      ) {
-        return;
-      }
+      // Block hover cards on touch devices or mobile viewports
+      if (!isCursorDevice()) return;
 
       clearTimers();
 
@@ -167,6 +171,9 @@ export function SocialHoverGroup({
 
   const onTriggerFocus = React.useCallback(
     (type: SocialType) => {
+      // Block hover cards on touch devices or mobile viewports
+      if (!isCursorDevice()) return;
+
       clearTimers();
       const nextCoords = computeCoords(type);
       if (nextCoords) setCoords(nextCoords);
@@ -306,7 +313,7 @@ export function SocialHoverGroup({
                   : { bottom: coords.bottomY }),
                 width: coords.cardWidth,
               }}
-              className="z-50 focus:outline-none pointer-events-auto"
+              className="hidden md:block [@media(hover:none)]:!hidden [@media(pointer:coarse)]:!hidden z-50 focus:outline-none pointer-events-auto"
               role="region"
               aria-label="Social profile preview"
             >
