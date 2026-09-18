@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence, useScroll, useTransform, useSpring } from "motion/react";
-import { ChevronDown } from "lucide-react";
+import { ChevronsDownUp, ChevronsUpDown } from "lucide-react";
 import { Section } from "@/components/ui/section";
 import { cn } from "@/lib/utils";
 import resumeData from "@/data/resume.json";
@@ -19,130 +19,137 @@ export interface ExperienceJob {
 }
 
 /**
- * ExpandableTimelineCard
- * - Shows a punchy summary by default.
- * - If `details` (or `highlights`) exist, smoothly expands on hover or tap.
- * - If only `summary` exists, stays clean and static without an expander cue.
+ * Collapsible Experience Card — Uday Kiran's design:
+ * - Company initials avatar on the left
+ * - Dashed border separator
+ * - Click to expand/collapse (NOT hover)
+ * - Expanded: dashed top border, bullet points, tech chip badges
  */
-function ExpandableTimelineCard({ job }: { job: ExperienceJob; index: number }) {
-  const [isHovered, setIsHovered] = useState(false);
-  const [isMobileExpanded, setIsMobileExpanded] = useState(false);
+function CollapsibleExperienceCard({ job }: { job: ExperienceJob }) {
+  const [isOpen, setIsOpen] = useState(false);
 
   const detailList = job.details ?? job.highlights ?? [];
   const hasDetails = detailList.length > 0;
-
-  const summaryText = job.summary ?? (hasDetails ? detailList[0] : "");
-  const displayDetails = job.summary ? detailList : detailList.slice(1);
-  const canExpand = hasDetails && (Boolean(job.summary) || displayDetails.length > 0);
-
-  const isOpen = canExpand && (isHovered || isMobileExpanded);
+  const canExpand = hasDetails;
   const isCurrent = job.duration.toLowerCase().includes("present");
 
   return (
     <div
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      onClick={() => {
-        if (canExpand) setIsMobileExpanded((prev) => !prev);
-      }}
       className={cn(
-        "group/card relative rounded-lg border-2 border-dotted border-foreground/35 bg-card/80 p-5 md:p-6 backdrop-blur-sm transition-all duration-300 card-glow",
-        canExpand && "cursor-pointer hover:border-foreground/75 hover:bg-card/95",
-        isOpen && "border-emerald-500/70 shadow-[0_4px_28px_rgba(52,211,153,0.1)]"
+        "w-full border-b border-border last:border-b-0",
       )}
+      data-state={isOpen ? "open" : "closed"}
     >
-      {/* Top Header: Role & Badges */}
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2.5 flex-wrap">
-            <h3 className="font-mono text-base md:text-lg font-semibold text-foreground tracking-tight group-hover/card:text-emerald-400 transition-colors">
-              {job.title}
-            </h3>
-            {isCurrent && (
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/40 bg-emerald-500/10 px-2.5 py-0.5 font-mono text-[10px] font-medium text-emerald-600 dark:text-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.15)]">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                CURRENT ROLE
-              </span>
-            )}
-          </div>
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <span className="font-medium text-foreground/90">{job.company}</span>
-            {job.location && (
-              <>
-                <span className="text-muted-foreground/40">•</span>
-                <span className="text-xs">{job.location}</span>
-              </>
-            )}
-          </div>
+      <button
+        type="button"
+        onClick={() => {
+          if (canExpand) setIsOpen((prev) => !prev);
+        }}
+        className={cn(
+          "group/project flex flex-col w-full p-4 sm:p-5 text-left select-none transition-colors hover:bg-muted/20",
+          canExpand && "cursor-pointer",
+        )}
+      >
+        {/* Header row: Role title + Chevron */}
+        <div className="flex w-full items-center justify-between gap-3">
+          <h3 className="text-sm font-medium leading-snug text-foreground/95 sm:text-base">
+            {job.title}
+          </h3>
+
+          {/* Chevron toggle */}
+          {canExpand && (
+            <div className="shrink-0 text-muted-foreground transition-colors group-hover/project:text-foreground" aria-hidden="true">
+              {isOpen ? (
+                <ChevronsDownUp className="h-4 w-4" />
+              ) : (
+                <ChevronsUpDown className="h-4 w-4" />
+              )}
+            </div>
+          )}
         </div>
 
-        {/* Duration pill (mobile inline) */}
-        <span className="md:hidden font-mono text-xs tabular-nums text-muted-foreground whitespace-nowrap self-start sm:self-auto px-2 py-0.5 rounded-md bg-muted/60 border border-border/40">
-          {job.duration}
-        </span>
-      </div>
-
-      {/* Summary (Always visible) */}
-      {summaryText && (
-        <p className="mt-3.5 text-sm leading-relaxed text-muted-foreground/90 font-sans">
-          {summaryText}
-        </p>
-      )}
-
-      {/* Tags / Technologies Pill Row */}
-      {job.tags && job.tags.length > 0 && (
-        <div className="mt-3.5 flex flex-wrap gap-1.5">
-          {job.tags.map((tag) => (
-            <span
-              key={tag}
-              className="rounded-md border border-border/50 bg-muted/40 px-2 py-0.5 font-mono text-[11px] text-muted-foreground transition-colors group-hover/card:border-emerald-500/30 group-hover/card:text-foreground/90"
-            >
-              {tag}
+        {/* Badges row: Company | Type | Duration */}
+        <div className="mt-1.5 flex flex-row flex-wrap items-center gap-x-2 gap-y-1 w-full">
+          {/* Company badge */}
+          <div className="border-r border-border pr-2">
+            <span className="inline-flex items-center justify-center rounded-md border border-border px-2 py-0.5 text-xs font-medium text-foreground">
+              {job.company.split(",")[0]}
             </span>
-          ))}
-        </div>
-      )}
-
-      {/* Expandable Technical Details */}
-      {canExpand && (
-        <>
-          <div className="mt-3.5 flex items-center justify-end pt-2 border-t border-border/25">
-            <motion.div
-              animate={{ rotate: isOpen ? 180 : 0 }}
-              transition={{ duration: 0.25, ease: [0.25, 1, 0.5, 1] }}
-              className="text-muted-foreground/60 group-hover/card:text-emerald-400 transition-colors"
-            >
-              <ChevronDown className="h-4 w-4" />
-            </motion.div>
           </div>
 
-          <AnimatePresence initial={false}>
-            {isOpen && (
-              <motion.div
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: "auto", opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                transition={{ duration: 0.35, ease: [0.25, 1, 0.5, 1] }}
-                className="overflow-hidden pt-1"
+          {/* Employment type badge */}
+          <span className="inline-flex items-center justify-center rounded-md border border-border px-2 py-0.5 text-xs font-medium text-foreground">
+            {isCurrent ? "Full-time" : "Internship"}
+          </span>
+
+          {/* Duration */}
+          <div className="border-l border-border pl-2">
+            <div className="flex flex-row items-center space-x-1.5">
+              {job.duration.split(" - ").map((part, i) => (
+                <span key={i} className="text-xs text-muted-foreground">
+                  {i > 0 && <span className="mr-1.5">-</span>}
+                  {part.trim().toLowerCase() === "present" ? (
+                    <span className="font-medium">{part}</span>
+                  ) : (
+                    part
+                  )}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Job summary — full width across card */}
+        {job.summary && (
+          <p className="mt-2.5 w-full text-xs sm:text-sm text-muted-foreground leading-relaxed font-normal">
+            {job.summary}
+          </p>
+        )}
+
+        {/* Tags — full width across card */}
+        {job.tags && job.tags.length > 0 && (
+          <div className="mt-2.5 flex flex-wrap gap-1.5 w-full">
+            {job.tags.map((tag) => (
+              <span
+                key={tag}
+                className="inline-flex items-center justify-center rounded-md border border-border px-2 py-0.5 text-xs font-medium text-foreground transition-[color,box-shadow]"
               >
-                <ul className="space-y-2.5 pt-2">
-                  {displayDetails.map((highlight, i) => (
-                    <motion.li
-                      key={i}
-                      initial={{ opacity: 0, x: -8 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.22, delay: i * 0.04 }}
-                      className="relative pl-4 text-xs md:text-sm leading-relaxed text-muted-foreground before:absolute before:left-0 before:top-[8px] before:h-1.5 before:w-1.5 before:rounded-full before:bg-emerald-400/80"
-                    >
-                      {highlight}
-                    </motion.li>
-                  ))}
-                </ul>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </>
-      )}
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
+      </button>
+
+      {/* Collapsible content with dashed separator */}
+      <AnimatePresence initial={false}>
+        {isOpen && canExpand && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3, ease: [0.25, 1, 0.5, 1] }}
+            className="overflow-hidden"
+          >
+            <div className="border-t border-dashed border-border space-y-3 p-4 sm:p-5">
+              {detailList.length > 0 && (
+                <div className="space-y-2">
+                  <p className="text-xs font-mono uppercase tracking-wider text-muted-foreground">
+                    Key Technical Details & Achievements
+                  </p>
+                  <ul className="flex list-disc flex-col gap-2 pl-4 text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                    {detailList.map((detail, i) => (
+                      <li key={i}>
+                        <span className="text-foreground/90">{detail}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
@@ -171,21 +178,12 @@ export function Experience() {
         const firstRect = firstAnchor.getBoundingClientRect();
         const lastAnchorRect = lastAnchor.getBoundingClientRect();
 
-        // Exact center of first circle (starts here, zero line above)
         const startOffset = Math.round(firstRect.top - containerRect.top + firstRect.height / 2);
-
-        // Resting center of last circle
         const restingLastCircle = Math.round(lastAnchorRect.top - containerRect.top + lastAnchorRect.height / 2);
-
-        // Maximum sticky travel of the last circle as user scrolls through the last card
         const maxStickyTravel = lastSticky
           ? Math.max(0, lastItem.offsetHeight - lastSticky.offsetHeight)
           : 0;
-
-        // Final center of the last circle when scrolled to the end of the last item
         const finalLastCircle = restingLastCircle + maxStickyTravel;
-
-        // Total span covered so circle never detaches from the line
         const totalSpan = Math.max(0, finalLastCircle - startOffset);
 
         setMetrics({ startOffset, totalSpan });
@@ -203,30 +201,27 @@ export function Experience() {
     return () => ro.disconnect();
   }, [jobs]);
 
-  // Track scroll within this timeline container
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start 15%", "end 50%"],
   });
 
-  // Physics smoothing
   const smoothProgress = useSpring(scrollYProgress, {
     stiffness: 85,
     damping: 24,
     restDelta: 0.001,
   });
 
-  // Map progress into line pixel height
   const lineHeight = useTransform(smoothProgress, [0, 1], [0, metrics.totalSpan]);
 
   return (
-    <Section id="experience" title="Experience" subtitle="Where I've been building.">
+    <Section id="experience" title="Experience">
       <div ref={containerRef} className="relative w-full">
         <div ref={contentRef} className="relative w-full py-2">
-          {/* 1. Permanent Static Rail */}
+          {/* 1. Permanent Static Rail (Desktop only) */}
           {metrics.totalSpan > 0 && (
             <div
-              className="absolute left-6 md:left-8 -translate-x-1/2 w-[2px] bg-neutral-300/80 dark:bg-neutral-800 pointer-events-none z-0"
+              className="hidden md:block absolute left-8 -translate-x-1/2 w-[2px] bg-neutral-300/80 dark:bg-neutral-800 pointer-events-none z-0"
               style={{
                 top: `${metrics.startOffset}px`,
                 height: `${metrics.totalSpan}px`,
@@ -234,14 +229,14 @@ export function Experience() {
             />
           )}
 
-          {/* 2. Animated Glowing Progress Beam */}
+          {/* 2. Animated Glowing Progress Beam (Desktop only) */}
           {metrics.totalSpan > 0 && (
             <div
               style={{
                 top: `${metrics.startOffset}px`,
                 height: `${metrics.totalSpan}px`,
               }}
-              className="absolute left-6 md:left-8 -translate-x-1/2 w-[2px] overflow-hidden pointer-events-none z-10"
+              className="hidden md:block absolute left-8 -translate-x-1/2 w-[2px] overflow-hidden pointer-events-none z-10"
             >
               <motion.div
                 style={{ height: lineHeight }}
@@ -254,7 +249,7 @@ export function Experience() {
           )}
 
           {/* Timeline Items List */}
-          <div className="space-y-12 md:space-y-16">
+          <div className="space-y-6 md:space-y-16">
             {jobs.map((job, index) => {
               const isCurrent = job.duration.toLowerCase().includes("present");
 
@@ -267,19 +262,19 @@ export function Experience() {
                   {/* Measurement Anchor */}
                   <div
                     data-timeline-anchor="true"
-                    className="absolute left-6 md:left-8 -translate-x-1/2 top-5 md:top-6 h-5 w-5 pointer-events-none opacity-0"
+                    className="hidden md:block absolute left-8 -translate-x-1/2 top-6 h-5 w-5 pointer-events-none opacity-0"
                     aria-hidden="true"
                   />
 
-                  {/* Left Column: Sticky Header with Node Circle & Duration */}
+                  {/* Left Column: Sticky Header with Node Circle & Duration (Desktop only) */}
                   <div
                     data-timeline-sticky="true"
-                    className="sticky top-36 self-start z-20 flex items-center md:flex-col md:items-start md:w-48 shrink-0"
+                    className="hidden md:flex sticky top-36 self-start z-20 flex-col items-start w-48 shrink-0"
                   >
                     {/* Minimal Node Bullet pinned exactly to line center */}
                     <div
                       data-timeline-node="true"
-                      className="absolute left-6 md:left-8 -translate-x-1/2 top-5 md:top-6 flex items-center justify-center z-20"
+                      className="absolute left-8 -translate-x-1/2 top-6 flex items-center justify-center z-20"
                     >
                       <div
                         className={cn(
@@ -301,7 +296,7 @@ export function Experience() {
                     </div>
 
                     {/* Desktop Sticky Duration & Location Info */}
-                    <div className="hidden md:flex flex-col pl-16 pt-5">
+                    <div className="flex flex-col pl-16 pt-5">
                       <span className="font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground group-hover:text-foreground transition-colors">
                         {job.duration}
                       </span>
@@ -319,9 +314,11 @@ export function Experience() {
                     </div>
                   </div>
 
-                  {/* Right Column: Expandable Card */}
-                  <div className="relative pl-14 md:pl-0 w-full flex-1 min-w-0">
-                    <ExpandableTimelineCard job={job} index={index} />
+                  {/* Right Column: Collapsible Card (Full width on mobile, no left padding) */}
+                  <div className="relative w-full flex-1 min-w-0">
+                    <div className="rounded-lg border border-border overflow-hidden">
+                      <CollapsibleExperienceCard job={job} />
+                    </div>
                   </div>
                 </div>
               );

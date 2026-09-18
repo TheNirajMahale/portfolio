@@ -1,4 +1,4 @@
-import { GitHubIcon, LinkedInIcon, MailIcon } from "@/components/ui/icons";
+import { GitHubIcon, LinkedInIcon, TwitterIcon } from "@/components/ui/icons";
 import { type SocialType } from "@/components/ui/social-hover-card";
 import resumeData from "@/data/resume.json";
 import socialsData from "@/data/socials.json";
@@ -24,9 +24,9 @@ export const socialLinks: SocialLinkItem[] = [
     type: "linkedin",
   },
   {
-    href: `mailto:${socialsData.email?.address || resumeData.personal.email}`,
-    icon: MailIcon,
-    label: socialsData.email?.platform || "Email",
-    type: "email",
+    href: socialsData.twitter?.url || "https://x.com/TheNirajMahale",
+    icon: TwitterIcon,
+    label: socialsData.twitter?.platform || "X (Twitter)",
+    type: "twitter",
   },
 ];

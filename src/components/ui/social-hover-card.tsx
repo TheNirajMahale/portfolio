@@ -6,19 +6,13 @@ import {
   ArrowUpRight,
   Check,
   Copy,
-  MapPin,
-  GraduationCap,
-  Sparkles,
-  GitBranch,
-  BookOpen,
   Mail,
-  Building2,
 } from "lucide-react";
-import { GitHubIcon, LinkedInIcon } from "@/components/ui/icons";
+import { GitHubIcon, LinkedInIcon, TwitterIcon } from "@/components/ui/icons";
 import socialsData from "@/data/socials.json";
 import { cn } from "@/lib/utils";
 
-export type SocialType = "github" | "linkedin" | "email";
+export type SocialType = "github" | "linkedin" | "twitter" | "email";
 
 interface CardCoords {
   cardX: number;
@@ -43,7 +37,8 @@ const SocialHoverContext = React.createContext<SocialHoverContextValue | null>(n
 const ORDER: Record<SocialType, number> = {
   github: 0,
   linkedin: 1,
-  email: 2,
+  twitter: 2,
+  email: 3,
 };
 
 function isCursorDevice(): boolean {
@@ -97,8 +92,8 @@ export function SocialHoverGroup({
       const groupRect = groupRef.current.getBoundingClientRect();
       const viewportWidth = window.innerWidth;
 
-      // Card width capped to 288px (272px on narrow mobile)
-      const cardWidth = Math.min(288, viewportWidth - 24);
+      // Compact card width
+      const cardWidth = Math.min(235, viewportWidth - 24);
       const triggerCenterX = triggerRect.left + triggerRect.width / 2;
       const idealLeft = triggerCenterX - cardWidth / 2;
 
@@ -368,7 +363,7 @@ export function SocialHoverGroup({
                 transition={{
                   layout: { type: "spring", stiffness: 350, damping: 28 },
                 }}
-                className="relative rounded-lg border-2 border-dotted border-foreground/40 bg-card p-3.5 text-card-foreground shadow-xl shadow-black/10 dark:shadow-2xl dark:shadow-black/40 backdrop-blur-md select-text overflow-hidden"
+                className="relative rounded-lg border border-border bg-card/95 p-2.5 px-3 text-card-foreground shadow-xl shadow-black/20 dark:shadow-2xl dark:shadow-black/50 backdrop-blur-md select-none overflow-hidden"
               >
                 <AnimatePresence mode="popLayout" initial={false}>
                   <motion.div
@@ -475,285 +470,135 @@ function CardContent({
 }) {
   if (type === "github") {
     return (
-      <div className="flex flex-col gap-2">
-        {/* Header */}
-        <div className="flex items-start justify-between">
-          <div className="flex items-center gap-2">
-            <div className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border bg-muted text-foreground">
-              <GitHubIcon size={16} />
-              <span
-                className="absolute -top-0.5 -right-0.5 flex h-2 w-2"
-                title={socialsData.github.status}
-              >
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
-              </span>
-            </div>
-            <div>
-              <div className="flex items-center gap-1">
-                <span className="font-mono text-xs font-semibold text-foreground leading-tight">
-                  {socialsData.github.name}
-                </span>
-              </div>
-              <span className="font-mono text-[10px] text-muted-foreground leading-tight block">
-                {socialsData.github.handle}
-              </span>
-            </div>
+      <a
+        href={socialsData.github.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="group/card flex items-center justify-between gap-2.5 text-left"
+      >
+        <div className="flex items-center gap-2.5 min-w-0">
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border bg-muted text-foreground">
+            <GitHubIcon size={16} />
           </div>
-
-          <span className="inline-flex items-center gap-0.5 rounded border border-border bg-muted/60 px-1.5 py-0.5 font-mono text-[9px] text-muted-foreground">
-            <GitBranch size={9} />
-            {socialsData.github.platform}
-          </span>
-        </div>
-
-        {/* Bio */}
-        <p className="text-[11px] leading-snug text-muted-foreground">
-          {socialsData.github.bio}
-        </p>
-
-        {/* Featured Repositories */}
-        <div className="rounded-md border border-border/80 bg-muted/40 p-2">
-          <div className="mb-1 flex items-center justify-between">
-            <span className="font-mono text-[10px] font-medium text-foreground flex items-center gap-1">
-              <BookOpen size={10} className="text-muted-foreground" />
-              {socialsData.github.featuredRepositoriesTitle}
+          <div className="min-w-0 flex-1">
+            <span className="block font-mono text-xs font-semibold text-foreground leading-tight truncate">
+              {socialsData.github.name}
             </span>
-            <span className="font-mono text-[9px] text-muted-foreground">
-              {socialsData.github.badge}
+            <span className="block font-mono text-[11px] text-muted-foreground leading-tight truncate mt-0.5">
+              {socialsData.github.handle}
             </span>
           </div>
-          <div className="flex flex-col gap-1">
-            {socialsData.github.featuredRepositories.map((repo) => (
-              <a
-                key={repo.name}
-                href={repo.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group/repo flex items-center justify-between rounded px-1.5 py-0.5 hover:bg-background/80 transition-colors"
-              >
-                <span className="font-mono text-[11px] text-foreground group-hover/repo:text-foreground font-medium truncate">
-                  {repo.name}
-                </span>
-                <span className="shrink-0 font-mono text-[9px] text-muted-foreground">
-                  {repo.tech}
-                </span>
-              </a>
-            ))}
-          </div>
         </div>
-
-        {/* Footer CTA */}
-        <a
-          href={socialsData.github.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex w-full items-center justify-center gap-1 rounded-md border border-border bg-foreground px-2.5 py-1 font-mono text-[11px] font-medium text-background transition-all hover:bg-foreground/90"
-        >
-          <span>{socialsData.github.ctaText}</span>
-          <ArrowUpRight size={11} strokeWidth={2} />
-        </a>
-      </div>
+        <div className="shrink-0 text-muted-foreground transition-transform group-hover/card:translate-x-0.5 group-hover/card:-translate-y-0.5 group-hover/card:text-foreground">
+          <ArrowUpRight size={14} strokeWidth={2} />
+        </div>
+      </a>
     );
   }
 
   if (type === "linkedin") {
     return (
-      <div className="flex flex-col gap-2">
-        {/* Header */}
-        <div className="flex items-start justify-between">
-          <div className="flex items-center gap-2">
-            <div className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-[#0077b5]/30 bg-[#0077b5]/10 text-[#0077b5] dark:text-[#38a0dc]">
-              <LinkedInIcon size={16} />
-            </div>
-            <div>
-              <div className="flex items-center gap-1">
-                <span className="font-mono text-xs font-semibold text-foreground leading-tight">
-                  {socialsData.linkedin.name}
-                </span>
-              </div>
-              <span className="font-mono text-[10px] text-muted-foreground leading-tight block truncate max-w-[130px]">
-                {socialsData.linkedin.headline}
-              </span>
-            </div>
+      <a
+        href={socialsData.linkedin.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="group/card flex items-center justify-between gap-2.5 text-left"
+      >
+        <div className="flex items-center gap-2.5 min-w-0">
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-[#0077b5]/30 bg-[#0077b5]/10 text-[#0077b5] dark:text-[#38a0dc]">
+            <LinkedInIcon size={16} />
           </div>
-
-          <span className="inline-flex items-center gap-0.5 rounded border border-[#0077b5]/30 bg-[#0077b5]/10 px-1.5 py-0.5 font-mono text-[9px] text-[#0077b5] dark:text-[#38a0dc] font-medium">
-            {socialsData.linkedin.platform}
-          </span>
-        </div>
-
-        {/* Snapshot info */}
-        <div className="flex flex-col gap-1 rounded-md border border-border/80 bg-muted/40 p-2 font-mono text-[10px]">
-          <div className="flex items-center gap-1.5 text-foreground">
-            <Building2 size={11} className="shrink-0 text-muted-foreground" />
-            <span className="font-medium truncate">
-              {socialsData.linkedin.role}
+          <div className="min-w-0 flex-1">
+            <span className="block font-mono text-xs font-semibold text-foreground leading-tight truncate">
+              {socialsData.linkedin.name}
             </span>
-            <span className="text-muted-foreground">·</span>
-            <span className="text-muted-foreground truncate">
-              {socialsData.linkedin.company}
+            <span className="block font-mono text-[11px] text-muted-foreground leading-tight truncate mt-0.5">
+              in/nirajmahale
             </span>
           </div>
-          <div className="flex items-center gap-1.5 text-muted-foreground text-[10px]">
-            <GraduationCap size={11} className="shrink-0 text-muted-foreground" />
-            <span className="truncate">{socialsData.linkedin.education}</span>
-          </div>
-          <div className="flex items-center gap-1.5 text-muted-foreground text-[10px]">
-            <MapPin size={11} className="shrink-0 text-muted-foreground" />
-            <span className="truncate">{socialsData.linkedin.location}</span>
-          </div>
         </div>
+        <div className="shrink-0 text-muted-foreground transition-transform group-hover/card:translate-x-0.5 group-hover/card:-translate-y-0.5 group-hover/card:text-foreground">
+          <ArrowUpRight size={14} strokeWidth={2} />
+        </div>
+      </a>
+    );
+  }
 
-        {/* Skills preview */}
-        <div className="flex flex-wrap gap-1">
-          {socialsData.linkedin.skills.map((skill) => (
-            <span
-              key={skill}
-              className="rounded border border-border bg-muted/70 px-1 py-0.25 font-mono text-[9px] text-muted-foreground"
-            >
-              {skill}
+  if (type === "twitter") {
+    return (
+      <a
+        href={socialsData.twitter?.url || "https://x.com/TheNirajMahale"}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="group/card flex items-center justify-between gap-2.5 text-left"
+      >
+        <div className="flex items-center gap-2.5 min-w-0">
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border bg-muted text-foreground">
+            <TwitterIcon size={15} />
+          </div>
+          <div className="min-w-0 flex-1">
+            <span className="block font-mono text-xs font-semibold text-foreground leading-tight truncate">
+              {socialsData.twitter?.name || "Niraj Mahale"}
             </span>
-          ))}
+            <span className="block font-mono text-[11px] text-muted-foreground leading-tight truncate mt-0.5">
+              {socialsData.twitter?.handle || "@TheNirajMahale"}
+            </span>
+          </div>
         </div>
-
-        {/* Footer CTA */}
-        <a
-          href={socialsData.linkedin.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex w-full items-center justify-center gap-1 rounded-md border border-border bg-foreground px-2.5 py-1 font-mono text-[11px] font-medium text-background transition-all hover:bg-foreground/90"
-        >
-          <span>{socialsData.linkedin.ctaText}</span>
-          <ArrowUpRight size={11} strokeWidth={2} />
-        </a>
-      </div>
+        <div className="shrink-0 text-muted-foreground transition-transform group-hover/card:translate-x-0.5 group-hover/card:-translate-y-0.5 group-hover/card:text-foreground">
+          <ArrowUpRight size={14} strokeWidth={2} />
+        </div>
+      </a>
     );
   }
 
   if (type === "email") {
     return (
-      <div className="flex flex-col gap-2">
-        {/* Header */}
-        <div className="flex items-start justify-between">
-          <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border bg-muted text-foreground">
-              <Mail size={16} strokeWidth={1.5} />
-            </div>
-            <div>
-              <span className="font-mono text-xs font-semibold text-foreground leading-tight block">
-                {socialsData.email.name}
-              </span>
-              <span className="font-mono text-[10px] text-muted-foreground leading-tight block">
-                {socialsData.email.label}
-              </span>
-            </div>
+      <button
+        type="button"
+        onClick={onCopyEmail}
+        className="group/card flex w-full items-center justify-between gap-2.5 text-left cursor-pointer"
+      >
+        <div className="flex items-center gap-2.5 min-w-0">
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border bg-muted text-foreground">
+            <Mail size={16} strokeWidth={1.5} />
           </div>
-
-          <span className="inline-flex items-center gap-0.5 rounded border border-border bg-muted/60 px-1.5 py-0.5 font-mono text-[9px] text-muted-foreground">
-            <Sparkles size={9} />
-            {socialsData.email.statusBadge}
-          </span>
+          <div className="min-w-0 flex-1">
+            <span className="block font-mono text-xs font-semibold text-foreground leading-tight truncate">
+              {socialsData.email.name}
+            </span>
+            <span className="block font-mono text-[11px] text-muted-foreground leading-tight truncate mt-0.5">
+              {copied ? "Copied to clipboard!" : socialsData.email.address}
+            </span>
+          </div>
         </div>
-
-        {/* Email Box */}
-        <div className="flex items-center justify-between gap-1.5 rounded-md border border-border/80 bg-muted/40 p-2">
-          <span className="font-mono text-[11px] text-foreground truncate select-all">
-            {socialsData.email.address}
-          </span>
-          <button
-            type="button"
-            onClick={onCopyEmail}
-            aria-label="Copy email address"
-            className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded border border-border bg-background text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer"
-          >
-            <AnimatePresence mode="wait" initial={false}>
-              {copied ? (
-                <motion.span
-                  key="check-icon"
-                  initial={{ scale: 0.4, rotate: -20, opacity: 0 }}
-                  animate={{ scale: 1, rotate: 0, opacity: 1 }}
-                  exit={{ scale: 0.4, rotate: 20, opacity: 0 }}
-                  transition={{ type: "spring", stiffness: 500, damping: 25 }}
-                  className="text-emerald-500 flex items-center justify-center"
-                >
-                  <Check size={11} strokeWidth={2.5} />
-                </motion.span>
-              ) : (
-                <motion.span
-                  key="copy-icon"
-                  initial={{ scale: 0.5, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  exit={{ scale: 0.5, opacity: 0 }}
-                  transition={{ duration: 0.15 }}
-                  className="flex items-center justify-center"
-                >
-                  <Copy size={11} />
-                </motion.span>
-              )}
-            </AnimatePresence>
-          </button>
-        </div>
-
-        {/* CTA Actions */}
-        <div className="grid grid-cols-2 gap-1.5">
-          <button
-            type="button"
-            onClick={onCopyEmail}
-            className="inline-flex items-center justify-center gap-1.5 rounded-md border border-border bg-muted px-2 py-1 font-mono text-[11px] font-medium text-foreground transition-all hover:bg-muted/80 cursor-pointer"
-          >
-            <AnimatePresence mode="wait" initial={false}>
-              {copied ? (
-                <motion.span
-                  key="check-btn"
-                  initial={{ scale: 0.4, rotate: -20, opacity: 0 }}
-                  animate={{ scale: 1, rotate: 0, opacity: 1 }}
-                  exit={{ scale: 0.4, opacity: 0 }}
-                  transition={{ type: "spring", stiffness: 500, damping: 25 }}
-                  className="text-emerald-500 flex items-center justify-center"
-                >
-                  <Check size={12} strokeWidth={2.5} />
-                </motion.span>
-              ) : (
-                <motion.span
-                  key="copy-btn"
-                  initial={{ scale: 0.5, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  exit={{ scale: 0.5, opacity: 0 }}
-                  transition={{ duration: 0.15 }}
-                  className="flex items-center justify-center"
-                >
-                  <Copy size={12} />
-                </motion.span>
-              )}
-            </AnimatePresence>
-            <AnimatePresence mode="wait" initial={false}>
+        <div className="shrink-0 text-muted-foreground transition-colors group-hover/card:text-foreground">
+          <AnimatePresence mode="wait" initial={false}>
+            {copied ? (
               <motion.span
-                key={copied ? "copied-text" : "copy-text"}
-                initial={{ opacity: 0, y: 2 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -2 }}
-                transition={{ duration: 0.15 }}
-                className={copied ? "text-emerald-500 font-semibold" : ""}
+                key="check"
+                initial={{ scale: 0.5, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.5, opacity: 0 }}
+                className="text-emerald-500 flex items-center justify-center"
               >
-                {copied
-                  ? socialsData.email.copiedButtonText
-                  : socialsData.email.copyButtonText}
+                <Check size={14} strokeWidth={2.5} />
               </motion.span>
-            </AnimatePresence>
-          </button>
-
-          <a
-            href={`mailto:${socialsData.email.address}`}
-            className="inline-flex items-center justify-center gap-1 rounded-md border border-border bg-foreground px-2 py-1 font-mono text-[11px] font-medium text-background transition-all hover:bg-foreground/90"
-          >
-            <span>{socialsData.email.sendMailButtonText}</span>
-            <ArrowUpRight size={11} strokeWidth={2} />
-          </a>
+            ) : (
+              <motion.span
+                key="copy"
+                initial={{ scale: 0.5, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.5, opacity: 0 }}
+                className="flex items-center justify-center"
+              >
+                <Copy size={13} strokeWidth={1.75} />
+              </motion.span>
+            )}
+          </AnimatePresence>
         </div>
-      </div>
+      </button>
     );
   }
 
-  return null;
 }

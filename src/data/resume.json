@@ -6,6 +6,7 @@
     "email": "nirajmahale2002@gmail.com",
     "linkedin": "https://linkedin.com/in/nirajmahale",
     "github": "https://github.com/TheNirajMahale",
+    "twitter": "https://x.com/TheNirajMahale",
     "summary": "Software engineer with hands-on experience in Flutter and Node.js, and backend experience in Spring Boot. Comfortable working on the full system, from mobile UI to APIs and databases."
   },
   "education": [
@@ -28,7 +29,7 @@
       "company": "Velastra Pvt. Ltd., Ahmedabad",
       "duration": "May 2026 - Present",
       "location": "Ahmedabad, India",
-      "summary": "Took over early-stage IoT fleet telematics platform and rebuilt the entire stack from the ground up — migrating legacy webviews into a high-performance native Flutter app and structured Node.js microservices.",
+      "summary": "Rebuilt an early-stage IoT fleet platform from scratch, moving from legacy webviews to a native Flutter app and Node.js backend.",
       "tags": ["Flutter", "Dart", "Node.js", "MongoDB", "MySQL", "Socket.io", "REST API"],
       "details": [
         "Replaced a WebView wrapping a static web dashboard with a fully native Flutter app — provider-driven state management, live GPS map tracking, analytics charts, and a custom point-to-route deviation detection engine built from vector math.",
@@ -41,7 +42,7 @@
   ],
   "projects": [
     {
-      "name": "LoreKeeper API — Personal Reading Tracker Backend",
+      "name": "LoreKeeper API — Reading Tracker Backend",
       "link": "https://github.com/TheNirajMahale/loreKeeper-api",
       "tags": [
         "Spring Boot",
@@ -50,15 +51,13 @@
         "REST API"
       ],
       "highlights": [
-        "Built a Spring Boot REST API for a personal reading tracker covering books, manga, and comics, following a clean 4-layer architecture (Entity -> DTO -> Repository -> Controller).",
-        "Implemented stateless JWT authentication with Email/Password login as well as Google OAuth sign-in.",
-        "Integrated the Open Library API to auto-fetch book metadata, page counts, and cover art.",
-        "Used PostgreSQL for persistence, with Jakarta Validation and a centralized global exception handler for strict data integrity.",
-        "Added Runeglass, a rule-based adaptive reading-assistance highlighter module built into the API."
+        "Built a clean Spring Boot and PostgreSQL backend to organize and track reading habits across books, manga, and comics.",
+        "Added secure user accounts with JWT authentication and Google sign-in.",
+        "Connected the Open Library API to automatically fetch book covers and details."
       ]
     },
     {
-      "name": "Lorebound — Offline EPUB Reader (Flutter)",
+      "name": "Lorebound — Offline EPUB Reader",
       "link": "https://github.com/TheNirajMahale/Lorebound",
       "tags": [
         "Flutter",
@@ -67,9 +66,9 @@
         "Custom Engine"
       ],
       "highlights": [
-        "Building an offline-first EPUB reader in Flutter with a custom, fully native render engine (no WebViews) for direct control over performance and typography.",
-        "Implemented dual reading modes — paginated and infinite vertical scroll — with an immersive, distraction-free overlay UI.",
-        "Designed local library management (importing EPUBs, tracking reading progress) as a standalone offline app, built to later serve as the mobile front-end for the LoreKeeper API."
+        "Created an offline Flutter reading app with a custom native text engine instead of slow webviews.",
+        "Built smooth page turns and continuous vertical scrolling with a clean, distraction-free interface.",
+        "Handles local file imports, fast book parsing, and saves your reading progress offline."
       ]
     }
   ],

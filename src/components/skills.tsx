@@ -402,7 +402,6 @@ export function Skills() {
     <Section
       id="skills"
       title="Skills"
-      subtitle="Technologies and tools I build with."
       className={cn(viewMode === "ticker" && "pb-0 sm:pb-0 md:pb-0")}
     >
       <div className="flex flex-col">
@@ -484,11 +483,11 @@ export function Skills() {
               mousePosRef.current = { x: e.clientX, y: e.clientY };
             }}
             onMouseLeave={handleMarqueeMouseLeave}
-            className="relative w-full overflow-hidden pt-[100px] pb-4 [mask-image:linear-gradient(to_right,transparent,black_6%,black_94%,transparent)]"
+            className="relative w-full overflow-hidden pt-9 pb-4 [mask-image:linear-gradient(to_right,transparent,black_6%,black_94%,transparent)]"
           >
             <div
               ref={tickerRef}
-              className="relative flex gap-4 py-3 w-max will-change-transform items-center select-none"
+              className="relative flex gap-4 py-2 w-max will-change-transform items-center select-none"
             >
               {/* Single Gliding Floating Inspector Pill (SocialHoverGroup style spring slide across badges) */}
               <AnimatePresence>
@@ -498,7 +497,7 @@ export function Skills() {
                     initial={{
                       opacity: 0,
                       scale: 0.85,
-                      y: 10,
+                      y: 8,
                       x: activeTooltip.centerX,
                     }}
                     animate={{
@@ -510,7 +509,7 @@ export function Skills() {
                     exit={{
                       opacity: 0,
                       scale: 0.85,
-                      y: 8,
+                      y: 6,
                     }}
                     transition={{
                       x: { type: "spring", stiffness: 350, damping: 28 },
@@ -521,11 +520,11 @@ export function Skills() {
                     style={{
                       position: "absolute",
                       left: 0,
-                      bottom: "calc(100% + 12px)",
+                      bottom: "calc(100% + 7px)",
                     }}
                     className="pointer-events-none z-30 flex items-center justify-center will-change-transform"
                   >
-                    <div className="-translate-x-1/2 flex items-center gap-2 rounded-lg border border-border/80 bg-card/95 px-3 py-1.5 text-card-foreground shadow-xl shadow-black/15 dark:shadow-black/45 backdrop-blur-md whitespace-nowrap">
+                    <div className="-translate-x-1/2 flex items-center gap-2 rounded-lg border border-border/80 bg-card/95 px-2.5 py-1 text-card-foreground shadow-xl shadow-black/15 dark:shadow-black/45 backdrop-blur-md whitespace-nowrap">
                       {/* Signature brand dot */}
                       <span
                         className="h-2 w-2 rounded-full shrink-0 transition-colors duration-200"

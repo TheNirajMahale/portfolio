@@ -20,46 +20,43 @@ export interface EducationItem {
  */
 function EducationTimelineCard({ edu }: { edu: EducationItem }) {
   return (
-    <div className="group/card relative rounded-lg border-2 border-dotted border-foreground/35 bg-card/80 p-5 md:p-6 backdrop-blur-sm transition-all duration-300 card-glow hover:border-foreground/75 hover:bg-card/95">
-      <div className="flex flex-col sm:flex-row sm:items-start gap-4">
-        {/* Degree Icon */}
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-border bg-muted/70 text-muted-foreground transition-all duration-300 group-hover/card:border-foreground/40 group-hover/card:text-foreground group-hover/card:bg-muted">
+    <div className="group/card relative rounded-lg border border-border bg-card p-4 sm:p-5 transition-colors hover:border-foreground/40 flex flex-col">
+      {/* Top row: Degree Icon + Degree Title */}
+      <div className="flex items-center gap-3">
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-border bg-muted/70 text-muted-foreground transition-all duration-300 group-hover/card:border-foreground/40 group-hover/card:text-foreground group-hover/card:bg-muted">
           <span className="inline-block transition-transform duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover/card:-translate-y-0.5 group-hover:scale-110 group-hover:-rotate-6">
-            <GraduationCap size={18} strokeWidth={1.5} />
+            <GraduationCap size={17} strokeWidth={1.5} />
           </span>
         </div>
+        <h3 className="text-sm font-medium leading-snug text-foreground/95 sm:text-base flex-1 min-w-0">
+          {edu.degree}
+        </h3>
+      </div>
 
-        {/* Info */}
-        <div className="flex-1 min-w-0">
-          <div className="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between">
-            <h3 className="font-mono text-base md:text-lg font-semibold text-foreground tracking-tight group-hover/card:text-emerald-400 transition-colors">
-              {edu.degree}
-            </h3>
+      {/* Year badge — sticks to left */}
+      <div className="md:hidden mt-2.5 flex items-center">
+        <span className="inline-flex items-center justify-center rounded-md border border-border px-2 py-0.5 text-xs font-medium text-foreground">
+          {edu.duration}
+        </span>
+      </div>
 
-            {/* Mobile Duration tag */}
-            <span className="md:hidden font-mono text-xs tabular-nums text-muted-foreground whitespace-nowrap self-start sm:self-auto px-2 py-0.5 rounded-md bg-muted/60 border border-border/40">
-              {edu.duration}
-            </span>
-          </div>
+      {/* College Name — sticks to left */}
+      <p className="mt-2 text-xs sm:text-sm text-muted-foreground font-medium">
+        {edu.institution}
+      </p>
 
-          <p className="mt-1 text-sm text-muted-foreground font-medium">
-            {edu.institution}
-          </p>
+      {edu.description && (
+        <p className="mt-2 text-xs sm:text-sm leading-relaxed text-muted-foreground">
+          {edu.description}
+        </p>
+      )}
 
-          {edu.description && (
-            <p className="mt-2.5 text-sm leading-relaxed text-muted-foreground/90 font-sans">
-              {edu.description}
-            </p>
-          )}
-
-          {/* Grade / Score Badge */}
-          <div className="mt-4 pt-3.5 border-t border-border/30 flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 rounded-md bg-muted/50 border border-border/40 px-2.5 py-1 font-mono text-xs text-muted-foreground">
-              <Award className="h-3.5 w-3.5 text-emerald-400/80" />
-              Score: <span className="font-semibold text-foreground">{edu.score}</span>
-            </span>
-          </div>
-        </div>
+      {/* Score Badge — sticks to left with dashed divider */}
+      <div className="mt-3.5 pt-3 border-t border-dashed border-border flex items-center gap-2">
+        <span className="inline-flex items-center gap-1.5 rounded-md border border-border px-2 py-0.5 text-xs font-medium text-foreground">
+          <Award className="h-3.5 w-3.5 text-emerald-400/80" />
+          Score: <span className="font-semibold">{edu.score}</span>
+        </span>
       </div>
     </div>
   );
@@ -138,18 +135,13 @@ export function Education() {
   const lineHeight = useTransform(smoothProgress, [0, 1], [0, metrics.totalSpan]);
 
   return (
-    <Section
-      id="education"
-      title="Education"
-      subtitle="Academic background."
-      className="pt-[84px] sm:pt-[84px] md:pt-[84px] pb-12 md:pb-16"
-    >
+    <Section id="education" title="Education">
       <div ref={containerRef} className="relative w-full">
         <div ref={contentRef} className="relative w-full py-2">
-          {/* 1. Permanent Static Rail */}
+          {/* 1. Permanent Static Rail (Desktop only) */}
           {metrics.totalSpan > 0 && (
             <div
-              className="absolute left-6 md:left-8 -translate-x-1/2 w-[2px] bg-neutral-300/80 dark:bg-neutral-800 pointer-events-none z-0"
+              className="hidden md:block absolute left-8 -translate-x-1/2 w-[2px] bg-neutral-300/80 dark:bg-neutral-800 pointer-events-none z-0"
               style={{
                 top: `${metrics.startOffset}px`,
                 height: `${metrics.totalSpan}px`,
@@ -157,14 +149,14 @@ export function Education() {
             />
           )}
 
-          {/* 2. Animated Glowing Progress Beam */}
+          {/* 2. Animated Glowing Progress Beam (Desktop only) */}
           {metrics.totalSpan > 0 && (
             <div
               style={{
                 top: `${metrics.startOffset}px`,
                 height: `${metrics.totalSpan}px`,
               }}
-              className="absolute left-6 md:left-8 -translate-x-1/2 w-[2px] overflow-hidden pointer-events-none z-10"
+              className="hidden md:block absolute left-8 -translate-x-1/2 w-[2px] overflow-hidden pointer-events-none z-10"
             >
               <motion.div
                 style={{ height: lineHeight }}
@@ -177,7 +169,7 @@ export function Education() {
           )}
 
           {/* Timeline Items List */}
-          <div className="space-y-12 md:space-y-16">
+          <div className="space-y-4 md:space-y-6">
             {items.map((edu, index) => {
               const isLatest = index === 0;
 
@@ -190,19 +182,19 @@ export function Education() {
                   {/* Measurement Anchor */}
                   <div
                     data-timeline-anchor="true"
-                    className="absolute left-6 md:left-8 -translate-x-1/2 top-5 md:top-6 h-5 w-5 pointer-events-none opacity-0"
+                    className="hidden md:block absolute left-8 -translate-x-1/2 top-6 h-5 w-5 pointer-events-none opacity-0"
                     aria-hidden="true"
                   />
 
-                  {/* Left Column: Sticky Header with Node Circle & Duration */}
+                  {/* Left Column: Sticky Header with Node Circle & Duration (Desktop only) */}
                   <div
                     data-timeline-sticky="true"
-                    className="sticky top-36 self-start z-20 flex items-center md:flex-col md:items-start md:w-48 shrink-0"
+                    className="hidden md:flex sticky top-36 self-start z-20 flex-col items-start w-48 shrink-0"
                   >
                     {/* Minimal Node Bullet pinned exactly to line center */}
                     <div
                       data-timeline-node="true"
-                      className="absolute left-6 md:left-8 -translate-x-1/2 top-5 md:top-6 flex items-center justify-center z-20"
+                      className="absolute left-8 -translate-x-1/2 top-6 flex items-center justify-center z-20"
                     >
                       <div
                         className={cn(
@@ -224,7 +216,7 @@ export function Education() {
                     </div>
 
                     {/* Desktop Sticky Duration & Degree Tag */}
-                    <div className="hidden md:flex flex-col pl-16 pt-5">
+                    <div className="flex flex-col pl-16 pt-5">
                       <span className="font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground group-hover:text-foreground transition-colors">
                         {edu.duration}
                       </span>
@@ -237,8 +229,8 @@ export function Education() {
                     </div>
                   </div>
 
-                  {/* Right Column: Solid Non-Expandable Card */}
-                  <div className="relative pl-14 md:pl-0 w-full flex-1 min-w-0">
+                  {/* Right Column: Solid Non-Expandable Card (Full width on mobile, no left padding) */}
+                  <div className="relative w-full flex-1 min-w-0">
                     <EducationTimelineCard edu={edu} />
                   </div>
                 </div>

@@ -13,7 +13,7 @@ type ProjectItem = (typeof resumeData.projects)[number];
 
 export function Projects() {
   return (
-    <Section id="projects" title="Projects" subtitle="Things I've built.">
+    <Section id="projects" title="Projects">
       <StaggerContainer className="grid gap-6 sm:grid-cols-2">
         {resumeData.projects.map((project) => (
           <StaggerItem key={project.name} className="h-full">
@@ -44,11 +44,9 @@ function ProjectCard({ project }: { project: ProjectItem }) {
 
   return (
     <motion.div
-      whileHover={{ scale: 1.015 }}
-      transition={{ duration: 0.35, ease: [0.25, 1, 0.5, 1] }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="group relative flex h-full flex-col overflow-hidden rounded-lg border-2 border-dotted border-foreground/40 bg-card p-6 md:p-7 transition-colors duration-300 hover:border-foreground/80 hover:z-10"
+      className="group relative flex h-full flex-col overflow-hidden rounded-lg border border-border bg-card p-5 sm:p-6 md:p-7 transition-colors duration-300 hover:border-foreground/40 hover:z-10"
     >
       {/* 2D Radial Spotlight Overlay following the cursor */}
       <motion.div
@@ -68,7 +66,7 @@ function ProjectCard({ project }: { project: ProjectItem }) {
             </span>
           </div>
           <div>
-            <h3 className="font-mono text-base font-semibold leading-snug text-foreground">
+            <h3 className="text-sm font-medium leading-snug text-foreground/95 sm:text-base">
               {project.name}
             </h3>
           </div>
@@ -81,7 +79,7 @@ function ProjectCard({ project }: { project: ProjectItem }) {
           {tags.map((tag) => (
             <span
               key={tag}
-              className="rounded border border-border/80 bg-muted/60 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-muted-foreground transition-colors group-hover:border-foreground/20 group-hover:text-foreground"
+              className="inline-flex items-center justify-center rounded-md border border-border px-2 py-0.5 text-xs font-medium text-foreground transition-[color,box-shadow]"
             >
               {tag}
             </span>
@@ -94,24 +92,57 @@ function ProjectCard({ project }: { project: ProjectItem }) {
         {project.highlights.map((highlight, i) => (
           <li
             key={i}
-            className="relative pl-4 text-sm leading-relaxed text-muted-foreground before:absolute before:left-0 before:top-[10px] before:h-px before:w-2 before:bg-border"
+            className="relative pl-4 text-xs sm:text-sm leading-relaxed text-muted-foreground before:absolute before:left-0 before:top-[10px] before:h-px before:w-2 before:bg-border"
           >
             {highlight}
           </li>
         ))}
       </ul>
 
-      {/* Footer with Fluidly Expanding MicroKit Button */}
-      <div className="relative z-10 mt-6 flex items-center justify-between border-t-2 border-dotted border-foreground/40 pt-4">
-        <span className="font-mono text-xs text-muted-foreground flex items-center gap-1.5">
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-          <span>Open Source</span>
-        </span>
+      {/* Footer with Demo and Source Buttons */}
+      <div className="relative z-10 mt-6 flex items-center justify-between border-t border-dashed border-border pt-4">
+        <ProjectDemoButton
+          demo={"demo" in project && typeof project.demo === "string" ? project.demo : undefined}
+          name={project.name}
+        />
 
         {/* Fluidly Expanding Project Source Button */}
         <ProjectSourceButton href={project.link} name={project.name} />
       </div>
     </motion.div>
+  );
+}
+
+function ProjectDemoButton({ demo, name }: { demo?: string; name: string }) {
+  if (!demo) {
+    return (
+      <span
+        className="inline-flex h-8 items-center gap-1.5 rounded-md border border-border/80 bg-muted/30 px-3 font-mono text-xs font-medium select-none cursor-not-allowed"
+        title="Demo not available"
+        aria-disabled="true"
+      >
+        <span className="text-muted-foreground/40">Demo</span>
+        <ArrowRight size={12} strokeWidth={2} className="-rotate-45 text-muted-foreground/30" />
+      </span>
+    );
+  }
+
+  return (
+    <a
+      href={demo}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={`View live demo of ${name}`}
+      className="group/demo inline-flex h-8 items-center gap-1.5 rounded-md border border-border/80 bg-muted/60 px-3 font-mono text-xs font-medium text-foreground transition-all duration-200 hover:border-foreground/75 hover:bg-background hover:text-foreground active:scale-[0.98]"
+    >
+      <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+      <span>Demo</span>
+      <ArrowRight
+        size={12}
+        strokeWidth={2}
+        className="-rotate-45 text-muted-foreground transition-transform duration-200 group-hover/demo:text-foreground group-hover/demo:translate-x-0.5 group-hover/demo:-translate-y-0.5"
+      />
+    </a>
   );
 }
 

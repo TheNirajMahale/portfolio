@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { FileText } from "lucide-react";
 import { useLenis } from "lenis/react";
 import { useSound } from "@/components/providers";
+import { cn } from "@/lib/utils";
 
 interface MobileNavProps {
   isOpen: boolean;
@@ -42,13 +43,13 @@ export function MobileNav({ isOpen, setIsOpen, navItems, activeSection }: Mobile
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          initial={{ opacity: 0, y: -10 }}
+          initial={{ opacity: 0, y: -6 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -10 }}
+          exit={{ opacity: 0, y: -6 }}
           transition={{ duration: 0.2, ease: "easeOut" }}
-          className="absolute left-0 right-0 top-full z-40 border-b border-dotted border-foreground/40 bg-background/95 backdrop-blur-xl sm:hidden"
+          className="mx-auto w-[95%] max-w-7xl border-x-2 border-b-2 border-dotted border-foreground/40 bg-background/98 backdrop-blur-2xl sm:hidden shadow-2xl shadow-black/20"
         >
-          <div className="flex flex-col px-6 py-4 gap-1">
+          <div className="flex flex-col px-4 py-3 gap-1">
             {navItems.map((item) => {
               const isActive = activeSection === item.href.replace("/#", "");
               return (
@@ -56,13 +57,17 @@ export function MobileNav({ isOpen, setIsOpen, navItems, activeSection }: Mobile
                   key={item.label}
                   href={item.href}
                   onClick={(e) => handleItemClick(e, item.href)}
-                  className={`font-mono text-sm px-3 py-2.5 rounded-md transition-colors duration-150 ${
-                    isActive 
-                      ? "text-foreground bg-muted font-semibold" 
-                      : "text-muted-foreground hover:text-foreground hover:bg-muted"
-                  }`}
+                  className={cn(
+                    "font-mono text-xs px-3 py-2 rounded-md transition-colors duration-150 flex items-center justify-between",
+                    isActive
+                      ? "text-foreground bg-muted border border-border font-semibold"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                  )}
                 >
-                  {item.label}
+                  <span>{item.label}</span>
+                  {isActive && (
+                    <span className="h-1.5 w-1.5 rounded-full bg-foreground" />
+                  )}
                 </a>
               );
             })}
@@ -75,10 +80,10 @@ export function MobileNav({ isOpen, setIsOpen, navItems, activeSection }: Mobile
                   window.scrollTo({ top: 0, behavior: "smooth" });
                 }
               }}
-              className="inline-flex items-center gap-2 rounded-md border border-border bg-muted px-3 py-2.5 font-mono text-sm font-medium text-foreground transition-all duration-200 hover:border-foreground/20 mt-2"
+              className="inline-flex items-center justify-center gap-2 rounded-md border border-border bg-muted/70 px-3 py-2 font-mono text-xs font-medium text-foreground transition-all duration-200 hover:border-foreground/40 hover:bg-background mt-1.5"
             >
-              <FileText size={14} strokeWidth={1.5} />
-              Resume
+              <FileText size={13} strokeWidth={1.5} />
+              <span>Resume</span>
             </Link>
           </div>
         </motion.div>

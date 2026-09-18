@@ -41,6 +41,13 @@
     "url": "https://linkedin.com/in/nirajmahale",
     "ctaText": "Connect on LinkedIn"
   },
+  "twitter": {
+    "platform": "X (Twitter)",
+    "name": "Niraj Mahale",
+    "username": "TheNirajMahale",
+    "handle": "@TheNirajMahale",
+    "url": "https://x.com/TheNirajMahale"
+  },
   "email": {
     "platform": "Email",
     "name": "Niraj Mahale",

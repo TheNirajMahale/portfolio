@@ -107,14 +107,7 @@ export function Nav() {
             }}
             className="flex items-center justify-center transition-opacity hover:opacity-80 -ml-2"
           >
-            <Image 
-              src={siteData.nav.logo}
-              alt="Logo" 
-              width={44}
-              height={44}
-              className="h-11 w-auto rounded-sm"
-              priority 
-            />
+            <span className="font-mono text-xl font-bold text-foreground">NM</span>
           </Link>
 
           {/* Desktop nav */}

@@ -12,23 +12,20 @@ export function Section({ id, title, subtitle, children, className }: SectionPro
   return (
     <section
       id={id}
-      className={cn("mx-auto w-full max-w-5xl px-6 pt-6 pb-10 sm:py-10 md:px-8 md:py-16", className)}
+      className={cn("w-full", className)}
     >
       {title && (
-        <div className="mb-8 sm:mb-12">
-          {/* Decorative line above title */}
-          <div className="decorative-line mb-5 sm:mb-8" />
-          <h2 className="font-mono text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+        <div className="flex h-10 w-full items-center justify-start border-b border-border">
+          <h2
+            className="px-4 text-xl font-bold text-foreground/90 md:px-6 md:text-2xl"
+          >
             {title}
           </h2>
-          {subtitle && (
-            <p className="mt-3 text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
-              {subtitle}
-            </p>
-          )}
         </div>
       )}
-      {children}
+      <div className="px-4 py-6 md:px-6 md:py-8">
+        {children}
+      </div>
     </section>
   );
 }

@@ -2,224 +2,90 @@
 
 import Image from "next/image";
 import { motion } from "motion/react";
-import { useLenis } from "lenis/react";
-import { MapPin, ArrowDown, ArrowUpRight, Sparkles, Volume2, VolumeX, Music } from "lucide-react";
+import { MapPin, ArrowUpRight } from "lucide-react";
 import { SocialHoverGroup, SocialHoverCard } from "@/components/ui/social-hover-card";
-import { useCursor, useSound, useMusic } from "@/components/providers";
-import { AudioWaveformLine } from "@/components/ui/audio-waveform-line";
 import { socialLinks } from "@/lib/socials";
 import resumeData from "@/data/resume.json";
 import siteData from "@/data/site.json";
 
 const container = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.1, delayChildren: 0.15 } },
+  visible: { transition: { staggerChildren: 0.08, delayChildren: 0.1 } },
 };
 
 const item = {
-  hidden: { opacity: 0, y: 20, filter: "blur(4px)" },
+  hidden: { opacity: 0, y: 16, filter: "blur(4px)" },
   visible: {
     opacity: 1,
     y: 0,
     filter: "blur(0px)",
-    transition: { duration: 0.5, ease: [0.2, 0, 0, 1] as [number, number, number, number] },
+    transition: { duration: 0.45, ease: [0.2, 0, 0, 1] as [number, number, number, number] },
   },
 };
 
 export function Hero() {
-  const lenis = useLenis();
-  const { cursorEnabled, toggleCursor } = useCursor();
-  const { soundEnabled, toggleSound } = useSound();
-  const { musicEnabled, toggleMusic } = useMusic();
-
-  const ctaTarget = siteData.hero.cta?.target || "#experience";
-  const ctaLabel = siteData.hero.cta?.label || "View my work";
-
-  const scrollToExperience = (e: React.MouseEvent) => {
-    e.preventDefault();
-    if (lenis) {
-      lenis.scrollTo(ctaTarget, { offset: -90, duration: 1.4 });
-    } else {
-      const target = document.getElementById(ctaTarget.replace("#", ""));
-      if (target) {
-        const top = target.getBoundingClientRect().top + window.scrollY - 90;
-        window.scrollTo({ top, behavior: "smooth" });
-      }
-    }
-  };
-
   return (
     <section className="relative w-full">
-      {/* Dynamic SVG Texture for Hero */}
-      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden opacity-[0.15] dark:opacity-[0.07]">
-        <svg className="absolute inset-0 h-full w-full" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <pattern id="hero-fabric" width="16" height="16" patternUnits="userSpaceOnUse">
-              <path d="M0 16V0h16v16H0zm8-16v16M0 8h16" fill="none" stroke="currentColor" strokeWidth="0.5" />
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#hero-fabric)" className="text-foreground" />
-        </svg>
-        {/* Fade the texture out at the bottom */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background" />
-      </div>
+      {/* Radial dot pattern — starts below nav bar, ends at vertical midpoint of avatar */}
+      <div
+        className="pointer-events-none absolute top-20 left-0 right-0 z-0 h-[136px] sm:h-[148px] md:h-[156px] w-full opacity-35 dark:opacity-20"
+        style={{
+          backgroundImage: "radial-gradient(var(--foreground) 1.5px, transparent 0)",
+          backgroundSize: "12px 12px",
+        }}
+      />
 
-      <div className="relative z-10 mx-auto w-full max-w-5xl px-6 pt-28 pb-2 sm:pt-30 md:pt-32 sm:pb-3 md:px-8">
+      <div className="relative z-10 px-4 pt-36 pb-6 sm:pt-38 md:px-6 md:pt-40">
         <motion.div variants={container} initial="hidden" animate="visible">
-          {/* Top Row: Location Badge + Underneath Right-Aligned Toggles */}
-          <motion.div variants={item} className="mb-4 sm:mb-1 w-fit flex flex-col items-start">
-            {/* Status badge */}
-            <div className="group inline-flex items-center gap-2 rounded-md border border-border bg-muted/80 backdrop-blur-sm px-3 py-1.5 font-mono text-xs text-muted-foreground transition-colors hover:border-foreground/30">
-              <MapPin size={12} strokeWidth={1.5} className="-translate-y-[0.5px] transition-transform duration-300 group-hover:-translate-y-1 text-muted-foreground group-hover:text-foreground" />
-              <span>{resumeData.personal.location}</span>
-              <span className="text-border">·</span>
-              <span className="inline-flex items-center gap-1.5 text-foreground">
-                <span className="relative flex h-1.5 w-1.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
+          {/* Grid: Left (avatar + text) / Right (socials + email) */}
+          <div className="grid w-full grid-cols-1 gap-y-6 sm:grid-cols-3">
+            {/* Left Column: Avatar + Name + Role + Location (col-span-2) */}
+            <div className="col-span-2 space-y-2">
+              {/* Avatar */}
+              <motion.div variants={item} className="relative mt-4 flex w-full justify-center sm:justify-start">
+                <Image
+                  src={siteData.hero?.avatar ?? "/developer-avatar.png"}
+                  alt={`${resumeData.personal.name}'s avatar`}
+                  width={300}
+                  height={300}
+                  priority
+                  className="size-28 rounded-full border-2 border-border/80 shadow-sm object-cover select-none sm:size-30"
+                />
+              </motion.div>
+
+              {/* Name + Verified Badge */}
+              <motion.div variants={item} className="flex items-center justify-center gap-1.5 sm:mt-2 sm:justify-start">
+                <h1 className="text-center text-xl font-bold text-foreground sm:text-left md:text-2xl">
+                  {resumeData.personal.name.toUpperCase()}
+                </h1>
+                {/* Blue verified checkmark */}
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 22" className="size-5 shrink-0">
+                  <path
+                    d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.69.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z"
+                    fill="#1d9bf0"
+                  />
+                </svg>
+              </motion.div>
+
+              {/* Role + Location (compact inline) */}
+              <motion.div variants={item} className="flex flex-wrap items-center justify-center gap-2 text-xs sm:text-sm text-muted-foreground sm:justify-start">
+                <span>{resumeData.experience[0]?.title}</span>
+                <span className="text-muted-foreground/40 font-light" aria-hidden="true">|</span>
+                <span className="inline-flex items-center gap-1">
+                  <MapPin size={12} strokeWidth={1.5} className="shrink-0" />
+                  <span>Maharashtra, India</span>
                 </span>
-                {resumeData.personal.relocation}
-              </span>
+              </motion.div>
             </div>
 
-            {/* Controls directly under badge, aligned flush with badge's right end (Desktop only) */}
-            <div className="hidden sm:flex w-full justify-between items-center gap-2.5 mt-1.5">
-              {/* Subtle dotted waveform line to the left of the buttons */}
-              <AudioWaveformLine isPlaying={musicEnabled} className="flex-1 justify-end mr-0.5" />
-
-              {/* Button Cluster */}
-              <div className="flex items-center gap-2">
-                {/* Background Music Toggle */}
-                <motion.button
-                  type="button"
-                  onClick={toggleMusic}
-                  whileHover={{ scale: 1.08 }}
-                  whileTap={{ scale: 0.94 }}
-                  title={musicEnabled ? "Pause ambient piano music" : "Play ambient piano music"}
-                  aria-label="Toggle ambient piano music"
-                  className={`group relative flex h-8 w-8 items-center justify-center rounded-md border transition-all duration-200 select-none ${musicEnabled
-                      ? "border-foreground/75 bg-card text-foreground shadow-xs"
-                      : "border-border/80 bg-muted/60 text-muted-foreground/60 hover:border-foreground/60 hover:text-foreground hover:bg-muted/80"
-                    }`}
-                >
-                  {musicEnabled && (
-                    <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-emerald-500 animate-pulse border-2 border-background" />
-                  )}
-                  <motion.span
-                    animate={musicEnabled ? { rotate: [-5, 5, -5] } : { rotate: 0 }}
-                    transition={musicEnabled ? { repeat: Infinity, duration: 1.8, ease: "easeInOut" } : { duration: 0.2 }}
-                    className="inline-flex items-center justify-center transition-transform duration-200 group-hover:scale-115"
-                  >
-                    <Music
-                      size={14}
-                      strokeWidth={musicEnabled ? 2.25 : 1.5}
-                      className={musicEnabled ? "text-foreground" : "text-muted-foreground/60"}
-                    />
-                  </motion.span>
-                </motion.button>
-
-                {/* Sound FX Toggle */}
-                <motion.button
-                  type="button"
-                  onClick={toggleSound}
-                  whileHover={{ scale: 1.08 }}
-                  whileTap={{ scale: 0.94 }}
-                  title={soundEnabled ? "Mute UI click sound" : "Enable UI click sound"}
-                  aria-label="Toggle UI click sound"
-                  className={`group relative flex h-8 w-8 items-center justify-center rounded-md border transition-all duration-200 select-none ${soundEnabled
-                      ? "border-foreground/75 bg-card text-foreground shadow-xs"
-                      : "border-border/80 bg-muted/60 text-muted-foreground/60 hover:border-foreground/60 hover:text-foreground hover:bg-muted/80"
-                    }`}
-                >
-                  {soundEnabled && (
-                    <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-emerald-500 animate-pulse border-2 border-background" />
-                  )}
-                  <span className="inline-flex items-center justify-center transition-transform duration-200 group-hover:scale-115">
-                    {soundEnabled ? (
-                      <motion.span
-                        key="vol-on"
-                        initial={{ scale: 0.8 }}
-                        animate={{ scale: 1 }}
-                        transition={{ duration: 0.2, ease: "easeOut" }}
-                      >
-                        <Volume2 size={14} strokeWidth={2.25} className="text-foreground" />
-                      </motion.span>
-                    ) : (
-                      <motion.span
-                        key="vol-off"
-                        initial={{ scale: 0.8 }}
-                        animate={{ scale: 1 }}
-                        transition={{ duration: 0.2, ease: "easeOut" }}
-                      >
-                        <VolumeX size={14} strokeWidth={1.5} className="text-muted-foreground/60" />
-                      </motion.span>
-                    )}
-                  </span>
-                </motion.button>
-
-                {/* Cursor FX Toggle */}
-                <motion.button
-                  type="button"
-                  onClick={toggleCursor}
-                  whileHover={{ scale: 1.08 }}
-                  whileTap={{ scale: 0.94 }}
-                  title={cursorEnabled ? "Disable cursor follower" : "Enable cursor follower"}
-                  aria-label="Toggle custom cursor follower"
-                  className={`group relative flex h-8 w-8 items-center justify-center rounded-md border transition-all duration-200 select-none ${cursorEnabled
-                      ? "border-foreground/75 bg-card text-foreground shadow-xs"
-                      : "border-border/80 bg-muted/60 text-muted-foreground/60 hover:border-foreground/60 hover:text-foreground hover:bg-muted/80"
-                    }`}
-                >
-                  {cursorEnabled && (
-                    <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-emerald-500 animate-pulse border-2 border-background" />
-                  )}
-                  <motion.span
-                    animate={cursorEnabled ? { rotate: 360 } : { rotate: 0 }}
-                    transition={cursorEnabled ? { repeat: Infinity, duration: 8, ease: "linear" } : { duration: 0.3 }}
-                    className="inline-flex items-center justify-center transition-transform duration-200 group-hover:scale-115 group-hover:rotate-45"
-                  >
-                    <Sparkles
-                      size={14}
-                      strokeWidth={cursorEnabled ? 2.25 : 1.5}
-                      className={cursorEnabled ? "text-foreground" : "text-muted-foreground/60"}
-                    />
-                  </motion.span>
-                </motion.button>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* 2-Column Responsive Layout */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-8 items-center">
-            {/* Left Column: Text & Actions (7 cols on desktop) */}
-            <div className="md:col-span-7 flex flex-col justify-center">
-              {/* Name */}
-              <motion.h1
-                variants={item}
-                className="font-mono text-3xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-6xl"
-              >
-                {resumeData.personal.name}
-              </motion.h1>
-
-              {/* Title / Role */}
-              <motion.p
-                variants={item}
-                className="my-3 sm:my-4 font-mono text-lg text-muted-foreground sm:text-2xl"
-              >
-                {resumeData.experience[0].title}
-              </motion.p>
-
-              {/* Description */}
-              <motion.p
-                variants={item}
-                className="max-w-xl text-sm leading-relaxed text-muted-foreground sm:text-base"
-              >
-                {resumeData.personal.summary}
-              </motion.p>
-
-              {/* Social links & Action buttons */}
-              <motion.div variants={item} className="mt-6 sm:mt-8 flex flex-wrap items-center gap-2.5">
-                <SocialHoverGroup side="top" className="flex items-center gap-2.5">
+            {/* Right Column: Social links + Email (vertically centered in plain bg section) */}
+            <motion.div
+              variants={item}
+              className="mx-2 flex flex-col items-center justify-center sm:items-end sm:justify-center sm:pt-[76px]"
+            >
+              {/* Social icon grid */}
+              <SocialHoverGroup side="top" className="flex items-center">
+                <div className="grid grid-cols-3 gap-x-6 sm:gap-x-8">
                   {socialLinks.map((link) => (
                     <SocialHoverCard key={link.label} type={link.type} side="top">
                       <a
@@ -233,63 +99,29 @@ export function Hero() {
                         <span className="transition-all duration-350 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-0 group-hover:opacity-0 group-hover:-translate-y-2 group-hover:translate-x-2 flex items-center justify-center">
                           <link.icon size={16} />
                         </span>
-                        {/* Incoming trade arrow on hover (MicroKit Social Icon Buttons) */}
+                        {/* Incoming trade arrow on hover */}
                         <span className="absolute transition-all duration-350 ease-[cubic-bezier(0.25,1,0.5,1)] scale-0 opacity-0 translate-y-2 -translate-x-2 group-hover:scale-100 group-hover:opacity-100 group-hover:translate-y-0 group-hover:translate-x-0 flex items-center justify-center text-foreground">
                           <ArrowUpRight size={15} strokeWidth={2} />
                         </span>
                       </a>
                     </SocialHoverCard>
                   ))}
-                </SocialHoverGroup>
+                </div>
+              </SocialHoverGroup>
 
-                {/* Primary CTA: MicroKit Read More Swap with Lenis smooth scroll */}
+              {/* Email address */}
+              <div className="mt-2.5 flex w-full items-center justify-center sm:justify-end">
                 <a
-                  href={ctaTarget}
-                  onClick={scrollToExperience}
-                  className="group relative inline-flex items-center justify-center overflow-hidden rounded-md border border-border bg-foreground px-4 py-2 font-mono text-xs font-medium text-background transition-all duration-300 ease-out hover:bg-foreground/90 hover:shadow-md active:scale-95"
+                  href={`mailto:${resumeData.personal.email}`}
+                  className="font-mono text-xs text-foreground underline-offset-4 hover:underline transition-colors"
                 >
-                  {/* Incoming leading arrow on hover */}
-                  <span className="inline-flex w-0 -translate-x-2 opacity-0 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:w-3.5 group-hover:translate-x-0 group-hover:opacity-100 mr-0 group-hover:mr-1.5 items-center">
-                    <ArrowDown size={12} strokeWidth={2.5} />
-                  </span>
-
-                  {/* Label */}
-                  <span className="transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]">
-                    {ctaLabel}
-                  </span>
-
-                  {/* Default trailing arrow */}
-                  <span className="inline-flex w-3.5 translate-x-0 opacity-100 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:w-0 group-hover:translate-x-2 group-hover:opacity-0 ml-1.5 group-hover:ml-0 items-center">
-                    <ArrowDown size={12} strokeWidth={2} />
-                  </span>
+                  {resumeData.personal.email}
                 </a>
-              </motion.div>
-            </div>
-
-            {/* Right Column: Floating Transparent Anime Developer Companion (5 cols on desktop) */}
-            <motion.div
-              variants={item}
-              className="hidden md:flex md:col-span-5 items-center justify-center lg:justify-end relative select-none overflow-visible p-2 pb-2"
-            >
-              {/* Soft ambient backlight glow behind monitor */}
-              <div className="absolute -left-4 top-1/4 h-36 w-36 rounded-full bg-cyan-500/15 blur-3xl pointer-events-none" />
-              <div className="absolute right-4 bottom-1/4 h-32 w-32 rounded-full bg-blue-500/10 blur-3xl pointer-events-none" />
-
-              <div className="relative group transition-transform duration-500 hover:scale-[1.02] overflow-visible">
-                <Image
-                  src={siteData.hero?.avatar ?? "/developer-avatar.png"}
-                  alt={siteData.hero?.avatarAlt ?? `${resumeData.personal.name} - Coding illustration`}
-                  width={420}
-                  height={420}
-                  priority
-                  className="relative z-10 w-full max-w-[300px] lg:max-w-[340px] h-auto object-contain filter drop-shadow-[0_8px_16px_rgba(0,0,0,0.35)] drop-shadow-[0_16px_32px_rgba(0,0,0,0.25)]"
-                />
               </div>
             </motion.div>
           </div>
         </motion.div>
       </div>
-
     </section>
   );
 }
