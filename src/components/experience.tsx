@@ -131,7 +131,7 @@ function CollapsibleExperienceCard({ job }: { job: ExperienceJob }) {
             transition={{ duration: 0.3, ease: [0.25, 1, 0.5, 1] }}
             className="overflow-hidden"
           >
-            <div className="border-t border-dashed border-border space-y-3 p-4 sm:p-5">
+            <div className="border-t-2 border-dotted border-foreground/45 space-y-3 p-4 sm:p-5">
               {detailList.length > 0 && (
                 <div className="space-y-2">
                   <p className="text-xs font-mono uppercase tracking-wider text-muted-foreground">

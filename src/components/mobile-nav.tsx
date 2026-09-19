@@ -47,7 +47,7 @@ export function MobileNav({ isOpen, setIsOpen, navItems, activeSection }: Mobile
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -6 }}
           transition={{ duration: 0.2, ease: "easeOut" }}
-          className="mx-auto w-[95%] max-w-7xl border-x-2 border-b-2 border-dotted border-foreground/40 bg-background/98 backdrop-blur-2xl sm:hidden shadow-2xl shadow-black/20"
+          className="mx-auto w-[95%] max-w-7xl border-x-2 border-b-2 border-dotted border-foreground/45 bg-background/98 backdrop-blur-2xl sm:hidden shadow-2xl shadow-black/20"
         >
           <div className="flex flex-col px-4 py-3 gap-1">
             {navItems.map((item) => {

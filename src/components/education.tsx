@@ -52,7 +52,7 @@ function EducationTimelineCard({ edu }: { edu: EducationItem }) {
       )}
 
       {/* Score Badge — sticks to left with dashed divider */}
-      <div className="mt-3.5 pt-3 border-t border-dashed border-border flex items-center gap-2">
+      <div className="mt-3.5 pt-3 border-t-2 border-dotted border-foreground/45 flex items-center gap-2">
         <span className="inline-flex items-center gap-1.5 rounded-md border border-border px-2 py-0.5 text-xs font-medium text-foreground">
           <Award className="h-3.5 w-3.5 text-emerald-400/80" />
           Score: <span className="font-semibold">{edu.score}</span>

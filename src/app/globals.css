@@ -22,7 +22,7 @@
   --foreground: #fafafa;
   --muted: #161616;
   --muted-foreground: #a1a1aa;
-  --border: #333333;
+  --border: #444444;
   --accent: #e5e5e5;
   --card: #121212;
   --card-foreground: #fafafa;
@@ -36,7 +36,7 @@
   --foreground: #0a0a0a;
   --muted: #f0f0f0;
   --muted-foreground: #52525b;
-  --border: #e5e5e5;
+  --border: #d4d4d8;
   --accent: #171717;
   --card: #ffffff;
   --card-foreground: #0a0a0a;
@@ -138,7 +138,7 @@ html.lenis body {
 .decorative-line {
   position: relative;
   height: 2px;
-  border-top: 2px dotted color-mix(in srgb, var(--foreground) 40%, transparent);
+  border-top: 2px dotted color-mix(in srgb, var(--foreground) 45%, transparent);
 }
 
 .decorative-line::before,
@@ -165,8 +165,8 @@ html.lenis body {
 .pattern-tilted-lines {
   background-image: repeating-linear-gradient(
     315deg,
-    color-mix(in srgb, var(--foreground) 22%, transparent) 0,
-    color-mix(in srgb, var(--foreground) 22%, transparent) 1px,
+    color-mix(in srgb, var(--foreground) 36%, transparent) 0,
+    color-mix(in srgb, var(--foreground) 36%, transparent) 1px,
     transparent 0,
     transparent 50%
   );
@@ -176,8 +176,8 @@ html.lenis body {
 :root.light .pattern-tilted-lines {
   background-image: repeating-linear-gradient(
     315deg,
-    color-mix(in srgb, var(--foreground) 10%, transparent) 0,
-    color-mix(in srgb, var(--foreground) 10%, transparent) 1px,
+    color-mix(in srgb, var(--foreground) 22%, transparent) 0,
+    color-mix(in srgb, var(--foreground) 22%, transparent) 1px,
     transparent 0,
     transparent 50%
   );

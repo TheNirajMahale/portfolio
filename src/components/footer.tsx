@@ -87,7 +87,7 @@ export function Footer() {
             </div>
 
             {/* Dotted Divider Line */}
-            <div className="my-4 sm:my-6 border-b-2 border-dotted border-border/60" />
+            <div className="my-4 sm:my-6 border-b-2 border-dotted border-foreground/45" />
 
             {/* Humanized Note */}
             <p className="max-w-2xl text-sm sm:text-base md:text-lg leading-relaxed text-muted-foreground font-sans">
@@ -121,7 +121,7 @@ export function Footer() {
             </div>
 
             {/* Bottom Minimal Copyright Bar */}
-            <div className="mt-6 sm:mt-8 pt-3 sm:pt-4 border-t border-border/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-[11px] sm:text-xs font-mono text-muted-foreground/60">
+            <div className="mt-6 sm:mt-8 pt-3 sm:pt-4 border-t border-border/50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-[11px] sm:text-xs font-mono text-muted-foreground/60">
               <p>© {new Date().getFullYear()} {resumeData.personal.name} • {resumeData.personal.location}</p>
               <p>
                 Crafted with ❤️ by {resumeData.personal.name} • Inspired by{" "}

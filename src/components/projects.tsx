@@ -100,7 +100,7 @@ function ProjectCard({ project }: { project: ProjectItem }) {
       </ul>
 
       {/* Footer with Demo and Source Buttons */}
-      <div className="relative z-10 mt-6 flex items-center justify-between border-t border-dashed border-border pt-4">
+      <div className="relative z-10 mt-6 flex items-center justify-between border-t-2 border-dotted border-foreground/45 pt-4">
         <ProjectDemoButton
           demo={"demo" in project && typeof project.demo === "string" ? project.demo : undefined}
           name={project.name}
