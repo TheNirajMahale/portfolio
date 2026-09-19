@@ -44,7 +44,7 @@ export function Hero() {
               {/* Avatar */}
               <motion.div variants={item} className="relative mt-4 flex w-full justify-center sm:justify-start">
                 <Image
-                  src={siteData.hero?.avatar ?? "/avatar.jpg"}
+                  src={siteData.hero?.avatar ?? "/avatar.png"}
                   alt={`${resumeData.personal.name}'s avatar`}
                   width={300}
                   height={300}
