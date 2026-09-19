@@ -11,8 +11,8 @@
     ]
   },
   "hero": {
-    "avatar": "/developer-avatar.png",
-    "avatarAlt": "Niraj Mahale - Coding illustration",
+    "avatar": "/avatar.jpg",
+    "avatarAlt": "Niraj Mahale - Profile picture",
     "cta": {
       "label": "View my work",
       "target": "#experience"
@@ -24,17 +24,8 @@
     "clickSoundSrc": "/sounds/click.mp3",
     "clickVolume": 0.3
   },
-  "terminal": {
-    "prompt": "niraj@portfolio",
-    "quotes": [
-      "Building digital products.",
-      "Writing clean code.",
-      "Designing robust systems.",
-      "Solving hard problems."
-    ]
-  },
   "footer": {
     "tagline": "Building digital experiences.",
-    "pitch": "If you're building something and want an extra pair of hands, or just want to talk shop — reach out. I'll actually reply."
+    "pitch": "If you're working on something cool and could use an extra pair of hands, need another perspective, or just want to talk, drop a message. I'll actually reply."
   }
 }

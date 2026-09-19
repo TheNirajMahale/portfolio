@@ -90,7 +90,7 @@ export function Footer() {
             <div className="my-4 sm:my-6 border-b-2 border-dotted border-border/60" />
 
             {/* Humanized Note */}
-            <p className="max-w-2xl text-xs sm:text-sm md:text-base leading-relaxed text-muted-foreground font-sans">
+            <p className="max-w-2xl text-sm sm:text-base md:text-lg leading-relaxed text-muted-foreground font-sans">
               {siteData.footer.pitch}
             </p>
 
@@ -123,6 +123,17 @@ export function Footer() {
             {/* Bottom Minimal Copyright Bar */}
             <div className="mt-6 sm:mt-8 pt-3 sm:pt-4 border-t border-border/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-[11px] sm:text-xs font-mono text-muted-foreground/60">
               <p>© {new Date().getFullYear()} {resumeData.personal.name} • {resumeData.personal.location}</p>
+              <p>
+                Crafted with ❤️ by {resumeData.personal.name} • Inspired by{" "}
+                <a
+                  href="https://udaykiran.dev"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline underline-offset-2 hover:text-foreground transition-colors"
+                >
+                  Uday Kiran
+                </a>
+              </p>
             </div>
           </motion.div>
         </div>

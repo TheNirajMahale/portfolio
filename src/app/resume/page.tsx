@@ -192,7 +192,7 @@ export default function ResumePage() {
                     </span>
                   </div>
                   <p className="text-sm text-muted-foreground">
-                    {edu.institution} — {edu.score}
+                    {edu.institution} • {edu.score}
                   </p>
                 </div>
               ))}

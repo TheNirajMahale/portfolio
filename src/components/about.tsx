@@ -14,7 +14,7 @@ export function About() {
           building production apps using Flutter, Node.js, and Spring Boot.
         </p>
         <p className="text-base text-foreground/90">
-          I work on IoT fleet telematics — real-time GPS tracking, sensor data
+          I work on IoT fleet telematics, focusing on real-time GPS tracking, sensor data
           pipelines, and WebSocket-driven dashboards, shipping native mobile apps
           backed by structured microservices.
         </p>

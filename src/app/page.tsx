@@ -9,7 +9,7 @@ import { SectionDivider } from "@/components/ui/section-divider";
 export default function Home() {
   return (
     <main className="relative">
-      <div className="relative z-10 mx-auto w-[95%] md:w-[80%] max-w-7xl border-x-2 border-b-2 border-dotted border-foreground/40 bg-background">
+      <div className="relative z-10 mx-auto w-[95%] md:w-[80%] max-w-7xl border-x-2 border-dotted border-foreground/40 bg-background">
         {/* Compact Hero (no 100dvh wrapper, no terminal animation) */}
         <Hero />
 
@@ -28,6 +28,9 @@ export default function Home() {
         <SectionDivider />
         <Education />
       </div>
+
+      {/* Full-width horizontal line extending to screen edges, matching nav bar */}
+      <div className="w-full border-b-2 border-dotted border-foreground/40" />
     </main>
   );
 }

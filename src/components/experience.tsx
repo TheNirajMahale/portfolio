@@ -277,20 +277,10 @@ export function Experience() {
                       className="absolute left-8 -translate-x-1/2 top-6 flex items-center justify-center z-20"
                     >
                       <div
-                        className={cn(
-                          "flex h-5 w-5 items-center justify-center rounded-full border bg-background transition-all duration-200",
-                          isCurrent
-                            ? "border-emerald-500/80 shadow-[0_0_10px_rgba(52,211,153,0.3)]"
-                            : "border-border/70 group-hover:border-foreground/40"
-                        )}
+                        className="flex h-5 w-5 items-center justify-center rounded-full border bg-background transition-all duration-200 border-border/70 group-hover:border-foreground/40"
                       >
                         <div
-                          className={cn(
-                            "h-2 w-2 rounded-full transition-all duration-200",
-                            isCurrent
-                              ? "bg-emerald-400 shadow-[0_0_6px_#34d399] animate-pulse"
-                              : "bg-muted-foreground/40 group-hover:bg-foreground/70"
-                          )}
+                          className="h-2 w-2 rounded-full transition-all duration-200 bg-muted-foreground/40 group-hover:bg-foreground/70"
                         />
                       </div>
                     </div>
@@ -306,8 +296,7 @@ export function Experience() {
                         </span>
                       )}
                       {isCurrent && (
-                        <span className="mt-2 w-fit inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2 py-0.5 font-mono text-[10px] font-medium text-emerald-500 dark:text-emerald-400">
-                          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                        <span className="mt-2 w-fit inline-flex items-center rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2 py-0.5 font-mono text-[10px] font-medium text-emerald-500 dark:text-emerald-400">
                           CURRENT
                         </span>
                       )}

@@ -44,7 +44,7 @@ export function Hero() {
               {/* Avatar */}
               <motion.div variants={item} className="relative mt-4 flex w-full justify-center sm:justify-start">
                 <Image
-                  src={siteData.hero?.avatar ?? "/developer-avatar.png"}
+                  src={siteData.hero?.avatar ?? "/avatar.jpg"}
                   alt={`${resumeData.personal.name}'s avatar`}
                   width={300}
                   height={300}
@@ -73,7 +73,7 @@ export function Hero() {
                 <span className="text-muted-foreground/40 font-light" aria-hidden="true">|</span>
                 <span className="inline-flex items-center gap-1">
                   <MapPin size={12} strokeWidth={1.5} className="shrink-0" />
-                  <span>Maharashtra, India</span>
+                  <span>{resumeData.personal.location}</span>
                 </span>
               </motion.div>
             </div>

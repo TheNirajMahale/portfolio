@@ -30,10 +30,10 @@ const robotoMono = Roboto_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteData.siteUrl),
-  title: `${resumeData.personal.name} — Software Engineer`,
+  title: `${resumeData.personal.name} | Software Engineer`,
   description: resumeData.personal.summary,
   openGraph: {
-    title: `${resumeData.personal.name} — Software Engineer`,
+    title: `${resumeData.personal.name} | Software Engineer`,
     description: resumeData.personal.summary,
     type: "website",
     url: siteData.siteUrl,
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `${resumeData.personal.name} — Software Engineer`,
+    title: `${resumeData.personal.name} | Software Engineer`,
     description: resumeData.personal.summary,
   },
 };
