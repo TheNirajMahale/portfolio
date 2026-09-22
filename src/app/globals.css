@@ -146,7 +146,7 @@ html.lenis body {
 .decorative-line {
   position: relative;
   height: 2px;
-  border-top: 2px dotted color-mix(in srgb, var(--foreground) 45%, transparent);
+  border-top: 2px dotted color-mix(in srgb, var(--foreground) 24%, transparent);
 }
 
 .decorative-line::before,
@@ -191,10 +191,11 @@ html.lenis body {
   );
 }
 
-/* ─── Wider dotted/dashed border segments ─── */
+/* ─── Wider dotted/dashed border segments (Softened) ─── */
 /* Override browser's tiny dotted borders with dashed for larger, crisper segments */
 *[class*="border-dotted"] {
   border-style: dashed !important;
+  border-color: color-mix(in srgb, var(--foreground) 22%, transparent) !important;
 }
 
 /* ─── Card hover glow ─── */
