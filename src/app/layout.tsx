@@ -6,6 +6,7 @@ import {
   MusicProvider,
   ThemeProvider,
   SmoothScroll,
+  LoaderProvider,
 } from "@/components/providers";
 import { Nav } from "@/components/nav";
 import { Footer } from "@/components/footer";
@@ -56,18 +57,20 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       suppressHydrationWarning
     >
-      <body className="min-h-dvh bg-background text-foreground flex flex-col bg-grid-texture max-w-full overflow-x-hidden">
+      <body className="min-h-dvh bg-background text-foreground flex flex-col">
         <SmoothScroll>
           <CursorProvider>
             <SoundProvider>
               <MusicProvider>
                 <CustomCursor />
                 <ThemeProvider>
-                  <ScrollProgressBar />
-                  <Nav />
-                  <div className="flex-1 relative z-10 bg-background max-w-full overflow-x-clip">{children}</div>
-                  <Footer />
-                  <ScrollToTop />
+                  <LoaderProvider>
+                    <ScrollProgressBar />
+                    <Nav />
+                    <div className="flex-1 relative bg-background">{children}</div>
+                    <Footer />
+                    <ScrollToTop />
+                  </LoaderProvider>
                 </ThemeProvider>
               </MusicProvider>
             </SoundProvider>

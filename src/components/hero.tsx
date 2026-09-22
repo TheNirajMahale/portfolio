@@ -10,15 +10,14 @@ import siteData from "@/data/site.json";
 
 const container = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.08, delayChildren: 0.1 } },
+  visible: { transition: { staggerChildren: 0.08, delayChildren: 0.35 } },
 };
 
 const item = {
-  hidden: { opacity: 0, y: 16, filter: "blur(4px)" },
+  hidden: { opacity: 0, y: 14 },
   visible: {
     opacity: 1,
     y: 0,
-    filter: "blur(0px)",
     transition: { duration: 0.45, ease: [0.2, 0, 0, 1] as [number, number, number, number] },
   },
 };
@@ -58,7 +57,7 @@ export function Hero({ isLoading = false }: HeroProps) {
                     layout
                     layoutId="hero-avatar"
                     transition={{ type: "tween", duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
-                    className="relative flex items-center justify-center"
+                    className="relative flex items-center justify-center will-change-transform"
                   >
                     <Image
                       src={siteData.hero?.avatar ?? "/avatar.png"}
@@ -67,7 +66,7 @@ export function Hero({ isLoading = false }: HeroProps) {
                       height={120}
                       priority
                       unoptimized
-                      className="size-28 rounded-full border-2 border-border/80 shadow-sm object-cover select-none sm:size-30"
+                      className="size-28 rounded-full border-2 border-border/80 shadow-md object-cover select-none sm:size-30"
                     />
                   </motion.div>
                 )}
@@ -82,9 +81,9 @@ export function Hero({ isLoading = false }: HeroProps) {
                     layout
                     layoutId="hero-name"
                     transition={{ type: "tween", duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
-                    className="flex items-center justify-center gap-1.5 sm:justify-start"
+                    className="flex items-center justify-center gap-1.5 sm:justify-start will-change-transform"
                   >
-                    <h1 className="text-center text-xl font-bold text-foreground sm:text-left md:text-2xl">
+                    <h1 className="text-center text-xl font-bold tracking-tight text-foreground sm:text-left sm:text-2xl">
                       {resumeData.personal.name.toUpperCase()}
                     </h1>
                     {/* Blue verified checkmark */}

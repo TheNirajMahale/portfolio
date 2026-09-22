@@ -46,7 +46,7 @@
 html,
 body {
   max-width: 100%;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 body {
@@ -132,18 +132,20 @@ html.lenis body {
   color: var(--background);
 }
 
-/* ─── Decorative: grid texture background ─── */
+/* ─── Decorative: grid texture background (footer accent) ─── */
 .bg-grid-texture {
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
   background-size: 48px 48px;
 }
 
-:root.light .bg-grid-texture {
+:root.light .bg-grid-texture,
+.light .bg-grid-texture,
+html.light .bg-grid-texture {
   background-image:
-    linear-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+    linear-gradient(rgba(0, 0, 0, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.06) 1px, transparent 1px);
   background-size: 48px 48px;
 }
 

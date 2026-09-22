@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { useLenis } from "lenis/react";
 import { FileText, Menu, X } from "lucide-react";
-import { useSound } from "@/components/providers";
+import { useSound, useLoader } from "@/components/providers";
 import { ThemeDropdown } from "@/components/ui/theme-dropdown";
 import { cn } from "@/lib/utils";
 import { MobileNav } from "@/components/mobile-nav";
@@ -19,6 +19,7 @@ export function Nav() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("");
   const { playClick } = useSound();
+  const { isLoaderActive } = useLoader();
   const lenis = useLenis();
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
@@ -93,9 +94,12 @@ export function Nav() {
     <>
       <motion.div
         initial={false}
-        animate={{ y: scrolled ? 0 : 16 }}
-        transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-        className="print:hidden fixed left-0 right-0 top-0 z-50 w-full"
+        animate={{ y: scrolled ? 0 : 16, opacity: isLoaderActive ? 0 : 1 }}
+        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+        className={cn(
+          "print:hidden fixed left-0 right-0 top-0 z-50 w-full",
+          isLoaderActive && "pointer-events-none"
+        )}
       >
         <header className="w-full border-y-2 border-dotted border-foreground/45">
         <nav className="mx-auto flex w-[95%] items-center justify-between border-x-2 border-dotted border-foreground/45 bg-foreground/5 px-4 sm:px-6 py-3.5 sm:py-4 backdrop-blur-2xl md:w-[80%] max-w-7xl">
