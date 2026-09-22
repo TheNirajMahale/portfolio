@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { motion, useScroll, useTransform } from "motion/react";
+import { motion, useScroll, useTransform, AnimatePresence } from "motion/react";
 import { ArrowUpRight, Copy, Check } from "lucide-react";
 import { SocialHoverGroup, SocialHoverCard } from "@/components/ui/social-hover-card";
 import { socialLinks } from "@/lib/socials";
@@ -69,20 +69,36 @@ export function Footer() {
               <button
                 type="button"
                 onClick={handleCopy}
-                className="shrink-0 inline-flex items-center gap-1 sm:gap-1.5 rounded-md border border-border/80 bg-background px-2 py-1 sm:px-2.5 sm:py-1 font-mono text-[11px] sm:text-xs text-muted-foreground hover:border-foreground/50 hover:text-foreground hover:bg-muted/30 transition-all select-none cursor-pointer"
+                className="shrink-0 relative inline-flex items-center justify-center min-w-[72px] sm:min-w-[78px] h-7 rounded-md border border-border/80 bg-background px-2 py-1 sm:px-2.5 sm:py-1 font-mono text-[11px] sm:text-xs text-muted-foreground hover:border-foreground/50 hover:text-foreground hover:bg-muted/30 transition-colors select-none cursor-pointer overflow-hidden"
                 title="Copy email address"
               >
-                {copied ? (
-                  <>
-                    <Check className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-emerald-400" />
-                    <span className="text-emerald-400 font-medium">Copied</span>
-                  </>
-                ) : (
-                  <>
-                    <Copy className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
-                    <span>Copy</span>
-                  </>
-                )}
+                <AnimatePresence mode="popLayout" initial={false}>
+                  {copied ? (
+                    <motion.span
+                      key="check"
+                      initial={{ opacity: 0, y: 8, scale: 0.92 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -8, scale: 0.92 }}
+                      transition={{ duration: 0.16, ease: [0.22, 1, 0.36, 1] }}
+                      className="inline-flex items-center gap-1 text-emerald-400 font-medium"
+                    >
+                      <Check className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
+                      <span>Copied</span>
+                    </motion.span>
+                  ) : (
+                    <motion.span
+                      key="copy"
+                      initial={{ opacity: 0, y: 8, scale: 0.92 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -8, scale: 0.92 }}
+                      transition={{ duration: 0.16, ease: [0.22, 1, 0.36, 1] }}
+                      className="inline-flex items-center gap-1"
+                    >
+                      <Copy className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
+                      <span>Copy</span>
+                    </motion.span>
+                  )}
+                </AnimatePresence>
               </button>
             </div>
 

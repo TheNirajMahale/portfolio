@@ -33,14 +33,14 @@ function EducationTimelineCard({ edu }: { edu: EducationItem }) {
         </h3>
       </div>
 
-      {/* Year badge — sticks to left */}
+      {/* Year badge - sticks to left */}
       <div className="md:hidden mt-2.5 flex items-center">
         <span className="inline-flex items-center justify-center rounded-md border border-border px-2 py-0.5 text-xs font-medium text-foreground">
           {edu.duration}
         </span>
       </div>
 
-      {/* College Name — sticks to left */}
+      {/* College Name - sticks to left */}
       <p className="mt-2 text-xs sm:text-sm text-muted-foreground font-medium">
         {edu.institution}
       </p>
@@ -51,7 +51,7 @@ function EducationTimelineCard({ edu }: { edu: EducationItem }) {
         </p>
       )}
 
-      {/* Score Badge — sticks to left with dashed divider */}
+      {/* Score Badge - sticks to left with dashed divider */}
       <div className="mt-3.5 pt-3 border-t-2 border-dotted border-foreground/45 flex items-center gap-2">
         <span className="inline-flex items-center gap-1.5 rounded-md border border-border px-2 py-0.5 text-xs font-medium text-foreground">
           <Award className="h-3.5 w-3.5 text-emerald-400/80" />

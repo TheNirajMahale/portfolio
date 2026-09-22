@@ -19,7 +19,7 @@ export interface ExperienceJob {
 }
 
 /**
- * Collapsible Experience Card — Uday Kiran's design:
+ * Collapsible Experience Card - Uday Kiran's design:
  * - Company initials avatar on the left
  * - Dashed border separator
  * - Click to expand/collapse (NOT hover)
@@ -99,14 +99,14 @@ function CollapsibleExperienceCard({ job }: { job: ExperienceJob }) {
           </div>
         </div>
 
-        {/* Job summary — full width across card */}
+        {/* Job summary - full width across card */}
         {job.summary && (
           <p className="mt-2.5 w-full text-xs sm:text-sm text-muted-foreground leading-relaxed font-normal">
             {job.summary}
           </p>
         )}
 
-        {/* Tags — full width across card */}
+        {/* Tags - full width across card */}
         {job.tags && job.tags.length > 0 && (
           <div className="mt-2.5 flex flex-wrap gap-1.5 w-full">
             {job.tags.map((tag) => (

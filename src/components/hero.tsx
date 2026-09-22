@@ -26,7 +26,7 @@ const item = {
 export function Hero() {
   return (
     <section className="relative w-full">
-      {/* Radial dot pattern — starts below nav bar, ends at vertical midpoint of avatar */}
+      {/* Radial dot pattern - starts below nav bar, ends at vertical midpoint of avatar */}
       <div
         className="pointer-events-none absolute top-20 left-0 right-0 z-0 h-[136px] sm:h-[148px] md:h-[156px] w-full opacity-35 dark:opacity-20"
         style={{
@@ -71,9 +71,25 @@ export function Hero() {
               <motion.div variants={item} className="flex flex-wrap items-center justify-center gap-2 text-xs sm:text-sm text-muted-foreground sm:justify-start">
                 <span>{resumeData.experience[0]?.title}</span>
                 <span className="text-muted-foreground/40 font-light" aria-hidden="true">|</span>
-                <span className="inline-flex items-center gap-1">
-                  <MapPin size={12} strokeWidth={1.5} className="shrink-0" />
-                  <span>{resumeData.personal.location}</span>
+                <span className="group/loc inline-flex items-center gap-1.5 cursor-default">
+                  <motion.span
+                    className="inline-flex items-center justify-center shrink-0"
+                    animate={{ y: [0, -2.5, 0] }}
+                    transition={{
+                      duration: 2.2,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    }}
+                    whileHover={{
+                      y: -4,
+                      scale: 1.15,
+                      rotate: [-6, 6, 0],
+                      transition: { duration: 0.35, ease: "easeOut" },
+                    }}
+                  >
+                    <MapPin size={12} strokeWidth={1.5} className="text-muted-foreground group-hover/loc:text-foreground transition-colors" />
+                  </motion.span>
+                  <span className="group-hover/loc:text-foreground transition-colors">{resumeData.personal.location}</span>
                 </span>
               </motion.div>
             </div>

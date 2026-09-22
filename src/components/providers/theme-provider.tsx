@@ -11,10 +11,13 @@ import {
 } from "react";
 import { flushSync } from "react-dom";
 
-type Theme = "dark" | "light";
+export type Theme = "system" | "light" | "dark";
+export type ResolvedTheme = "light" | "dark";
 
 interface ThemeContextValue {
   theme: Theme;
+  resolvedTheme: ResolvedTheme;
+  setTheme: (theme: Theme) => void;
   toggleTheme: () => void;
 }
 
@@ -29,33 +32,62 @@ function useMounted() {
   );
 }
 
+function getSystemTheme(): ResolvedTheme {
+  if (typeof window === "undefined") return "dark";
+  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+}
+
 export function useTheme() {
   const ctx = useContext(ThemeContext);
-  // Return safe default during SSR/static generation when provider isn't mounted yet
-  if (!ctx) return { theme: "dark" as Theme, toggleTheme: () => {} };
+  if (!ctx) {
+    return {
+      theme: "system" as Theme,
+      resolvedTheme: "dark" as ResolvedTheme,
+      setTheme: () => {},
+      toggleTheme: () => {},
+    };
+  }
   return ctx;
 }
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<Theme>(() => {
-    if (typeof window === "undefined") return "dark";
+  const [theme, setThemeState] = useState<Theme>(() => {
+    if (typeof window === "undefined") return "system";
     try {
       const saved = localStorage.getItem("theme") as Theme | null;
-      if (saved === "light" || saved === "dark") return saved;
-      return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      if (saved === "light" || saved === "dark" || saved === "system") return saved;
+      return "system";
     } catch {
-      return "dark";
+      return "system";
     }
   });
 
+  const [systemResolved, setSystemResolved] = useState<ResolvedTheme>(getSystemTheme);
   const mounted = useMounted();
   const isTransitioningRef = useRef(false);
 
-  // Sync class on <html> whenever theme changes
+  // Active theme calculation
+  const resolvedTheme: ResolvedTheme = theme === "system" ? systemResolved : theme;
+
+  // Listen to OS theme changes if theme === "system"
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+
+    const handleChange = (e: MediaQueryListEvent) => {
+      setSystemResolved(e.matches ? "dark" : "light");
+    };
+
+    setSystemResolved(mediaQuery.matches ? "dark" : "light");
+    mediaQuery.addEventListener("change", handleChange);
+    return () => mediaQuery.removeEventListener("change", handleChange);
+  }, []);
+
+  // Sync class on <html> whenever resolved theme changes
   useEffect(() => {
     if (!mounted) return;
     const root = document.documentElement;
-    if (theme === "light") {
+    if (resolvedTheme === "light") {
       root.classList.add("light");
     } else {
       root.classList.remove("light");
@@ -65,68 +97,93 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     } catch {
       // Storage unavailable fallback
     }
-  }, [theme, mounted]);
+  }, [theme, resolvedTheme, mounted]);
+
+  const applyThemeTransition = useCallback(
+    (targetTheme: Theme) => {
+      if (isTransitioningRef.current) return;
+
+      const nextResolved: ResolvedTheme =
+        targetTheme === "system" ? getSystemTheme() : targetTheme;
+      const currentResolved = resolvedTheme;
+
+      const prefersReducedMotion =
+        typeof window !== "undefined" &&
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      // If themes resolve to the same visual mode or no View Transitions
+      if (
+        !document.startViewTransition ||
+        prefersReducedMotion ||
+        nextResolved === currentResolved
+      ) {
+        const root = document.documentElement;
+        if (nextResolved === "light") {
+          root.classList.add("light");
+        } else {
+          root.classList.remove("light");
+        }
+        setThemeState(targetTheme);
+        return;
+      }
+
+      isTransitioningRef.current = true;
+      const root = document.documentElement;
+
+      const cleanup = () => {
+        isTransitioningRef.current = false;
+      };
+
+      try {
+        const transition = document.startViewTransition(() => {
+          flushSync(() => {
+            setThemeState(targetTheme);
+            if (nextResolved === "light") {
+              root.classList.add("light");
+            } else {
+              root.classList.remove("light");
+            }
+          });
+        });
+
+        transition.ready
+          .then(() => {
+            const animation = root.animate(
+              {
+                clipPath: ["inset(0 100% 0 0)", "inset(0 0 0 0)"],
+              },
+              {
+                duration: 900,
+                easing: "cubic-bezier(0.25, 1, 0.4, 1)",
+                pseudoElement: "::view-transition-new(root)",
+              }
+            );
+            animation.finished.finally(cleanup).catch(cleanup);
+          })
+          .catch(cleanup);
+      } catch {
+        cleanup();
+      }
+    },
+    [resolvedTheme]
+  );
 
   const toggleTheme = useCallback(() => {
-    if (isTransitioningRef.current) return;
-
-    const isDark = theme === "dark";
-    const nextTheme = isDark ? "light" : "dark";
-
-    // Fallback if reduced motion is preferred or View Transitions not supported
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (!document.startViewTransition || prefersReducedMotion) {
-      const root = document.documentElement;
-      if (nextTheme === "light") {
-        root.classList.add("light");
-      } else {
-        root.classList.remove("light");
-      }
-      setTheme(nextTheme);
-      return;
-    }
-
-    isTransitioningRef.current = true;
-    const root = document.documentElement;
-
-    const cleanup = () => {
-      isTransitioningRef.current = false;
+    // Cycle: system -> light -> dark -> system
+    const cycleMap: Record<Theme, Theme> = {
+      system: "light",
+      light: "dark",
+      dark: "system",
     };
+    applyThemeTransition(cycleMap[theme]);
+  }, [theme, applyThemeTransition]);
 
-    try {
-      const transition = document.startViewTransition(() => {
-        flushSync(() => {
-          setTheme(nextTheme);
-          if (nextTheme === "light") {
-            root.classList.add("light");
-          } else {
-            root.classList.remove("light");
-          }
-        });
-      });
-
-      transition.ready
-        .then(() => {
-          const animation = root.animate(
-            {
-              clipPath: [
-                "inset(0 100% 0 0)",
-                "inset(0 0 0 0)",
-              ],
-            },
-            {
-              duration: 900,
-              easing: "cubic-bezier(0.25, 1, 0.4, 1)",
-              pseudoElement: "::view-transition-new(root)",
-            }
-          );
-          animation.finished.finally(cleanup).catch(cleanup);
-        })
-        .catch(cleanup);
-    } catch {
-      cleanup();
-    }
-  }, [theme]);
+  const setTheme = useCallback(
+    (newTheme: Theme) => {
+      applyThemeTransition(newTheme);
+    },
+    [applyThemeTransition]
+  );
 
   // Prevent flash of wrong theme by hiding content until mounted
   if (!mounted) {
@@ -134,7 +191,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+    <ThemeContext.Provider value={{ theme, resolvedTheme, setTheme, toggleTheme }}>
       {children}
     </ThemeContext.Provider>
   );

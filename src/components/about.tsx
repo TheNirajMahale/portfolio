@@ -1,7 +1,7 @@
 import { Section } from "@/components/ui/section";
 
 /**
- * About section — concise paragraphs in Uday Kiran's writing style,
+ * About section - concise paragraphs in Uday Kiran's writing style,
  * placed directly below the Hero with a section header banner bar.
  */
 export function About() {

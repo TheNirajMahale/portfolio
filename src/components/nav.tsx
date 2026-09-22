@@ -5,8 +5,9 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { useLenis } from "lenis/react";
-import { FileText, Sun, Moon, Menu, X } from "lucide-react";
-import { useTheme, useSound } from "@/components/providers";
+import { FileText, Menu, X } from "lucide-react";
+import { useSound } from "@/components/providers";
+import { ThemeDropdown } from "@/components/ui/theme-dropdown";
 import { cn } from "@/lib/utils";
 import { MobileNav } from "@/components/mobile-nav";
 import siteData from "@/data/site.json";
@@ -17,7 +18,6 @@ export function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("");
-  const { theme, toggleTheme } = useTheme();
   const { playClick } = useSound();
   const lenis = useLenis();
 
@@ -41,44 +41,52 @@ export function Nav() {
     }
   };
 
-  // Handle scroll bounce
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 40);
-    handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  // Sync scrolled state with Lenis scroll
+  useLenis(({ scroll }) => {
+    setScrolled(scroll > 40);
+  });
 
-  // Scroll Spy functionality
+  // Zero-overhead IntersectionObserver scroll-spy
   useEffect(() => {
-    const handleScrollSpy = () => {
-      const sections = NAV_ITEMS.map((item) => item.href.replace("/#", ""));
-      let current = "";
-      
-      for (const section of sections) {
-        const element = document.getElementById(section);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          // Trigger if section top is above middle of screen and bottom is below header
-          if (rect.top <= window.innerHeight / 2 && rect.bottom >= 100) {
-            current = section;
+    // Initial check for non-zero scroll on page refresh
+    if (typeof window !== "undefined") {
+      setScrolled(window.scrollY > 40);
+    }
+
+    const sectionIds = NAV_ITEMS.map((item) => item.href.replace("/#", "").replace("#", ""));
+    const visibleEntries = new Map<string, IntersectionObserverEntry>();
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            visibleEntries.set(entry.target.id, entry);
+          } else {
+            visibleEntries.delete(entry.target.id);
+          }
+        });
+
+        if (visibleEntries.size > 0) {
+          const topEntry = Array.from(visibleEntries.values()).sort(
+            (a, b) => Math.abs(a.boundingClientRect.top) - Math.abs(b.boundingClientRect.top)
+          )[0];
+          if (topEntry && topEntry.target.id !== activeSection) {
+            setActiveSection(topEntry.target.id);
           }
         }
+      },
+      {
+        rootMargin: "-20% 0px -40% 0px",
+        threshold: [0, 0.2, 0.5],
       }
-      if (current !== activeSection) {
-        setActiveSection(current);
-      }
-    };
+    );
 
-    window.addEventListener("scroll", handleScrollSpy, { passive: true });
-    // Retry once after a short delay in case of slow hydration
-    const timeout = setTimeout(handleScrollSpy, 500);
-    handleScrollSpy();
+    sectionIds.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
 
-    return () => {
-      window.removeEventListener("scroll", handleScrollSpy);
-      clearTimeout(timeout);
-    };
+    return () => observer.disconnect();
   }, [activeSection]);
 
   return (
@@ -143,38 +151,8 @@ export function Nav() {
               );
             })}
 
-            {/* Theme toggle */}
-            <button
-              onClick={toggleTheme}
-              aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
-              className="relative flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground transition-colors duration-150 hover:text-foreground hover:bg-muted overflow-hidden"
-            >
-              <AnimatePresence mode="wait" initial={false}>
-                {theme === "dark" ? (
-                  <motion.span
-                    key="sun"
-                    initial={{ rotate: -90, scale: 0.5, opacity: 0 }}
-                    animate={{ rotate: 0, scale: 1, opacity: 1 }}
-                    exit={{ rotate: 90, scale: 0.5, opacity: 0 }}
-                    transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                    className="flex items-center justify-center"
-                  >
-                    <Sun size={15} strokeWidth={1.5} />
-                  </motion.span>
-                ) : (
-                  <motion.span
-                    key="moon"
-                    initial={{ rotate: 90, scale: 0.5, opacity: 0 }}
-                    animate={{ rotate: 0, scale: 1, opacity: 1 }}
-                    exit={{ rotate: -90, scale: 0.5, opacity: 0 }}
-                    transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                    className="flex items-center justify-center"
-                  >
-                    <Moon size={15} strokeWidth={1.5} />
-                  </motion.span>
-                )}
-              </AnimatePresence>
-            </button>
+            {/* Theme Dropdown (System / Light / Dark) */}
+            <ThemeDropdown />
 
             {/* Resume link */}
             <Link

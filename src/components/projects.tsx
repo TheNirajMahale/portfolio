@@ -30,6 +30,7 @@ function ProjectCard({ project }: { project: ProjectItem }) {
   const mouseY = useMotionValue(-1000);
 
   function handleMouseMove({ currentTarget, clientX, clientY }: React.MouseEvent) {
+    if (typeof window !== "undefined" && (window.innerWidth < 768 || window.matchMedia("(pointer: coarse)").matches)) return;
     const { left, top } = currentTarget.getBoundingClientRect();
     mouseX.set(clientX - left);
     mouseY.set(clientY - top);
@@ -178,22 +179,9 @@ function SlideThroughArrow({ size = 13, className = "" }: { size?: number; class
 }
 
 // Motion Primitives 3D TextRoll: Characters rotate in 3D perspective with staggered delay
-// Strictly fixed vertical height (h-8) — expands ONLY horizontally
+// GPU-accelerated: zero DOM layout reflow, pure transform and opacity execution
 function ProjectSourceButton({ href, name }: { href: string; name: string }) {
   const [isHovered, setIsHovered] = React.useState(false);
-  const restingRef = React.useRef<HTMLDivElement>(null);
-  const hoverRef = React.useRef<HTMLDivElement>(null);
-  const [restingWidth, setRestingWidth] = React.useState<number | undefined>(undefined);
-  const [hoverWidth, setHoverWidth] = React.useState<number | undefined>(undefined);
-
-  React.useEffect(() => {
-    if (restingRef.current) {
-      setRestingWidth(restingRef.current.scrollWidth);
-    }
-    if (hoverRef.current) {
-      setHoverWidth(hoverRef.current.scrollWidth);
-    }
-  }, []);
 
   return (
     <a
@@ -201,7 +189,11 @@ function ProjectSourceButton({ href, name }: { href: string; name: string }) {
       target="_blank"
       rel="noopener noreferrer"
       aria-label={`View ${name} on GitHub`}
-      onMouseEnter={() => setIsHovered(true)}
+      onMouseEnter={() => {
+        if (typeof window !== "undefined" && window.innerWidth >= 768 && window.matchMedia("(hover: hover)").matches) {
+          setIsHovered(true);
+        }
+      }}
       onMouseLeave={() => setIsHovered(false)}
       className="group/btn relative inline-flex h-8 items-center gap-2 overflow-hidden rounded-md border border-border/80 bg-muted/60 px-3 font-mono text-xs font-medium text-muted-foreground transition-all duration-200 hover:border-foreground/75 hover:bg-background hover:text-foreground active:scale-[0.98]"
     >
@@ -213,17 +205,10 @@ function ProjectSourceButton({ href, name }: { href: string; name: string }) {
         )}
       />
 
-      {/* Motion Primitives TextRoll Container: Strictly Horizontal Width Expansion */}
-      <motion.div
-        animate={{
-          width: isHovered ? (hoverWidth ?? "auto") : (restingWidth ?? "auto"),
-        }}
-        transition={{ type: "spring", stiffness: 450, damping: 32 }}
-        className="relative h-4 flex items-center overflow-hidden shrink-0"
-      >
-        {/* Resting Text: "GitHub" with 3D tumble exit (zero letter-spacing gaps) */}
+      {/* GPU-Safe TextRoll Container: stable width prevents adjacent layout reflows and text cutoff */}
+      <div className="relative h-4 w-[88px] flex items-center overflow-hidden shrink-0">
+        {/* Resting Text: "GitHub" with 3D tumble exit */}
         <div
-          ref={restingRef}
           aria-hidden={isHovered}
           className={cn(
             "flex items-center whitespace-nowrap [perspective:1000px] [transform-style:preserve-3d]",
@@ -258,7 +243,6 @@ function ProjectSourceButton({ href, name }: { href: string; name: string }) {
 
         {/* Hovered Text: "Source Code" with 3D tumble entry (zero letter-spacing gaps) */}
         <div
-          ref={hoverRef}
           aria-hidden={!isHovered}
           className={cn(
             "flex items-center whitespace-nowrap [perspective:1000px] [transform-style:preserve-3d]",
@@ -290,7 +274,7 @@ function ProjectSourceButton({ href, name }: { href: string; name: string }) {
             ))}
           </span>
         </div>
-      </motion.div>
+      </div>
 
       {/* MicroKit Slide-Through Diagonal Arrow Animation */}
       <SlideThroughArrow size={13} />

@@ -1,5 +1,5 @@
 /**
- * Tilted lines grid section divider — uniform visual separator between sections.
+ * Tilted lines grid section divider - uniform visual separator between sections.
  * Matches the pattern used on udaykiran.dev between every section.
  */
 export function SectionDivider() {

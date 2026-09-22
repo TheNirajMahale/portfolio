@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-roboto-mono), ui-monospace, monospace;
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -51,6 +51,14 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   -webkit-text-size-adjust: 100%;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  text-wrap: balance;
+}
+
+p, li {
+  text-wrap: pretty;
 }
 
 html {
@@ -106,7 +114,7 @@ html.lenis body {
 }
 
 ::view-transition-new(root) {
-  z-index: 9999;
+  z-index: 50;
 }
 
 ::view-transition-image-pair(root) {
@@ -199,23 +207,22 @@ html.lenis body {
   box-shadow: 0 0 40px -12px color-mix(in srgb, var(--foreground) 15%, transparent);
 }
 
-/* ─── Cursor glow ─── */
-.cursor-glow {
-  position: fixed;
-  inset: 0;
-  z-index: 30;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  background: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
-      hsl(var(--glow-hue, 280) 70% 55% / 0.12),
-      transparent 80%);
-}
+/* ─── Disable all hover animations on mobile & touch devices ─── */
+@media (hover: none), (pointer: coarse), (max-width: 768px) {
+  /* Suppress sticky hover transforms, lifts and scaling on touch */
+  *:hover,
+  .group:hover *,
+  .group\/project:hover *,
+  .group\/demo:hover *,
+  .group\/btn:hover *,
+  .group\/card:hover * {
+    transform: none !important;
+  }
 
-:root.light .cursor-glow {
-  background: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
-      hsl(var(--glow-hue, 280) 70% 55% / 0.12),
-      transparent 80%);
+  .card-glow:hover {
+    box-shadow: none !important;
+    border-color: var(--border) !important;
+  }
 }
 
 /* ─── Print styles ─── */

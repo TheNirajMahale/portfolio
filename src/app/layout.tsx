@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Roboto_Mono } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 import {
   CursorProvider,
   SoundProvider,
@@ -10,7 +10,6 @@ import {
 import { Nav } from "@/components/nav";
 import { Footer } from "@/components/footer";
 import { CustomCursor } from "@/components/ui/custom-cursor";
-import { CursorGlow } from "@/components/ui/cursor-glow";
 import { ScrollToTop } from "@/components/ui/scroll-to-top";
 import { ScrollProgressBar } from "@/components/ui/scroll-progress-bar";
 import "./globals.css";
@@ -18,13 +17,13 @@ import "./globals.css";
 import resumeData from "@/data/resume.json";
 import siteData from "@/data/site.json";
 
-const inter = Inter({
-  variable: "--font-inter",
+const geistSans = Geist({
+  variable: "--font-geist-sans",
   subsets: ["latin"],
 });
 
-const robotoMono = Roboto_Mono({
-  variable: "--font-roboto-mono",
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
   subsets: ["latin"],
 });
 
@@ -54,16 +53,15 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${robotoMono.variable} antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       suppressHydrationWarning
     >
-      <body className="min-h-screen bg-background text-foreground flex flex-col bg-grid-texture">
+      <body className="min-h-dvh bg-background text-foreground flex flex-col bg-grid-texture">
         <SmoothScroll>
           <CursorProvider>
             <SoundProvider>
               <MusicProvider>
                 <CustomCursor />
-                <CursorGlow />
                 <ThemeProvider>
                   <ScrollProgressBar />
                   <Nav />

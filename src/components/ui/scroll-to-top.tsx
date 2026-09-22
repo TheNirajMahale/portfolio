@@ -5,22 +5,43 @@ import { motion, AnimatePresence } from "motion/react";
 import { useLenis } from "lenis/react";
 import { ChevronUp } from "lucide-react";
 
+// Animated Elevator Arrow: shoots straight up on hover and re-enters smoothly from below
+function ElevatorArrow({ size = 18 }: { size?: number }) {
+  return (
+    <span
+      className="relative inline-grid place-items-center overflow-hidden shrink-0 text-foreground"
+      style={{ width: size + 4, height: size + 4 }}
+      aria-hidden="true"
+    >
+      {/* Resting arrow: shoots up out of frame on hover */}
+      <ChevronUp
+        size={size}
+        strokeWidth={2}
+        className="absolute transition-transform duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-5"
+      />
+      {/* Incoming arrow: shoots in from below on hover */}
+      <ChevronUp
+        size={size}
+        strokeWidth={2}
+        className="absolute translate-y-5 transition-transform duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-y-0"
+      />
+    </span>
+  );
+}
+
 export function ScrollToTop() {
   const [isVisible, setIsVisible] = useState(false);
   const lenis = useLenis();
 
-  useEffect(() => {
-    const handleScroll = () => {
-      // Show button when page is scrolled down 300px
-      if (window.scrollY > 300) {
-        setIsVisible(true);
-      } else {
-        setIsVisible(false);
-      }
-    };
+  // Sync button visibility with Lenis scroll events (zero redundant window scroll listeners)
+  useLenis(({ scroll }) => {
+    setIsVisible(scroll > 300);
+  });
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setIsVisible(window.scrollY > 300);
+    }
   }, []);
 
   const scrollToTop = () => {
@@ -49,7 +70,7 @@ export function ScrollToTop() {
           className="group print:hidden fixed bottom-22 right-6 md:right-[calc(max(5vw,(100vw_-_80rem)/4)_-_1.25rem)] z-50 flex h-10 w-10 items-center justify-center rounded-full border border-border/80 bg-background shadow-md transition-all hover:border-foreground/70 hover:bg-muted focus:outline-none focus:ring-2 focus:ring-foreground focus:ring-offset-2 focus:ring-offset-background select-none cursor-pointer"
           aria-label="Scroll to top"
         >
-          <ChevronUp size={20} strokeWidth={1.5} className="text-foreground transition-transform duration-200 group-hover:-translate-y-0.5" />
+          <ElevatorArrow size={18} />
         </motion.button>
       )}
     </AnimatePresence>
