@@ -43,6 +43,12 @@
 }
 
 /* ─── Base ─── */
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
 body {
   background-color: var(--background);
   color: var(--foreground);
@@ -101,10 +107,9 @@ html.lenis body {
   pointer-events: none;
 }
 
-/* ─── View Transitions (Hardware-Accelerated Linear Wipe) ─── */
+/* ─── View Transitions (Hardware-Accelerated Theme Ripple) ─── */
 ::view-transition-old(root),
 ::view-transition-new(root) {
-  animation: none;
   mix-blend-mode: normal;
   display: block;
 }
@@ -114,7 +119,7 @@ html.lenis body {
 }
 
 ::view-transition-new(root) {
-  z-index: 50;
+  z-index: 9999;
 }
 
 ::view-transition-image-pair(root) {

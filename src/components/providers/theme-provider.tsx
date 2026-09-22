@@ -14,11 +14,16 @@ import { flushSync } from "react-dom";
 export type Theme = "system" | "light" | "dark";
 export type ResolvedTheme = "light" | "dark";
 
+export interface TransitionOrigin {
+  clientX: number;
+  clientY: number;
+}
+
 interface ThemeContextValue {
   theme: Theme;
   resolvedTheme: ResolvedTheme;
-  setTheme: (theme: Theme) => void;
-  toggleTheme: () => void;
+  setTheme: (theme: Theme, origin?: TransitionOrigin) => void;
+  toggleTheme: (origin?: TransitionOrigin) => void;
 }
 
 const ThemeContext = createContext<ThemeContextValue | null>(null);
@@ -100,7 +105,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   }, [theme, resolvedTheme, mounted]);
 
   const applyThemeTransition = useCallback(
-    (targetTheme: Theme) => {
+    (targetTheme: Theme, origin?: TransitionOrigin) => {
       if (isTransitioningRef.current) return;
 
       const nextResolved: ResolvedTheme =
@@ -130,8 +135,56 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       isTransitioningRef.current = true;
       const root = document.documentElement;
 
+      const x = origin?.clientX ?? (typeof window !== "undefined" ? window.innerWidth - 60 : 0);
+      const y = origin?.clientY ?? (typeof window !== "undefined" ? 40 : 0);
+      const endRadius = Math.hypot(
+        Math.max(x, window.innerWidth - x),
+        Math.max(y, window.innerHeight - y)
+      );
+
+      const styleId = "theme-view-transition-styles";
+      let styleEl = document.getElementById(styleId) as HTMLStyleElement | null;
+      if (!styleEl) {
+        styleEl = document.createElement("style");
+        styleEl.id = styleId;
+        document.head.appendChild(styleEl);
+      }
+
+      styleEl.textContent = `
+        ::view-transition-group(root) {
+          animation-duration: 0.7s;
+          animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        ::view-transition-old(root),
+        .dark::view-transition-old(root) {
+          animation: none !important;
+          z-index: -1 !important;
+        }
+        ::view-transition-new(root),
+        .dark::view-transition-new(root) {
+          animation: reveal-theme-blur 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+          filter: blur(2px);
+          z-index: 1 !important;
+        }
+        @keyframes reveal-theme-blur {
+          0% {
+            clip-path: circle(0% at ${x}px ${y}px);
+            filter: blur(8px);
+          }
+          50% {
+            filter: blur(4px);
+          }
+          100% {
+            clip-path: circle(${endRadius}px at ${x}px ${y}px);
+            filter: blur(0px);
+          }
+        }
+      `;
+
       const cleanup = () => {
         isTransitioningRef.current = false;
+        const el = document.getElementById(styleId);
+        if (el) el.remove();
       };
 
       try {
@@ -146,21 +199,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
           });
         });
 
-        transition.ready
-          .then(() => {
-            const animation = root.animate(
-              {
-                clipPath: ["inset(0 100% 0 0)", "inset(0 0 0 0)"],
-              },
-              {
-                duration: 900,
-                easing: "cubic-bezier(0.25, 1, 0.4, 1)",
-                pseudoElement: "::view-transition-new(root)",
-              }
-            );
-            animation.finished.finally(cleanup).catch(cleanup);
-          })
-          .catch(cleanup);
+        transition.finished.finally(cleanup).catch(cleanup);
       } catch {
         cleanup();
       }
@@ -168,19 +207,22 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     [resolvedTheme]
   );
 
-  const toggleTheme = useCallback(() => {
-    // Cycle: system -> light -> dark -> system
-    const cycleMap: Record<Theme, Theme> = {
-      system: "light",
-      light: "dark",
-      dark: "system",
-    };
-    applyThemeTransition(cycleMap[theme]);
-  }, [theme, applyThemeTransition]);
+  const toggleTheme = useCallback(
+    (origin?: TransitionOrigin) => {
+      // Cycle: system -> light -> dark -> system
+      const cycleMap: Record<Theme, Theme> = {
+        system: "light",
+        light: "dark",
+        dark: "system",
+      };
+      applyThemeTransition(cycleMap[theme], origin);
+    },
+    [theme, applyThemeTransition]
+  );
 
   const setTheme = useCallback(
-    (newTheme: Theme) => {
-      applyThemeTransition(newTheme);
+    (newTheme: Theme, origin?: TransitionOrigin) => {
+      applyThemeTransition(newTheme, origin);
     },
     [applyThemeTransition]
   );

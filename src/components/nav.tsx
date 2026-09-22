@@ -98,7 +98,7 @@ export function Nav() {
         className="print:hidden fixed left-0 right-0 top-0 z-50 w-full"
       >
         <header className="w-full border-y-2 border-dotted border-foreground/45">
-        <nav className="mx-auto flex w-[95%] items-center justify-between border-x-2 border-dotted border-foreground/45 bg-foreground/5 px-6 py-4 backdrop-blur-2xl md:w-[80%] max-w-7xl">
+        <nav className="mx-auto flex w-[95%] items-center justify-between border-x-2 border-dotted border-foreground/45 bg-foreground/5 px-4 sm:px-6 py-3.5 sm:py-4 backdrop-blur-2xl md:w-[80%] max-w-7xl">
           {/* Logo */}
           <Link
             href="/"

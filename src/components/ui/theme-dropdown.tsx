@@ -44,9 +44,10 @@ export function ThemeDropdown() {
     };
   }, [isOpen]);
 
-  const handleSelect = (selectedTheme: Theme) => {
+  const handleSelect = (selectedTheme: Theme, e?: React.MouseEvent) => {
     playClick();
-    setTheme(selectedTheme);
+    const origin = e ? { clientX: e.clientX, clientY: e.clientY } : undefined;
+    setTheme(selectedTheme, origin);
     setIsOpen(false);
   };
 
@@ -134,7 +135,7 @@ export function ThemeDropdown() {
                   key={option.value}
                   type="button"
                   role="menuitem"
-                  onClick={() => handleSelect(option.value)}
+                  onClick={(e) => handleSelect(option.value, e)}
                   className={cn(
                     "group/item relative flex w-full items-center justify-between rounded-md px-2 py-1.5 text-xs font-mono transition-colors cursor-pointer select-none",
                     isSelected

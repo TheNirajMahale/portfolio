@@ -56,7 +56,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       suppressHydrationWarning
     >
-      <body className="min-h-dvh bg-background text-foreground flex flex-col bg-grid-texture">
+      <body className="min-h-dvh bg-background text-foreground flex flex-col bg-grid-texture max-w-full overflow-x-hidden">
         <SmoothScroll>
           <CursorProvider>
             <SoundProvider>
@@ -65,7 +65,7 @@ export default function RootLayout({
                 <ThemeProvider>
                   <ScrollProgressBar />
                   <Nav />
-                  <div className="flex-1 relative z-10 bg-background">{children}</div>
+                  <div className="flex-1 relative z-10 bg-background max-w-full overflow-x-clip">{children}</div>
                   <Footer />
                   <ScrollToTop />
                 </ThemeProvider>

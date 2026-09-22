@@ -52,7 +52,7 @@ function CollapsibleExperienceCard({ job }: { job: ExperienceJob }) {
       >
         {/* Header row: Role title + Chevron */}
         <div className="flex w-full items-center justify-between gap-3">
-          <h3 className="text-sm font-medium leading-snug text-foreground/95 sm:text-base">
+          <h3 className="text-sm font-medium leading-snug text-foreground/95 sm:text-base flex-1 min-w-0">
             {job.title}
           </h3>
 
@@ -71,7 +71,7 @@ function CollapsibleExperienceCard({ job }: { job: ExperienceJob }) {
         {/* Badges row: Company | Type | Duration */}
         <div className="mt-1.5 flex flex-row flex-wrap items-center gap-x-2 gap-y-1 w-full">
           {/* Company badge */}
-          <div className="border-r border-border pr-2">
+          <div className="sm:border-r sm:border-border sm:pr-2">
             <span className="inline-flex items-center justify-center rounded-md border border-border px-2 py-0.5 text-xs font-medium text-foreground">
               {job.company.split(",")[0]}
             </span>
@@ -83,7 +83,7 @@ function CollapsibleExperienceCard({ job }: { job: ExperienceJob }) {
           </span>
 
           {/* Duration */}
-          <div className="border-l border-border pl-2">
+          <div className="sm:border-l sm:border-border sm:pl-2">
             <div className="flex flex-row items-center space-x-1.5">
               {job.duration.split(" - ").map((part, i) => (
                 <span key={i} className="text-xs text-muted-foreground">

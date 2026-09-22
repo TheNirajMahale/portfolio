@@ -57,12 +57,12 @@ export function Footer() {
             </span>
 
             {/* Responsive Email Display */}
-            <div className="mt-2.5 sm:mt-3 flex flex-wrap items-center gap-2 sm:gap-3 md:gap-4">
+            <div className="mt-2.5 sm:mt-3 flex flex-wrap items-center gap-2 sm:gap-3 md:gap-4 max-w-full">
               <a
                 href={`mailto:${resumeData.personal.email}`}
-                className="group inline-flex items-center gap-1.5 sm:gap-2 font-mono text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold tracking-tight text-foreground hover:text-emerald-400 transition-colors break-all sm:break-normal"
+                className="group inline-flex items-center gap-1.5 sm:gap-2 font-mono text-base xs:text-lg sm:text-2xl md:text-3xl lg:text-4xl font-semibold tracking-tight text-foreground hover:text-emerald-400 transition-colors break-all max-w-full"
               >
-                <span>{resumeData.personal.email}</span>
+                <span className="break-all">{resumeData.personal.email}</span>
                 <ArrowUpRight className="h-4 w-4 sm:h-6 sm:w-6 md:h-7 md:w-7 shrink-0 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1 text-muted-foreground group-hover:text-emerald-400" />
               </a>
 
