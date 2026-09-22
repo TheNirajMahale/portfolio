@@ -148,6 +148,15 @@ export function Footer() {
                   className="underline underline-offset-2 hover:text-foreground transition-colors"
                 >
                   Uday Kiran
+                </a>{" "}
+                &amp;{" "}
+                <a
+                  href="https://abhee.dev"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline underline-offset-2 hover:text-foreground transition-colors"
+                >
+                  Abhay
                 </a>
               </p>
             </div>
