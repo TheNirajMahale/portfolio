@@ -62,8 +62,8 @@ function AnimatedDownloadIcon({
 
 export default function ResumePage() {
   return (
-    <main className="relative">
-      <div className="relative z-10 mx-auto w-[95%] md:w-[80%] max-w-7xl border-x-2 border-b-2 border-dotted border-foreground/45 bg-background px-6 pt-28 pb-16 min-h-dvh">
+    <main className="relative max-w-full overflow-x-clip">
+      <div className="relative z-10 mx-auto w-[95%] md:w-[80%] max-w-7xl border-x-2 border-dotted border-foreground/45 bg-background px-6 pt-28 pb-16 min-h-dvh">
         {/* Resume content - styled as a clean document with Hero-style entrance */}
         <motion.article
           variants={container}
@@ -223,6 +223,9 @@ export default function ResumePage() {
           </motion.section>
         </motion.article>
       </div>
+
+      {/* Full-width horizontal line extending to screen edges, matching nav bar and home page */}
+      <div className="w-full border-b-2 border-dotted border-foreground/45" />
 
       {/* Floating Sticky Download Action Pill */}
       <motion.div

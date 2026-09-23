@@ -104,14 +104,21 @@ function SplashCenter({ showName }: { showName: boolean }) {
 }
 
 export function HomeClient() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [showName, setShowName] = useState(false);
+  const { hasLoaded, markLoaded } = useLoader();
+  const [isLoading, setIsLoading] = useState(!hasLoaded);
+  const [showName, setShowName] = useState(hasLoaded);
   const lenis = useLenis();
-  const { setLoaderActive } = useLoader();
   const lenisRef = useRef(lenis);
   lenisRef.current = lenis;
 
   useEffect(() => {
+    // If the site has already completed its initial entrance loader, don't run splash
+    if (hasLoaded) {
+      setIsLoading(false);
+      setShowName(true);
+      return;
+    }
+
     // Lock scroll during initial splash
     const l = lenisRef.current;
     if (l) {
@@ -128,7 +135,7 @@ export function HomeClient() {
     // Exact timing from abhee.dev: total splash duration is 2300ms
     const loadTimer = setTimeout(() => {
       setIsLoading(false);
-      setLoaderActive(false);
+      markLoaded();
       document.body.style.overflow = "";
       const currentLenis = lenisRef.current;
       if (currentLenis) {
@@ -146,41 +153,74 @@ export function HomeClient() {
         currentLenis.start();
       }
     };
-    // Empty dependency: run only once on mount. Lenis accessed via ref.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [hasLoaded, markLoaded]);
+
+  // Handle URL hash scrolling (e.g. navigating from /resume → /#about).
+  // Runs here instead of the global route handler because this component
+  // owns the section DOM — we know the target elements exist at this point.
+  useEffect(() => {
+    if (isLoading) return; // Wait until content is visible
+
+    const targetHash = window.location.hash.replace("#", "");
+    if (!targetHash) return;
+
+    // Delay so the DOM is fully laid out after SPA transition
+    const timer = setTimeout(() => {
+      const el = document.getElementById(targetHash);
+      if (!el) return;
+
+      // Calculate the exact pixel position we want the viewport top at.
+      // Use the element's absolute position minus nav bar clearance.
+      const absoluteTop = el.getBoundingClientRect().top + window.scrollY;
+      const scrollTarget = Math.max(0, absoluteTop - 80);
+
+      const currentLenis = lenisRef.current;
+      if (currentLenis) {
+        currentLenis.scrollTo(scrollTarget, { immediate: true });
+      } else {
+        window.scrollTo({ top: scrollTarget, behavior: "instant" as ScrollBehavior });
+      }
+
+      // Clear hash so refreshing doesn't re-trigger
+      window.history.replaceState(null, "", window.location.pathname);
+    }, 200);
+
+    return () => clearTimeout(timer);
+  }, [isLoading]);
 
   return (
     <LayoutGroup id="site-loader-group">
-      {/* 100% Solid Plain Backdrop — instant frame-0 paint without Motion hydration delay */}
-      <div
-        className={`fixed inset-0 z-[9999] bg-background pointer-events-none select-none transition-opacity duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-          isLoading ? "opacity-100" : "opacity-0"
-        }`}
-      />
+      {/* 100% Solid Plain Backdrop — only rendered during initial site visit */}
+      {!hasLoaded && (
+        <div
+          className={`fixed inset-0 z-[9999] bg-background pointer-events-none select-none transition-opacity duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+            isLoading ? "opacity-100" : "opacity-0"
+          }`}
+        />
+      )}
 
       {/* Centered splash stage — z-[10000] above the backdrop */}
-      {isLoading && (
+      {!hasLoaded && isLoading && (
         <div className="fixed inset-0 z-[10000] flex items-center justify-center pointer-events-none">
           <SplashCenter showName={showName} />
         </div>
       )}
 
       <main className="relative max-w-full overflow-x-clip">
-        <div className="relative z-10 mx-auto w-[95%] md:w-[80%] max-w-7xl border-x-2 border-dotted border-foreground/45 bg-background overflow-x-clip">
+        <div className="relative mx-auto w-[95%] md:w-[80%] max-w-7xl border-x-2 border-dotted border-foreground/45 bg-background">
           {/* Hero receives loading state to coordinate placeholder vs motion component */}
-          <Hero isLoading={isLoading} />
+          <Hero isLoading={isLoading} hasLoaded={hasLoaded} />
 
           {/* Smooth entrance for sections — GPU-compositable properties only (opacity + translateY) */}
           <motion.div
-            initial="hidden"
+            initial={hasLoaded ? "visible" : "hidden"}
             animate={isLoading ? "hidden" : "visible"}
             variants={{
               hidden: { opacity: 0, y: 16 },
               visible: {
                 opacity: 1,
                 y: 0,
-                transition: { duration: 0.6, ease: EASE_OUT, delay: 0.4 },
+                transition: { duration: 0.6, ease: EASE_OUT, delay: hasLoaded ? 0 : 0.4 },
               },
             }}
           >

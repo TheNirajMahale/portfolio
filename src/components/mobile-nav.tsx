@@ -53,7 +53,7 @@ export function MobileNav({ isOpen, setIsOpen, navItems, activeSection }: Mobile
             {navItems.map((item) => {
               const isActive = activeSection === item.href.replace("/#", "");
               return (
-                <a
+                <Link
                   key={item.label}
                   href={item.href}
                   onClick={(e) => handleItemClick(e, item.href)}
@@ -68,7 +68,7 @@ export function MobileNav({ isOpen, setIsOpen, navItems, activeSection }: Mobile
                   {isActive && (
                     <span className="h-1.5 w-1.5 rounded-full bg-foreground" />
                   )}
-                </a>
+                </Link>
               );
             })}
             <Link

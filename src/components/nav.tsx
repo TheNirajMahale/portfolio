@@ -127,7 +127,7 @@ export function Nav() {
             {NAV_ITEMS.map((item) => {
               const isActive = activeSection === item.href.replace("/#", "");
               return (
-                <a
+                <Link
                   key={item.label}
                   href={item.href}
                   onClick={(e) => handleNavClick(e, item.href)}
@@ -151,7 +151,7 @@ export function Nav() {
                     />
                   )}
                   <span className="relative z-10">{item.label}</span>
-                </a>
+                </Link>
               );
             })}
 

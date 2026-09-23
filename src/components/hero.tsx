@@ -24,9 +24,16 @@ const item = {
 
 interface HeroProps {
   isLoading?: boolean;
+  /** True after the first-visit splash has completed (persisted in session) */
+  hasLoaded?: boolean;
 }
 
-export function Hero({ isLoading = false }: HeroProps) {
+export function Hero({ isLoading = false, hasLoaded = false }: HeroProps) {
+  // Only use stagger variants on return visits — during first visit,
+  // the layoutId handles the splash-to-hero transition and item variants
+  // would conflict (adding opacity:0 + y:14 on top of the layout anim).
+  const avatarVariants = hasLoaded ? item : undefined;
+  const nameVariants = hasLoaded ? item : undefined;
   return (
     <section className="relative w-full">
       {/* Radial dot pattern - starts below nav bar, ends at vertical midpoint of avatar */}
@@ -38,7 +45,7 @@ export function Hero({ isLoading = false }: HeroProps) {
         }}
       />
 
-      <div className="relative z-10 px-4 pt-36 pb-6 sm:pt-38 md:px-6 md:pt-40">
+      <div className="relative px-4 pt-36 pb-6 sm:pt-38 md:px-6 md:pt-40">
         <motion.div
           variants={container}
           initial="hidden"
@@ -49,7 +56,7 @@ export function Hero({ isLoading = false }: HeroProps) {
             {/* Left Column: Avatar + Name + Role + Location (col-span-2) */}
             <div className="col-span-2 space-y-2">
               {/* Avatar */}
-              <div className="relative mt-4 flex w-full justify-center sm:justify-start">
+              <motion.div variants={avatarVariants} className="relative mt-4 flex w-full justify-center sm:justify-start">
                 {isLoading ? (
                   <div className="size-28 sm:size-30 shrink-0" aria-hidden="true" />
                 ) : (
@@ -70,10 +77,10 @@ export function Hero({ isLoading = false }: HeroProps) {
                     />
                   </motion.div>
                 )}
-              </div>
+              </motion.div>
 
               {/* Name + Verified Badge */}
-              <div className="flex items-center justify-center gap-1.5 sm:mt-2 sm:justify-start">
+              <motion.div variants={nameVariants} className="flex items-center justify-center gap-1.5 sm:mt-2 sm:justify-start">
                 {isLoading ? (
                   <div className="h-7 sm:h-8 w-44" aria-hidden="true" />
                 ) : (
@@ -95,7 +102,7 @@ export function Hero({ isLoading = false }: HeroProps) {
                     </svg>
                   </motion.div>
                 )}
-              </div>
+              </motion.div>
 
               {/* Role + Location (compact inline) */}
               <motion.div variants={item} className="flex flex-wrap items-center justify-center gap-2 text-xs sm:text-sm text-muted-foreground sm:justify-start">

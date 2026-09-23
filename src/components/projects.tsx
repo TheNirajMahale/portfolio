@@ -148,7 +148,7 @@ function ProjectDemoButton({ demo, name }: { demo?: string; name: string }) {
 }
 
 const RESTING_CHARS = "GitHub".split("");
-const HOVER_CHARS = "Source Code".split("");
+const HOVER_CHARS = "GitHub".split("");
 
 // MicroKit Preview Browser Arrow Slide-Through Animation
 // Reference: https://microkit.co/components/preview-browser-button
@@ -206,7 +206,7 @@ function ProjectSourceButton({ href, name }: { href: string; name: string }) {
       />
 
       {/* GPU-Safe TextRoll Container: stable width prevents adjacent layout reflows and text cutoff */}
-      <div className="relative h-4 w-[88px] flex items-center overflow-hidden shrink-0">
+      <div className="relative h-4 w-[60px] flex items-center overflow-hidden shrink-0">
         {/* Resting Text: "GitHub" with 3D tumble exit */}
         <div
           aria-hidden={isHovered}

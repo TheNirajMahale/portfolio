@@ -308,7 +308,7 @@ export function SocialHoverGroup({
                   : { bottom: coords.bottomY }),
                 width: coords.cardWidth,
               }}
-              className="hidden md:block [@media(hover:none)]:!hidden [@media(pointer:coarse)]:!hidden z-50 focus:outline-none pointer-events-auto"
+              className="hidden md:block [@media(hover:none)]:!hidden [@media(pointer:coarse)]:!hidden z-[70] focus:outline-none pointer-events-auto"
               role="region"
               aria-label="Social profile preview"
             >

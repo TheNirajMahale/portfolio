@@ -9,17 +9,20 @@ function LenisRouteHandler() {
   const lenis = useLenis();
 
   useEffect(() => {
-    if (lenis) {
-      // 1. Stop any residual scroll inertia from the previous page
-      lenis.stop();
-      // 2. Instantly snap virtual scroll to top (0px) without animation lag
-      lenis.scrollTo(0, { immediate: true });
-      // 3. Force Lenis to recalculate document dimensions for the new page layout
-      lenis.resize();
-      // 4. Resume smooth scrolling for the new page
-      lenis.start();
-    }
-    // 5. Reset native browser window scroll coordinate
+    if (!lenis) return;
+
+    const targetHash = window.location.hash.replace("#", "");
+
+    // When navigating to a hash (e.g. /resume → /#about), DON'T touch
+    // Lenis here. The page component (home-client.tsx) handles hash scrolling
+    // after its DOM is mounted. Any stop/resize/start here would race with it.
+    if (targetHash) return;
+
+    // Normal page navigation (no hash) — snap to top
+    lenis.stop();
+    lenis.scrollTo(0, { immediate: true });
+    lenis.resize();
+    lenis.start();
     window.scrollTo(0, 0);
   }, [pathname, lenis]);
 
