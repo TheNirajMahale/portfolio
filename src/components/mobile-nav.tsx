@@ -4,7 +4,6 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "motion/react";
 import { FileText } from "lucide-react";
 import { useLenis } from "lenis/react";
-import { useSound } from "@/components/providers";
 import { cn } from "@/lib/utils";
 
 interface MobileNavProps {
@@ -16,7 +15,6 @@ interface MobileNavProps {
 
 export function MobileNav({ isOpen, setIsOpen, navItems, activeSection }: MobileNavProps) {
   const lenis = useLenis();
-  const { playClick } = useSound();
 
   const handleItemClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     setIsOpen(false);
@@ -24,7 +22,6 @@ export function MobileNav({ isOpen, setIsOpen, navItems, activeSection }: Mobile
       const targetId = href.replace("/#", "").replace("#", "");
       if (window.location.pathname === "/") {
         e.preventDefault();
-        playClick();
         if (lenis) {
           lenis.scrollTo(`#${targetId}`, { offset: -90, duration: 1.4 });
         } else {

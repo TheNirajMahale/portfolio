@@ -2,16 +2,12 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { Geist_Mono, Newsreader, Fraunces } from "next/font/google";
 import {
-  CursorProvider,
-  SoundProvider,
-  MusicProvider,
   ThemeProvider,
   SmoothScroll,
   LoaderProvider,
 } from "@/components/providers";
 import { Nav } from "@/components/nav";
 import { Footer } from "@/components/footer";
-import { CustomCursor } from "@/components/ui/custom-cursor";
 import { ScrollToTop } from "@/components/ui/scroll-to-top";
 import { ScrollProgressBar } from "@/components/ui/scroll-progress-bar";
 import "./globals.css";
@@ -93,22 +89,15 @@ export default function RootLayout({
     >
       <body className="min-h-dvh bg-background text-foreground flex flex-col">
         <SmoothScroll>
-          <CursorProvider>
-            <SoundProvider>
-              <MusicProvider>
-                <CustomCursor />
-                <ThemeProvider>
-                  <LoaderProvider>
-                    <ScrollProgressBar />
-                    <Nav />
-                    <div className="flex-1 relative bg-background">{children}</div>
-                    <Footer />
-                    <ScrollToTop />
-                  </LoaderProvider>
-                </ThemeProvider>
-              </MusicProvider>
-            </SoundProvider>
-          </CursorProvider>
+          <ThemeProvider>
+            <LoaderProvider>
+              <ScrollProgressBar />
+              <Nav />
+              <div className="flex-1 relative bg-background">{children}</div>
+              <Footer />
+              <ScrollToTop />
+            </LoaderProvider>
+          </ThemeProvider>
         </SmoothScroll>
       </body>
     </html>

@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { useLenis } from "lenis/react";
 import { FileText, Menu, X } from "lucide-react";
-import { useSound, useLoader } from "@/components/providers";
+import { useLoader } from "@/components/providers";
 import { ThemeDropdown } from "@/components/ui/theme-dropdown";
 import { cn } from "@/lib/utils";
 import { MobileNav } from "@/components/mobile-nav";
@@ -18,7 +18,6 @@ export function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("");
-  const { playClick } = useSound();
   const { isLoaderActive } = useLoader();
   const lenis = useLenis();
 
@@ -27,7 +26,6 @@ export function Nav() {
       const targetId = href.replace("/#", "").replace("#", "");
       if (window.location.pathname === "/") {
         e.preventDefault();
-        playClick();
         if (lenis) {
           lenis.scrollTo(`#${targetId}`, { offset: -90, duration: 1.4 });
         } else {
@@ -109,7 +107,6 @@ export function Nav() {
             onClick={(e) => {
               if (window.location.pathname === "/") {
                 e.preventDefault();
-                playClick();
                 if (lenis) {
                   lenis.scrollTo(0, { duration: 1.4 });
                 } else {

@@ -4,7 +4,6 @@ import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Sun, Moon, Monitor, Check } from "lucide-react";
 import { useTheme, type Theme } from "@/components/providers/theme-provider";
-import { useSound } from "@/components/providers";
 import { cn } from "@/lib/utils";
 
 const THEME_OPTIONS: { value: Theme; label: string; icon: typeof Monitor }[] = [
@@ -17,7 +16,6 @@ export function ThemeDropdown() {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const { theme, setTheme } = useTheme();
-  const { playClick } = useSound();
 
   // Close on click outside
   useEffect(() => {
@@ -45,7 +43,6 @@ export function ThemeDropdown() {
   }, [isOpen]);
 
   const handleSelect = (selectedTheme: Theme, e?: React.MouseEvent) => {
-    playClick();
     const origin = e ? { clientX: e.clientX, clientY: e.clientY } : undefined;
     setTheme(selectedTheme, origin);
     setIsOpen(false);
@@ -57,7 +54,6 @@ export function ThemeDropdown() {
       <button
         type="button"
         onClick={() => {
-          playClick();
           setIsOpen((prev) => !prev);
         }}
         aria-haspopup="menu"
