@@ -20,7 +20,7 @@ const EASE_OUT: [number, number, number, number] = [0.16, 1, 0.3, 1];
 const tweenDrop = { type: "tween" as const, duration: 0.85, ease: EASE_OUT };
 
 // Split name into individual characters for wave animation
-const NAME_CHARS = resumeData.personal.name.toUpperCase().split("");
+const NAME_CHARS = resumeData.personal.name.split("");
 
 /**
  * Wave animation for loader name text.
@@ -34,7 +34,7 @@ function WaveName() {
       layoutId="hero-name"
       className="relative z-[100] flex items-center justify-center gap-1.5"
     >
-      <h1 className="text-center text-xl font-bold tracking-tight text-foreground sm:text-2xl flex overflow-hidden">
+      <h1 className="text-center text-xl font-medium tracking-tight text-foreground sm:text-2xl flex overflow-hidden font-serif">
         {NAME_CHARS.map((char, i) => (
           <motion.span
             key={i}
@@ -224,7 +224,7 @@ export function HomeClient() {
               },
             }}
           >
-            <SectionDivider />
+           
             <About />
 
             <SectionDivider />

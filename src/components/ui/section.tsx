@@ -30,7 +30,7 @@ export function Section({ id, title, subtitle, children, className }: SectionPro
           className="flex h-10 w-full items-center justify-start border-b border-border"
         >
           <h2
-            className="px-4 text-xl font-bold text-foreground/90 md:px-6 md:text-2xl"
+            className="px-4 text-xl font-bold text-foreground/90 md:px-6 md:text-2xl font-fraunces uppercase"
           >
             {title}
           </h2>

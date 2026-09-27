@@ -45,7 +45,7 @@ export function Hero({ isLoading = false, hasLoaded = false }: HeroProps) {
         }}
       />
 
-      <div className="relative px-4 pt-36 pb-6 sm:pt-38 md:px-6 md:pt-40">
+      <div className="relative px-4 pt-36 pb-3 sm:pt-38 md:px-6 md:pt-40">
         <motion.div
           variants={container}
           initial="hidden"
@@ -90,8 +90,8 @@ export function Hero({ isLoading = false, hasLoaded = false }: HeroProps) {
                     transition={{ type: "tween", duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
                     className="flex items-center justify-center gap-1.5 sm:justify-start will-change-transform"
                   >
-                    <h1 className="text-center text-xl font-bold tracking-tight text-foreground sm:text-left sm:text-2xl">
-                      {resumeData.personal.name.toUpperCase()}
+                    <h1 className="text-center text-xl font-medium tracking-tight text-foreground sm:text-left sm:text-2xl font-serif">
+                      {resumeData.personal.name}
                     </h1>
                     {/* Blue verified checkmark */}
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 22" className="size-5 shrink-0">
@@ -106,7 +106,7 @@ export function Hero({ isLoading = false, hasLoaded = false }: HeroProps) {
 
               {/* Role + Location (compact inline) */}
               <motion.div variants={item} className="flex flex-wrap items-center justify-center gap-2 text-xs sm:text-sm text-muted-foreground sm:justify-start">
-                <span>{resumeData.experience[0]?.title}</span>
+                <span className="font-medium text-foreground/90">{resumeData.experience[0]?.title}</span>
                 <span className="text-muted-foreground/40 font-light" aria-hidden="true">|</span>
                 <span className="group/loc inline-flex items-center gap-1.5 cursor-default">
                   <motion.span
@@ -126,7 +126,7 @@ export function Hero({ isLoading = false, hasLoaded = false }: HeroProps) {
                   >
                     <MapPin size={12} strokeWidth={1.5} className="text-muted-foreground group-hover/loc:text-foreground transition-colors" />
                   </motion.span>
-                  <span className="group-hover/loc:text-foreground transition-colors">{resumeData.personal.location}</span>
+                  <span className="font-medium group-hover/loc:text-foreground transition-colors">{resumeData.personal.location}</span>
                 </span>
               </motion.div>
             </div>

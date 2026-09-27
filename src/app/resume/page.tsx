@@ -73,7 +73,7 @@ export default function ResumePage() {
         >
           {/* Header */}
           <motion.header variants={item} className="text-center">
-            <h1 className="text-3xl font-bold tracking-tight text-foreground print:text-xl">
+            <h1 className="text-3xl font-bold tracking-tight text-foreground print:text-xl font-serif">
               {resumeData.personal.name}
             </h1>
             <p className="mt-1 text-base text-muted-foreground">
