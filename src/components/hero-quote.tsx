@@ -51,8 +51,8 @@ export function HeroQuote({ quote = siteData.hero.quote, className = "" }: HeroQ
           style={{ touchAction: "none" }}
           className="group relative flex max-w-md sm:max-w-lg flex-col items-center text-center will-change-transform pointer-events-auto px-5 py-2.5 rounded-xl select-none cursor-grab active:cursor-grabbing"
         >
-          {/* Subtle quotation icon */}
-          <div className="mb-1 flex items-center justify-center text-muted-foreground/35 transition-colors group-hover:text-muted-foreground/60">
+          {/* Quotation icon */}
+          <div className="mb-1 flex items-center justify-center text-foreground/70">
             <QuoteIcon size={15} strokeWidth={1.5} />
           </div>
 
