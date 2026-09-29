@@ -14,7 +14,7 @@ export function About() {
         <StaggerContainer className="space-y-2.5">
           {siteData.about.paragraphs.map((paragraph, index) => (
             <StaggerItem key={index}>
-              <p className="text-base text-foreground/90 font-sans leading-relaxed">
+              <p className="text-base text-foreground/90 font-sans leading-relaxed text-justify sm:text-left">
                 {paragraph}
               </p>
             </StaggerItem>

@@ -25,6 +25,12 @@
   "hero": {
     "avatar": "/profile.jpeg",
     "avatarAlt": "Niraj Mahale - Profile picture",
+    "quote": {
+      "text": "If you don't have any happy memories, then make them.",
+      "author": "Dr. Tenma",
+      "source": "Monster",
+      "subtext": "Naoki Urasawa"
+    },
     "cta": {
       "label": "View my work",
       "target": "#experience"

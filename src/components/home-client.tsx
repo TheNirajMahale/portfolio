@@ -93,7 +93,8 @@ function SplashCenter({ showName }: { showName: boolean }) {
           height={120}
           priority
           unoptimized
-          className="size-28 rounded-full border-2 border-border/80 shadow-md object-cover select-none sm:size-30"
+          draggable={false}
+          className="size-28 rounded-full border-2 border-border/80 shadow-md object-cover select-none sm:size-30 pointer-events-none"
         />
       </motion.div>
 

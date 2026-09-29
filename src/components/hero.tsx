@@ -5,6 +5,7 @@ import { motion } from "motion/react";
 import { MapPin, ArrowUpRight } from "lucide-react";
 import { SocialHoverGroup, SocialHoverCard } from "@/components/ui/social-hover-card";
 import { socialLinks } from "@/lib/socials";
+import { HeroQuote } from "@/components/hero-quote";
 import resumeData from "@/data/resume.json";
 import siteData from "@/data/site.json";
 
@@ -36,16 +37,25 @@ export function Hero({ isLoading = false, hasLoaded = false }: HeroProps) {
   const nameVariants = hasLoaded ? item : undefined;
   return (
     <section className="relative w-full">
-      {/* Radial dot pattern - starts below nav bar, ends at vertical midpoint of avatar */}
-      <div
-        className="pointer-events-none absolute top-20 left-0 right-0 z-0 h-[136px] sm:h-[148px] md:h-[156px] w-full opacity-35 dark:opacity-20"
-        style={{
-          backgroundImage: "radial-gradient(var(--foreground) 1.5px, transparent 0)",
-          backgroundSize: "12px 12px",
-        }}
-      />
+      {/* Interactive Dot Matrix Canvas with Magnetic Quote */}
+      {/* Mobile: Dedicated standalone banner below navbar */}
+      {/* Desktop (sm+): Backdrop band overlapping upper half of avatar */}
+      <motion.div
+        initial={false}
+        animate={{ opacity: isLoading ? 0 : 1 }}
+        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: hasLoaded ? 0 : 0.2 }}
+        className="relative z-20 w-full pt-20 pb-2 sm:absolute sm:top-20 sm:left-0 sm:right-0 sm:h-[148px] md:h-[156px] sm:pt-0 sm:pb-0 sm:pointer-events-none"
+      >
+        <HeroQuote
+          quote={siteData.hero.quote}
+          className="h-full w-full border-b-2 border-dotted border-foreground/35 sm:border-b-0"
+        />
+      </motion.div>
 
-      <div className="relative px-4 pt-36 pb-3 sm:pt-38 md:px-6 md:pt-40">
+      {/* Profile Section: Avatar, Name, Socials */}
+      {/* Mobile: Sits cleanly below quote with pt-4 pb-6 */}
+      {/* Desktop (sm+): Retains original pt-38 md:pt-40 overlapping dot matrix */}
+      <div className="relative z-10 px-4 pt-4 pb-6 sm:pt-38 md:px-6 md:pt-40">
         <motion.div
           variants={container}
           initial="hidden"
@@ -73,7 +83,8 @@ export function Hero({ isLoading = false, hasLoaded = false }: HeroProps) {
                       height={120}
                       priority
                       unoptimized
-                      className="size-28 rounded-full border-2 border-border/80 shadow-md object-cover select-none sm:size-30"
+                      draggable={false}
+                      className="size-28 rounded-full border-2 border-border/80 shadow-md object-cover select-none sm:size-30 pointer-events-none"
                     />
                   </motion.div>
                 )}
