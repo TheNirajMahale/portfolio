@@ -43,10 +43,10 @@ export function HeroQuote({ quote = siteData.hero.quote, className = "" }: HeroQ
         {/* Only the exact quote element is draggable, with calibrated subtle travel range */}
         <motion.div
           drag
-          dragConstraints={{ top: -30, bottom: 45, left: -60, right: 60 }}
+          dragConstraints={{ top: -33, bottom: 50, left: -65, right: 65 }}
           dragSnapToOrigin
-          dragElastic={0.16}
-          dragTransition={{ bounceStiffness: 175, bounceDamping: 12 }}
+          dragElastic={0.18}
+          dragTransition={{ bounceStiffness: 250, bounceDamping: 12 }}
           whileDrag={{ scale: 1.015, cursor: "grabbing" }}
           style={{ touchAction: "none" }}
           className="group relative flex max-w-md sm:max-w-lg flex-col items-center text-center will-change-transform pointer-events-auto px-5 py-2.5 rounded-xl select-none cursor-grab active:cursor-grabbing"
