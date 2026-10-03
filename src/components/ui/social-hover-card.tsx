@@ -4,7 +4,6 @@ import * as React from "react";
 import { motion, AnimatePresence } from "motion/react";
 import {
   ArrowUpRight,
-  Check,
   Copy,
   Mail,
 } from "lucide-react";
@@ -30,6 +29,7 @@ interface SocialHoverContextValue {
   onTriggerLeave: () => void;
   onTriggerFocus: (type: SocialType) => void;
   onTriggerBlur: () => void;
+  closeImmediately: () => void;
 }
 
 const SocialHoverContext = React.createContext<SocialHoverContextValue | null>(null);
@@ -61,15 +61,14 @@ export function SocialHoverGroup({
   className,
 }: SocialHoverGroupProps) {
   const [activeType, setActiveType] = React.useState<SocialType | null>(null);
+  const [displayType, setDisplayType] = React.useState<SocialType | null>(null);
   const [coords, setCoords] = React.useState<CardCoords | null>(null);
-  const [copied, setCopied] = React.useState(false);
 
   const groupRef = React.useRef<HTMLDivElement>(null);
   const triggerRefs = React.useRef<Map<SocialType, HTMLElement>>(new Map());
   const [slideDirection, setSlideDirection] = React.useState(0);
   const openTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
   const closeTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
-  const copyTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
 
   const registerTrigger = React.useCallback(
     (type: SocialType, node: HTMLElement | null) => {
@@ -143,6 +142,7 @@ export function SocialHoverGroup({
         const nextCoords = computeCoords(type);
         if (nextCoords) setCoords(nextCoords);
         setSlideDirection(Math.sign(ORDER[type] - ORDER[activeType]));
+        setDisplayType(type);
         setActiveType(type);
       } else {
         // Opening fresh: brief 130ms delay to prevent flashing on fast cursor pass
@@ -150,6 +150,7 @@ export function SocialHoverGroup({
           const nextCoords = computeCoords(type);
           if (nextCoords) setCoords(nextCoords);
           setSlideDirection(0);
+          setDisplayType(type);
           setActiveType(type);
         }, 130);
       }
@@ -177,6 +178,7 @@ export function SocialHoverGroup({
       } else {
         setSlideDirection(0);
       }
+      setDisplayType(type);
       setActiveType(type);
     },
     [activeType, clearTimers, computeCoords]
@@ -200,20 +202,30 @@ export function SocialHoverGroup({
     }, 200);
   }, [clearTimers]);
 
-  const handleCopyEmail = React.useCallback((e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (typeof navigator !== "undefined" && navigator.clipboard?.writeText) {
-      navigator.clipboard.writeText(socialsData.email.address);
-      setCopied(true);
-      if (copyTimeoutRef.current) clearTimeout(copyTimeoutRef.current);
-      copyTimeoutRef.current = setTimeout(() => {
-        setCopied(false);
-      }, 2000);
+  const closeImmediately = React.useCallback(() => {
+    clearTimers();
+    setActiveType(null);
+    if (
+      typeof document !== "undefined" &&
+      document.activeElement instanceof HTMLElement
+    ) {
+      document.activeElement.blur();
     }
-  }, []);
+  }, [clearTimers]);
 
-  // Window resize & keyboard Escape handling
+  const handleCopyEmail = React.useCallback(
+    (e: React.MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (typeof navigator !== "undefined" && navigator.clipboard?.writeText) {
+        navigator.clipboard.writeText(socialsData.email.address);
+      }
+      closeImmediately();
+    },
+    [closeImmediately]
+  );
+
+  // Window resize, keyboard Escape & click-outside handling
   React.useEffect(() => {
     const handleResize = () => {
       if (activeType) {
@@ -223,23 +235,34 @@ export function SocialHoverGroup({
     };
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
-        setActiveType(null);
+        closeImmediately();
+      }
+    };
+    const handlePointerDownOutside = (e: PointerEvent) => {
+      if (
+        groupRef.current &&
+        !groupRef.current.contains(e.target as Node)
+      ) {
+        closeImmediately();
       }
     };
 
     window.addEventListener("resize", handleResize);
     window.addEventListener("keydown", handleKeyDown);
+    if (activeType) {
+      document.addEventListener("pointerdown", handlePointerDownOutside);
+    }
     return () => {
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("pointerdown", handlePointerDownOutside);
     };
-  }, [activeType, computeCoords]);
+  }, [activeType, computeCoords, closeImmediately]);
 
   // Clean up timers on unmount
   React.useEffect(() => {
     return () => {
       clearTimers();
-      if (copyTimeoutRef.current) clearTimeout(copyTimeoutRef.current);
     };
   }, [clearTimers]);
 
@@ -252,6 +275,7 @@ export function SocialHoverGroup({
       onTriggerLeave,
       onTriggerFocus,
       onTriggerBlur,
+      closeImmediately,
     }),
     [
       activeType,
@@ -261,6 +285,7 @@ export function SocialHoverGroup({
       onTriggerLeave,
       onTriggerFocus,
       onTriggerBlur,
+      closeImmediately,
     ]
   );
 
@@ -300,6 +325,8 @@ export function SocialHoverGroup({
               }}
               onMouseEnter={handleCardMouseEnter}
               onMouseLeave={handleCardMouseLeave}
+              onClick={closeImmediately}
+              onAuxClick={closeImmediately}
               style={{
                 position: "absolute",
                 left: 0,
@@ -308,7 +335,7 @@ export function SocialHoverGroup({
                   : { bottom: coords.bottomY }),
                 width: coords.cardWidth,
               }}
-              className="hidden md:block [@media(hover:none)]:!hidden [@media(pointer:coarse)]:!hidden z-[70] focus:outline-none pointer-events-auto"
+              className="hidden md:block [@media(hover:none)]:!hidden [@media(pointer:coarse)]:!hidden z-40 focus:outline-none pointer-events-auto cursor-pointer"
               role="region"
               aria-label="Social profile preview"
             >
@@ -366,31 +393,32 @@ export function SocialHoverGroup({
                 className="relative rounded-lg border border-border bg-card/95 p-2.5 px-3 text-card-foreground shadow-xl shadow-black/20 dark:shadow-2xl dark:shadow-black/50 backdrop-blur-md select-none overflow-hidden"
               >
                 <AnimatePresence mode="popLayout" initial={false}>
-                  <motion.div
-                    key={activeType}
-                    initial={{
-                      opacity: 0,
-                      x: slideDirection * 14,
-                      filter: "blur(2px)",
-                    }}
-                    animate={{
-                      opacity: 1,
-                      x: 0,
-                      filter: "blur(0px)",
-                    }}
-                    exit={{
-                      opacity: 0,
-                      x: -slideDirection * 14,
-                      filter: "blur(2px)",
-                    }}
-                    transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
-                  >
-                    <CardContent
-                      type={activeType}
-                      copied={copied}
-                      onCopyEmail={handleCopyEmail}
-                    />
-                  </motion.div>
+                  {displayType && (
+                    <motion.div
+                      key={displayType}
+                      initial={{
+                        opacity: 0,
+                        x: slideDirection * 14,
+                        filter: "blur(2px)",
+                      }}
+                      animate={{
+                        opacity: 1,
+                        x: 0,
+                        filter: "blur(0px)",
+                      }}
+                      exit={{
+                        opacity: 0,
+                        x: -slideDirection * 14,
+                        filter: "blur(2px)",
+                      }}
+                      transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
+                    >
+                      <CardContent
+                        type={displayType}
+                        onCopyEmail={handleCopyEmail}
+                      />
+                    </motion.div>
+                  )}
                 </AnimatePresence>
               </motion.div>
             </motion.div>
@@ -435,10 +463,11 @@ function SocialHoverTrigger({
   type: SocialType;
   children: React.ReactNode;
 }) {
-  const context = React.useContext(SocialHoverContext)!;
+  const context = React.useContext(SocialHoverContext);
   const triggerRef = React.useRef<HTMLSpanElement>(null);
 
   React.useEffect(() => {
+    if (!context) return;
     context.registerTrigger(type, triggerRef.current);
     return () => {
       context.registerTrigger(type, null);
@@ -448,10 +477,12 @@ function SocialHoverTrigger({
   return (
     <span
       ref={triggerRef}
-      onMouseEnter={() => context.onTriggerEnter(type)}
-      onMouseLeave={() => context.onTriggerLeave()}
-      onFocus={() => context.onTriggerFocus(type)}
-      onBlur={() => context.onTriggerBlur()}
+      onMouseEnter={() => context?.onTriggerEnter(type)}
+      onMouseLeave={() => context?.onTriggerLeave()}
+      onFocus={() => context?.onTriggerFocus(type)}
+      onBlur={() => context?.onTriggerBlur()}
+      onClick={() => context?.closeImmediately()}
+      onAuxClick={() => context?.closeImmediately()}
       className="inline-flex"
     >
       {children}
@@ -461,11 +492,9 @@ function SocialHoverTrigger({
 
 function CardContent({
   type,
-  copied,
   onCopyEmail,
 }: {
   type: SocialType;
-  copied: boolean;
   onCopyEmail: (e: React.MouseEvent) => void;
 }) {
   if (type === "github") {
@@ -568,34 +597,14 @@ function CardContent({
               {socialsData.email.name}
             </span>
             <span className="block font-mono text-[11px] text-muted-foreground leading-tight truncate mt-0.5">
-              {copied ? "Copied to clipboard!" : socialsData.email.address}
+              {socialsData.email.address}
             </span>
           </div>
         </div>
         <div className="shrink-0 text-muted-foreground transition-colors group-hover/card:text-foreground">
-          <AnimatePresence mode="wait" initial={false}>
-            {copied ? (
-              <motion.span
-                key="check"
-                initial={{ scale: 0.5, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.5, opacity: 0 }}
-                className="text-emerald-500 flex items-center justify-center"
-              >
-                <Check size={14} strokeWidth={2.5} />
-              </motion.span>
-            ) : (
-              <motion.span
-                key="copy"
-                initial={{ scale: 0.5, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.5, opacity: 0 }}
-                className="flex items-center justify-center"
-              >
-                <Copy size={13} strokeWidth={1.75} />
-              </motion.span>
-            )}
-          </AnimatePresence>
+          <span className="flex items-center justify-center">
+            <Copy size={13} strokeWidth={1.75} />
+          </span>
         </div>
       </button>
     );

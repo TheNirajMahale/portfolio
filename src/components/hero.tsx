@@ -36,7 +36,7 @@ export function Hero({ isLoading = false, hasLoaded = false }: HeroProps) {
   const avatarVariants = hasLoaded ? item : undefined;
   const nameVariants = hasLoaded ? item : undefined;
   return (
-    <section className="relative w-full">
+    <section className="relative z-30 w-full">
       {/* Interactive Dot Matrix Canvas with Magnetic Quote */}
       {/* Mobile: Dedicated standalone banner below navbar */}
       {/* Desktop (sm+): Backdrop band overlapping upper half of avatar */}

@@ -214,6 +214,7 @@ export function HomeClient() {
 
           {/* Smooth entrance for sections — GPU-compositable properties only (opacity + translateY) */}
           <motion.div
+            className="relative z-10"
             initial={hasLoaded ? "visible" : "hidden"}
             animate={isLoading ? "hidden" : "visible"}
             variants={{

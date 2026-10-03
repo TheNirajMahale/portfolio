@@ -23,11 +23,11 @@ export function HeroQuote({ quote = siteData.hero.quote, className = "" }: HeroQ
   return (
     <div
       ref={constraintsRef}
-      className={`relative w-full h-full overflow-hidden ${className}`}
+      className={`relative w-full h-full ${className}`}
     >
       {/* Dot Matrix Canvas with Radial Vignette Mask */}
       <div
-        className="pointer-events-none absolute inset-0 select-none opacity-35 dark:opacity-20"
+        className="pointer-events-none absolute inset-0 overflow-hidden select-none opacity-35 dark:opacity-20"
         style={{
           backgroundImage: "radial-gradient(var(--foreground) 1.5px, transparent 1.5px)",
           backgroundSize: "12px 12px",
@@ -43,10 +43,10 @@ export function HeroQuote({ quote = siteData.hero.quote, className = "" }: HeroQ
         {/* Only the exact quote element is draggable, with calibrated subtle travel range */}
         <motion.div
           drag
-          dragConstraints={{ top: -20, bottom: 20, left: -45, right: 45 }}
+          dragConstraints={{ top: -30, bottom: 45, left: -60, right: 60 }}
           dragSnapToOrigin
-          dragElastic={0.08}
-          dragTransition={{ bounceStiffness: 140, bounceDamping: 15 }}
+          dragElastic={0.16}
+          dragTransition={{ bounceStiffness: 175, bounceDamping: 12 }}
           whileDrag={{ scale: 1.015, cursor: "grabbing" }}
           style={{ touchAction: "none" }}
           className="group relative flex max-w-md sm:max-w-lg flex-col items-center text-center will-change-transform pointer-events-auto px-5 py-2.5 rounded-xl select-none cursor-grab active:cursor-grabbing"
